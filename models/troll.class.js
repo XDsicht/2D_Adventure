@@ -1,0 +1,2 @@
+class Troll extends MovableObject {
+}
