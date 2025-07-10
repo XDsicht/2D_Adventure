@@ -6,6 +6,11 @@ class World {
         new Troll(),
         new Troll()
     ];
+    movingAssets = [
+        new Cloud(),
+        new Cloud(),
+        new Cloud(),
+    ];
     canvas;
     ctx;
 
@@ -24,6 +29,9 @@ class World {
             this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.height, enemy.width);
         });
 
+        this.movingAssets.forEach(movingAsset => {
+            this.ctx.drawImage(movingAsset.img, movingAsset.x, movingAsset.y, movingAsset.height, movingAsset.width);
+        });
         // draw wird immer wieder aufgerufen, damit die Animationen laufen
         let self = this;
         requestAnimationFrame(function () {
