@@ -1,7 +1,7 @@
 class Cloud extends MovableObject {
 
-    height = 75;
-    width = 75;
+    height = 100;
+    width = 100;
 
     constructor() {
         super().loadImage('img/5.elements/clouds/1.png');
