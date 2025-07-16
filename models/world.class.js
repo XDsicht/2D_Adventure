@@ -12,7 +12,11 @@ class World {
         new Cloud(),
     ];
     backgroundObjects = [
-        new BackgroundObject('img/5.elements/background/3.png', 0, 0),
+        new BackgroundObject('img/5.elements/background/1.png', 0),
+        new BackgroundObject('img/5.elements/background/2.png', 0),
+        new BackgroundObject('img/5.elements/background/3.png', 0),
+        new BackgroundObject('img/5.elements/background/4.png', 0),
+        new BackgroundObject('img/5.elements/background/5.png', 0),
     ];
     canvas;
     ctx;
@@ -27,8 +31,8 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas leeren
-        this.addToMap(this.character);
         this.addObjectsToMap(this.backgroundObjects);
+        this.addToMap(this.character);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.enemies);
 
