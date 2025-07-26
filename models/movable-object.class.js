@@ -4,6 +4,7 @@ class MovableObject {
   img;
   height = 150;
   width = 200;
+  currentImage = 0;
   imageCache = {};
   // loadImage('img/test.png');
   loadImage(path) {
@@ -23,5 +24,5 @@ class MovableObject {
     console.log("move right");
   }
 
-  moveLeft() {}
+  moveLeft() { }
 }
