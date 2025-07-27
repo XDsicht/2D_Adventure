@@ -3,11 +3,31 @@ class World {
   enemies = [new Troll(), new Troll(), new Troll()];
   clouds = [new Cloud(), new Cloud(), new Cloud()];
   backgroundObjects = [
+    new BackgroundObject("img/5.elements/background/1.png", -720),
+    new BackgroundObject("img/5.elements/background/2.png", -720),
+    new BackgroundObject("img/5.elements/background/3.png", -720),
+    new BackgroundObject("img/5.elements/background/4.png", -720),
+    new BackgroundObject("img/5.elements/background/5.png", -720),
     new BackgroundObject("img/5.elements/background/1.png", 0),
     new BackgroundObject("img/5.elements/background/2.png", 0),
     new BackgroundObject("img/5.elements/background/3.png", 0),
     new BackgroundObject("img/5.elements/background/4.png", 0),
     new BackgroundObject("img/5.elements/background/5.png", 0),
+    new BackgroundObject("img/5.elements/background/1.png", 720),
+    new BackgroundObject("img/5.elements/background/2.png", 720),
+    new BackgroundObject("img/5.elements/background/3.png", 720),
+    new BackgroundObject("img/5.elements/background/4.png", 720),
+    new BackgroundObject("img/5.elements/background/5.png", 720),
+    new BackgroundObject("img/5.elements/background/1.png", 1440),
+    new BackgroundObject("img/5.elements/background/2.png", 1440),
+    new BackgroundObject("img/5.elements/background/3.png", 1440),
+    new BackgroundObject("img/5.elements/background/4.png", 1440),
+    new BackgroundObject("img/5.elements/background/5.png", 1440),
+    new BackgroundObject("img/5.elements/background/1.png", 2160),
+    new BackgroundObject("img/5.elements/background/2.png", 2160),
+    new BackgroundObject("img/5.elements/background/3.png", 2160),
+    new BackgroundObject("img/5.elements/background/4.png", 2160),
+    new BackgroundObject("img/5.elements/background/5.png", 2160),
   ];
   canvas;
   ctx;
