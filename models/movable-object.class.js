@@ -4,9 +4,10 @@ class MovableObject {
   img;
   height = 150;
   width = 200;
+  imageCache = {};
   currentImage = 0;
   speed = 0.15;
-  imageCache = {};
+  otherDirection = false;
   // loadImage('img/test.png');
   loadImage(path) {
     this.img = new Image(); // this.img = document.getElementById("image"); <img id="image">
