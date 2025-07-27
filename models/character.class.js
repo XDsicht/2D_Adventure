@@ -26,16 +26,16 @@ class Character extends MovableObject {
   animate() {
 
     setInterval(() => {
-      if (this.world.keyboard.RIGHT) {
+      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.otherDirection = false;
         this.x += this.speed;
       }
-      if (this.world.keyboard.LEFT) {
+      if (this.world.keyboard.LEFT && this.x > 0) {
         this.otherDirection = true;
         this.x -= this.speed;
 
       }
-      this.world.camera_x = -this.x; // Kamera folgt dem Character
+      this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
     }, 1000 / 60);
 
 

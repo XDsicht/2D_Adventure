@@ -1,34 +1,6 @@
 class World {
+  level = level1;
   character = new Character();
-  enemies = [new Troll(), new Troll(), new Troll()];
-  clouds = [new Cloud(), new Cloud(), new Cloud()];
-  backgroundObjects = [
-    new BackgroundObject("img/5.elements/background/1.png", -720),
-    new BackgroundObject("img/5.elements/background/2.png", -720),
-    new BackgroundObject("img/5.elements/background/3.png", -720),
-    new BackgroundObject("img/5.elements/background/4.png", -720),
-    new BackgroundObject("img/5.elements/background/5.png", -720),
-    new BackgroundObject("img/5.elements/background/1.png", 0),
-    new BackgroundObject("img/5.elements/background/2.png", 0),
-    new BackgroundObject("img/5.elements/background/3.png", 0),
-    new BackgroundObject("img/5.elements/background/4.png", 0),
-    new BackgroundObject("img/5.elements/background/5.png", 0),
-    new BackgroundObject("img/5.elements/background/1.png", 720),
-    new BackgroundObject("img/5.elements/background/2.png", 720),
-    new BackgroundObject("img/5.elements/background/3.png", 720),
-    new BackgroundObject("img/5.elements/background/4.png", 720),
-    new BackgroundObject("img/5.elements/background/5.png", 720),
-    new BackgroundObject("img/5.elements/background/1.png", 1440),
-    new BackgroundObject("img/5.elements/background/2.png", 1440),
-    new BackgroundObject("img/5.elements/background/3.png", 1440),
-    new BackgroundObject("img/5.elements/background/4.png", 1440),
-    new BackgroundObject("img/5.elements/background/5.png", 1440),
-    new BackgroundObject("img/5.elements/background/1.png", 2160),
-    new BackgroundObject("img/5.elements/background/2.png", 2160),
-    new BackgroundObject("img/5.elements/background/3.png", 2160),
-    new BackgroundObject("img/5.elements/background/4.png", 2160),
-    new BackgroundObject("img/5.elements/background/5.png", 2160),
-  ];
   canvas;
   ctx;
   keyboard;
@@ -50,10 +22,10 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas leeren
     this.ctx.translate(this.camera_x, 0); // Kamera verschieben
-    this.addObjectsToMap(this.backgroundObjects);
+    this.addObjectsToMap(this.level.backgroundObjects);
     this.addToMap(this.character);
-    this.addObjectsToMap(this.clouds);
-    this.addObjectsToMap(this.enemies);
+    this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
 
     // draw wird immer wieder aufgerufen, damit die Animationen laufen
