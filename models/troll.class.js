@@ -18,7 +18,9 @@ class Troll extends MovableObject {
     constructor() {
         super().loadImage('img/3.enemy/1.idle/Troll_03_1_IDLE_000.png');
         this.loadImages(this.IMAGES_WALKING);
+        this.moveLeft();
         this.x = 200 + Math.random() * 500;
+        this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
 
