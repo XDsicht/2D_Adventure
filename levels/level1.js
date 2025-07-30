@@ -1,5 +1,5 @@
 const level1 = new Level(
-    [new Troll(), new Troll(), new Troll()],
+    [new Troll(), new Troll(), new Troll(), new Endboss()],
     [new Cloud(), new Cloud(), new Cloud()],
     [
         new BackgroundObject("img/5.elements/background/1.png", -720),
