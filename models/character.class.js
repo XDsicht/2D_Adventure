@@ -2,7 +2,7 @@ class Character extends MovableObject {
   height = 200;
   width = 250;
   speed = 10;
-  y = 245;
+  y = 80;
   IMAGES_WALKING = [
     "img/2.character/2.walk/Warrior_03__WALK_000.png",
     "img/2.character/2.walk/Warrior_03__WALK_001.png",
@@ -21,6 +21,7 @@ class Character extends MovableObject {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
     this.loadImages(this.IMAGES_WALKING);
     this.animate();
+    this.applyGravity();
   }
 
   animate() {
