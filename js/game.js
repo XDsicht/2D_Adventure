@@ -27,7 +27,6 @@ window.addEventListener('keydown', (event) => {
   if (event.keyCode == 32) {
     keyboard.SPACE = true;
   }
-  console.log(event.keyCode);
 });
 
 window.addEventListener('keyup', (event) => {

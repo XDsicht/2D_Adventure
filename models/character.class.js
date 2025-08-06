@@ -2,7 +2,7 @@ class Character extends MovableObject {
   height = 200;
   width = 250;
   speed = 10;
-  y = 85;
+  y = 250;
   IMAGES_WALKING = [
     "img/2.character/2.walk/Warrior_03__WALK_000.png",
     "img/2.character/2.walk/Warrior_03__WALK_001.png",
@@ -44,15 +44,15 @@ class Character extends MovableObject {
     setInterval(() => {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
+        this.otherDirection = false;
         // this.walking_sound.play();
       }
       if (this.world.keyboard.LEFT && this.x > 0) {
+        this.moveLeft();
         this.otherDirection = true;
-        this.x -= this.speed;
         // this.walking_sound.play();
       }
       this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
-      console.log("this.speedY", this.speedY);
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.jump();
@@ -70,6 +70,6 @@ class Character extends MovableObject {
           this.playAnimation(this.IMAGES_WALKING);
         }
       }
-    }, 40);
+    }, 1000 / 10);
   }
 }
