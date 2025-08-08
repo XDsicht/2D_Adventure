@@ -57,6 +57,9 @@ class Character extends MovableObject {
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.jump();
       }
+      if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
+        this.currentImage = 0;
+      }
     }, 1000 / 60);
 
 
@@ -73,3 +76,5 @@ class Character extends MovableObject {
     }, 1000 / 10);
   }
 }
+
+// currentImage = 0; resetten, damit die Animation wieder zurückgsetzt wird

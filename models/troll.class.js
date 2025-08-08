@@ -1,7 +1,7 @@
 class Troll extends MovableObject {
-    height = 270;
-    width = 270;
-    y = 194;
+    height = 240;
+    width = 240;
+    y = 225;
     otherDirection = true;
     IMAGES_WALKING = [
         'img/3.enemy/2.walk/Troll_03_1_WALK_000.png',

@@ -20,7 +20,7 @@ class MovableObject {
         console.log("this.y", this.y);
 
       }
-    }, 1000 / 25);
+    }, 1000 / 20);
   }
 
   isAboveGround() {
@@ -48,6 +48,7 @@ class MovableObject {
     this.currentImage++;
     if (images === this.IMAGES_JUMPING) {
       console.log(images[i]);
+      console.log("i", i);
     }
   }
 
@@ -60,6 +61,6 @@ class MovableObject {
   }
 
   jump() {
-    this.speedY = 30; // Set the speedY to a positive value to make the character jump
+    this.speedY = 25; // Set the speedY to a positive value to make the character jump 25
   }
 }
