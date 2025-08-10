@@ -28,7 +28,7 @@ class Character extends MovableObject {
     'img/2.character/4.jump/Warrior_03__JUMP_007.png',
     'img/2.character/4.jump/Warrior_03__JUMP_008.png',
     'img/2.character/4.jump/Warrior_03__JUMP_009.png',
-  ]
+  ];
 
   IMAGES_ISHURT = [
     'img/2.character/6.hurt/Warrior_03__HURT_000.png',
@@ -41,7 +41,20 @@ class Character extends MovableObject {
     'img/2.character/6.hurt/Warrior_03__HURT_007.png',
     'img/2.character/6.hurt/Warrior_03__HURT_008.png',
     'img/2.character/6.hurt/Warrior_03__HURT_009.png',
-  ]
+  ];
+
+  IMAGES_DEAD = [
+    'img/2.character/7.dead/Warrior_03__DIE_000.png',
+    'img/2.character/7.dead/Warrior_03__DIE_001.png',
+    'img/2.character/7.dead/Warrior_03__DIE_002.png',
+    'img/2.character/7.dead/Warrior_03__DIE_003.png',
+    'img/2.character/7.dead/Warrior_03__DIE_004.png',
+    'img/2.character/7.dead/Warrior_03__DIE_005.png',
+    'img/2.character/7.dead/Warrior_03__DIE_006.png',
+    'img/2.character/7.dead/Warrior_03__DIE_007.png',
+    'img/2.character/7.dead/Warrior_03__DIE_008.png',
+    'img/2.character/7.dead/Warrior_03__DIE_009.png',
+  ];
 
   world; // variable, die es ermöglicht, dass wir über den Character auf die Welt zugreifen können
 
@@ -49,6 +62,8 @@ class Character extends MovableObject {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_ISHURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.animate();
     this.applyGravity();
   }
@@ -72,14 +87,19 @@ class Character extends MovableObject {
         this.characterJumping = true;
         this.jump();
       }
-      if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
-        this.currentImage = 0;
-      }
+      // if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isDead()) {
+      //   this.currentImage = 0;
+      // } ist für counter reset der jump animation
     }, 1000 / 60);
 
 
     setInterval(() => {
-      if (this.isAboveGround()) {
+
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+        console.log(this.img);
+
+      } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
       } else {
