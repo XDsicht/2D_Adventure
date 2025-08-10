@@ -11,6 +11,14 @@ class MovableObject {
   otherDirection = false;
   speedY = 0;
   acceleration = 2.5;
+  characterJumping = false;
+
+  offset = {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  };
 
   applyGravity() {
     setInterval(() => {
@@ -30,6 +38,30 @@ class MovableObject {
   loadImage(path) {
     this.img = new Image(); // this.img = document.getElementById("image"); <img id="image">
     this.img.src = path;
+  }
+
+  draw(ctx) {
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+  }
+
+  drawFrame(ctx) {
+    if (this instanceof Character || this instanceof Troll) {
+      ctx.beginPath();
+      ctx.lineWidth = '5';
+      ctx.strokeStyle = 'blue';
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+    }
+  }
+
+  // character.isColliding(chicken)
+  isColliding(mo) {
+    return (
+      this.x + this.width > mo.x &&
+      this.y + this.height > mo.y &&
+      this.x < mo.x + mo.width &&
+      this.y < mo.y + mo.height
+    );
   }
 
   loadImages(arr) {

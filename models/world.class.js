@@ -13,10 +13,22 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.checkCollisions();
   }
 
   setWorld() {
     this.character.world = this;
+  }
+
+  checkCollisions() {
+    setInterval(() => {
+      this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy)) {
+          console.log("Collision with Character", enemy);
+          // this.playAnimation(this.character.IMAGES_ISHURT);
+        }
+      });
+    }, 200);
   }
 
   draw() {
@@ -43,15 +55,25 @@ class World {
 
   addToMap(mo) {
     if (mo.otherDirection) {
-      this.ctx.save(); // Save the current state of the canvas
-      this.ctx.translate(mo.width, 0); // Translate to flip the image
-      this.ctx.scale(-1, 1); // Flip horizontally
-      mo.x = mo.x * -1; // Adjust the x position for flipped image
+      this.flipImage(mo);
     }
-    this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    mo.draw(this.ctx); // Draw the object
+    mo.drawFrame(this.ctx);
+
     if (mo.otherDirection) {
-      mo.x = mo.x * -1; // Adjust the x position for flipped image
-      this.ctx.restore(); // Restore the original state of the canvas
+      this.flipImageBack(mo);
     }
+  }
+
+  flipImage(mo) {
+    this.ctx.save(); // Save the current state of the canvas
+    this.ctx.translate(mo.width, 0); // Translate to flip the image
+    this.ctx.scale(-1, 1); // Flip horizontally
+    mo.x = mo.x * -1; // Adjust the x position for flipped image
+  }
+
+  flipImageBack(mo) {
+    this.ctx.restore(); // Restore the original state of the canvas
+    mo.x = mo.x * -1; // Adjust the x position for flipped image
   }
 }

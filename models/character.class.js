@@ -3,6 +3,7 @@ class Character extends MovableObject {
   width = 250;
   speed = 10;
   y = 250;
+
   IMAGES_WALKING = [
     "img/2.character/2.walk/Warrior_03__WALK_000.png",
     "img/2.character/2.walk/Warrior_03__WALK_001.png",
@@ -27,6 +28,19 @@ class Character extends MovableObject {
     'img/2.character/4.jump/Warrior_03__JUMP_007.png',
     'img/2.character/4.jump/Warrior_03__JUMP_008.png',
     'img/2.character/4.jump/Warrior_03__JUMP_009.png',
+  ]
+
+  IMAGES_ISHURT = [
+    'img/2.character/6.hurt/Warrior_03__HURT_000.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_001.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_002.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_003.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_004.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_005.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_006.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_007.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_008.png',
+    'img/2.character/6.hurt/Warrior_03__HURT_009.png',
   ]
 
   world; // variable, die es ermöglicht, dass wir über den Character auf die Welt zugreifen können
@@ -55,6 +69,7 @@ class Character extends MovableObject {
       this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+        this.characterJumping = true;
         this.jump();
       }
       if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT)) {
@@ -65,9 +80,9 @@ class Character extends MovableObject {
 
     setInterval(() => {
       if (this.isAboveGround()) {
+        this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
       } else {
-
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
           // WALK ANIMATION
           this.playAnimation(this.IMAGES_WALKING);
