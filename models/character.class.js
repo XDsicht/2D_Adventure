@@ -30,7 +30,7 @@ class Character extends MovableObject {
     'img/2.character/4.jump/Warrior_03__JUMP_009.png',
   ];
 
-  IMAGES_ISHURT = [
+  IMAGES_HURT = [
     'img/2.character/6.hurt/Warrior_03__HURT_000.png',
     'img/2.character/6.hurt/Warrior_03__HURT_001.png',
     'img/2.character/6.hurt/Warrior_03__HURT_002.png',
@@ -62,7 +62,7 @@ class Character extends MovableObject {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
-    this.loadImages(this.IMAGES_ISHURT);
+    this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.animate();
     this.applyGravity();
@@ -97,14 +97,15 @@ class Character extends MovableObject {
 
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
-        console.log(this.img);
+        // console.log(this.img);
 
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
       } else {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          // WALK ANIMATION
           this.playAnimation(this.IMAGES_WALKING);
         }
       }

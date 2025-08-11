@@ -1,17 +1,10 @@
-class MovableObject {
-  x = 120;
-  y = 300;
-  img;
-  height = 150;
-  width = 200;
-  imageCache = {};
-  currentImage = 0;
-
+class MovableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
   speedY = 0;
   acceleration = 2.5;
   energy = 100;
+  lastHit = 0;
   // characterJumping = false;
 
   // offset = {
@@ -34,15 +27,6 @@ class MovableObject {
 
   isAboveGround() {
     return this.y < 250;
-  }
-  // loadImage('img/test.png');
-  loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById("image"); <img id="image">
-    this.img.src = path;
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   drawFrame(ctx) {
@@ -70,6 +54,8 @@ class MovableObject {
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
     }
   }
 
@@ -77,13 +63,15 @@ class MovableObject {
     return this.energy == 0;
   }
 
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
+  isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit; // difference in ms
+    timePassed = timePassed / 1000; // difference in seconds
+    // console.log("timePassed", timePassed);
+
+    return timePassed < 0.8;
   }
+
+
 
   playAnimation(images) {
     let i = this.currentImage % images.length;
