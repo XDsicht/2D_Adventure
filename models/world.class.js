@@ -45,6 +45,7 @@ class World {
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.throwableObjects);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
 
@@ -57,7 +58,12 @@ class World {
 
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
-      this.addToMap(obj);
+      if (obj instanceof ThrowableObject) {
+        this.drawThrowableObject(obj);
+      } else {
+        this.addToMap(obj);
+      }
+      // this.addToMap(obj);
     });
   }
 
@@ -67,10 +73,11 @@ class World {
     }
     mo.draw(this.ctx); // Draw the object
     mo.drawFrame(this.ctx);
-
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
+
+
   }
 
   flipImage(mo) {
@@ -83,5 +90,13 @@ class World {
   flipImageBack(mo) {
     this.ctx.restore(); // Restore the original state of the canvas
     mo.x = mo.x * -1; // Adjust the x position for flipped image
+  }
+
+  drawThrowableObject(mo) {
+    this.ctx.save();
+    this.ctx.translate(mo.x + mo.width / 2, mo.y + mo.height / 2);
+    this.ctx.rotate(mo.angle);
+    this.ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
+    this.ctx.restore();
   }
 }
