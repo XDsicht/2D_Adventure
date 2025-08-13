@@ -1,19 +1,24 @@
 class StatusBar extends DrawableObject {
 
     IMAGES = [
-        'img/6.bars/1.health/0_copia_3.png',
-        'img/6.bars/1.health/20_copia_4.png',
-        'img/6.bars/1.health/40_copia_3.png',
-        'img/6.bars/1.health/60_copia_3.png',
-        'img/6.bars/1.health/80_copia_3.png',
-        'img/6.bars/1.health/100_copia_2.png'
+        'img/6.bars/1.health/0_ copia_3.png',
+        'img/6.bars/1.health/20_ copia_4.png',
+        'img/6.bars/1.health/40_ copia_3.png',
+        'img/6.bars/1.health/60_ copia_3.png',
+        'img/6.bars/1.health/80_ copia_3.png',
+        'img/6.bars/1.health/100_ copia_2.png',
     ];
 
     percentage = 100;
 
     constructor() {
-        super();
+        super(); // initialisiert die Funktionen des übergeordneten Objekts
         this.loadImages(this.IMAGES);
+        this.x = 80;
+        this.y = 0;
+        this.width = 200;
+        this.height = 60;
+        this.setPercentage(100); // Set initial percentage to 100 
     }
 
     //setPercentage(50)

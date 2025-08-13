@@ -5,6 +5,7 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  statusBar = new StatusBar();
 
 
   constructor(canvas, keyboard) {
@@ -35,6 +36,7 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas leeren
     this.ctx.translate(this.camera_x, 0); // Kamera verschieben
     this.addObjectsToMap(this.level.backgroundObjects);
+    this.addToMap(this.statusBar);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);

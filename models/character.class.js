@@ -77,6 +77,7 @@ class Character extends MovableObject {
         // this.walking_sound.play();
       }
       if (this.world.keyboard.LEFT && this.x > 0) {
+        // this.world.statusBar.moveLeft();
         this.moveLeft();
         this.otherDirection = true;
         // this.walking_sound.play();
