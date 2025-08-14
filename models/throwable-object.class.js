@@ -1,19 +1,26 @@
-class ThrowableObject extends DrawableObject {
+class ThrowableObject extends MovableObject {
     speedY = 30;
-    speedX = 20;
-    y = 360;
-    width = 80;
-    height = 80;
+    speedX = 10;
+    y = 368;
+
     angle = 140;
 
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
 
-    constructor() {
+    constructor(x, y) {
         super().loadImage(this.IMAGE);
-        this.x = 400 + Math.random() * 300 * 2;
+        this.x = x;
+        this.y = y;
+        this.width = 80;
+        this.height = 80;
+        this.shoot();
     }
 
-    throw() {
-
+    shoot() {
+        this.speedY = 30;
+        this.applyGravity();
+        setInterval(() => {
+            this.x += this.speedX;
+        }, 25);
     }
 }

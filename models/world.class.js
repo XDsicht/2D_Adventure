@@ -14,23 +14,36 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.run();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  checkCollisions() {
+  run() {
     setInterval(() => {
-      this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-          this.character.hit();
-          this.statusBar.setPercentage(this.character.energy);
-          // console.log("Character hit, energy:", this.character.energy);
-        }
-      });
+
+      this.checkCollisions();
+      this.checkShootArrow();
     }, 200);
+  }
+
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy)) {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+        // console.log("Character hit, energy:", this.character.energy);
+      }
+    });
+  }
+
+  checkShootArrow() {
+    if (this.keyboard.D) {
+      let arrow = new ThrowableObject(this.character.x, this.character.y);
+      this.level.throwableObjects.push(arrow);
+    }
   }
 
   draw() {
