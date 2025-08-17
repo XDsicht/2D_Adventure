@@ -5,7 +5,8 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
-  statusBar = new StatusBar();
+  healthBar = new HealthBar();
+  quiver = new Quiver();
 
 
   constructor(canvas, keyboard) {
@@ -33,7 +34,7 @@ class World {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+        this.healthBar.setPercentage(this.character.energy);
         // console.log("Character hit, energy:", this.character.energy);
       }
     });
@@ -53,7 +54,8 @@ class World {
 
     this.ctx.translate(-this.camera_x, 0); // camera back
     // ------ Space for fixed objects ----- //
-    this.addToMap(this.statusBar);
+    this.addToMap(this.healthBar);
+    this.addToMap(this.quiver);
     this.ctx.translate(this.camera_x, 0); // camera forward
 
     this.addToMap(this.character);
@@ -75,8 +77,7 @@ class World {
         this.drawThrowableObject(obj);
       } else {
         this.addToMap(obj);
-      }
-      // this.addToMap(obj);
+      };
     });
   }
 
@@ -84,7 +85,11 @@ class World {
     if (mo.otherDirection) {
       this.flipImage(mo);
     }
-    mo.draw(this.ctx); // Draw the object
+    mo.draw(this.ctx);
+    if (Object.keys(mo.imageCache).length == 7) {
+
+      mo.drawQuiver(mo, this.ctx, mo.imageCache[Object.keys(mo.imageCache)[6]]);
+    } // Draw the object
     mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
@@ -112,4 +117,5 @@ class World {
     this.ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
     this.ctx.restore();
   }
+
 }
