@@ -8,7 +8,7 @@ function init() {
   // console.log("My Character is: ", world.character);
 }
 
-window.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', async (event) => {
   if (event.keyCode == 39) {
     keyboard.RIGHT = true;
   }
@@ -32,7 +32,7 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
-window.addEventListener('keyup', (event) => {
+window.addEventListener('keyup', async (event) => {
   if (event.keyCode == 39) {
     keyboard.RIGHT = false;
   }

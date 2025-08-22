@@ -86,10 +86,10 @@ class World {
       this.flipImage(mo);
     }
     mo.draw(this.ctx);
-    if (Object.keys(mo.imageCache).length == 7) {
+    // if (Object.keys(mo.imageCache).length == 7) {
 
-      mo.drawQuiver(mo, this.ctx, mo.imageCache[Object.keys(mo.imageCache)[6]]);
-    } // Draw the object
+    //   mo.drawQuiver(mo, this.ctx, mo.imageCache[Object.keys(mo.imageCache)[6]]);
+    // } // Draw the object
     mo.drawFrame(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
