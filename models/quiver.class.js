@@ -24,7 +24,7 @@ class Quiver extends StatusBar {
     constructor() {
         super();
         this.loadImages(this.IMAGES);
-        this.setPercentage(40);
+        this.setPercentage(0);
     }
 
     drawIcon(ctx, iconImg) {
