@@ -7,6 +7,7 @@ class World {
   camera_x = 0;
   healthBar = new HealthBar();
   quiver = new Quiver();
+  coinBar = new CoinBar();
 
 
   constructor(canvas, keyboard) {
@@ -53,13 +54,15 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
 
     this.ctx.translate(-this.camera_x, 0); // camera back
+    this.addObjectsToMap(this.level.clouds);
     // ------ Space for fixed objects ----- //
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);
+    this.addToMap(this.coinBar);
     this.ctx.translate(this.camera_x, 0); // camera forward
 
     this.addToMap(this.character);
-    this.addObjectsToMap(this.level.clouds);
+
     this.addObjectsToMap(this.level.throwableObjects);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
