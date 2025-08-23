@@ -1,7 +1,13 @@
 body {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  background-image: url("img/5.elements/background/website-background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
 }
 
 canvas {
