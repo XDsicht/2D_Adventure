@@ -27,6 +27,17 @@ class DrawableObject {
         }
     }
 
+
+    drawOffset(ctx) {
+        if (this instanceof Character || this instanceof Troll) {
+            ctx.beginPath();
+            ctx.lineWidth = '4';
+            ctx.strokeStyle = 'red';
+            ctx.rect(this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.left - this.offset.right, this.height - this.offset.top - this.offset.bottom);
+            ctx.stroke();
+        }
+    }
+
     loadImages(arr) {
         arr.forEach((path) => {
             let img = new Image();

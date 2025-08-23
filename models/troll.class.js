@@ -3,6 +3,14 @@ class Troll extends MovableObject {
     width = 240;
     y = 225;
     otherDirection = true;
+
+    offset = {
+        top: 85,
+        left: 90,
+        right: 60,
+        bottom: 35,
+    };
+
     IMAGES_WALKING = [
         'img/3.enemy/2.walk/Troll_03_1_WALK_000.png',
         'img/3.enemy/2.walk/Troll_03_1_WALK_001.png',
