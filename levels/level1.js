@@ -28,6 +28,6 @@ const level1 = new Level(
         new BackgroundObject("img/5.elements/background/4.png", 2160),
         new BackgroundObject("img/5.elements/background/5.png", 2160),
     ],
-    [],
+    [new CollectableObject(), new CollectableObject(), new CollectableObject(), new CollectableObject(), new CollectableObject(), new CollectableObject()],
     // [new ThrowableObject(), new ThrowableObject(), new ThrowableObject(), new ThrowableObject(), new ThrowableObject(), new ThrowableObject()]
 );

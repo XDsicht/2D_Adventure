@@ -60,10 +60,10 @@ class World {
     this.addToMap(this.quiver);
     this.addToMap(this.coinBar);
     this.ctx.translate(this.camera_x, 0); // camera forward
-
+    this.addObjectsToMap(this.level.coins);
     this.addToMap(this.character);
 
-    this.addObjectsToMap(this.level.throwableObjects);
+    // this.addObjectsToMap(this.level.throwableObjects);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
 
