@@ -16,12 +16,14 @@ body {
   height: 100vh;
 }
 
-body h1 {
+.game-title {
   font-family: "Uncial Antiqua", system-ui;
   color: #735c4a;
   letter-spacing: 2px;
   padding-bottom: 16px;
   margin: 0;
+  font-size: 40px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .game-container {
@@ -33,8 +35,9 @@ body h1 {
 
 canvas {
   background-color: black;
-  height: 100%;
-  width: 100%;
+  border: 8px solid #735c4a;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
 }
 
 /* letter-spacing, text-shadow einfügen */
