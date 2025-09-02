@@ -1,5 +1,4 @@
 class CoinBar extends StatusBar {
-    // x = 80;
     y = 105;
 
     IMAGES = [

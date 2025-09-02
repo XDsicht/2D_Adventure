@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Uncial Antiqua", system-ui;
+  src: url("fonts/UncialAntiqua-Regular.ttf") format("truetype");
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -7,12 +12,29 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  margin: 0;
   height: 100vh;
+}
+
+body h1 {
+  font-family: "Uncial Antiqua", system-ui;
+  color: #735c4a;
+  letter-spacing: 2px;
+  padding-bottom: 16px;
+  margin: 0;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
   background-color: black;
+  height: 100%;
+  width: 100%;
 }
 
-/* Besondere Schriftart nehmen ggfls. Zabras */
 /* letter-spacing, text-shadow einfügen */

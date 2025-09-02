@@ -8,6 +8,8 @@ class World {
   healthBar = new HealthBar();
   quiver = new Quiver();
   coinBar = new CoinBar();
+  throwableObjects = [];
+
 
 
   constructor(canvas, keyboard) {
@@ -25,10 +27,9 @@ class World {
 
   run() {
     setInterval(() => {
-
       this.checkCollisions();
       this.checkShootArrow();
-    }, 200);
+    }, 100);
   }
 
   checkCollisions() {
@@ -55,6 +56,7 @@ class World {
 
     this.ctx.translate(-this.camera_x, 0); // camera back
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.throwableObjects);
     // ------ Space for fixed objects ----- //
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);

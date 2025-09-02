@@ -1,5 +1,4 @@
 class HealthBar extends StatusBar {
-    // x = 80;
     y = 0;
 
     IMAGES = [
