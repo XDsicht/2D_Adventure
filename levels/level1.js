@@ -28,6 +28,7 @@ const level1 = new Level(
         new BackgroundObject("img/5.elements/background/4.png", 2160),
         new BackgroundObject("img/5.elements/background/5.png", 2160),
     ],
-    [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
-    []
+    [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
+    [],
+    [new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow()]
 );

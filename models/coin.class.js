@@ -1,4 +1,4 @@
-class Coin extends CollectableObject {
+class Coin extends MovableObject {
     width = 30;
     height = 30;
 
@@ -18,7 +18,7 @@ class Coin extends CollectableObject {
     constructor() {
         super().loadImage('img/5.elements/coins/Bronze_30.png');
         this.loadImages(this.IMAGES);
-        this.x = 300 + Math.random() * 800;
+        this.x = 300 + Math.random() * 2000;
         this.y = 100 + Math.random() * 200;
         this.animate();
     }

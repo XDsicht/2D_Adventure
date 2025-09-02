@@ -44,7 +44,7 @@ class World {
 
   checkShootArrow() {
     if (this.keyboard.D) {
-      let arrow = new ThrowableObject(this.character.x, this.character.y);
+      let arrow = new ThrowableObject(this.character.x + this.character.width / 3, this.character.y + this.character.height / 3);
       this.level.throwableObjects.push(arrow);
     }
   }
@@ -63,9 +63,8 @@ class World {
     this.addToMap(this.coinBar);
     this.ctx.translate(this.camera_x, 0); // camera forward
     this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.arrows);
     this.addToMap(this.character);
-
-    // this.addObjectsToMap(this.level.throwableObjects);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
 
@@ -78,11 +77,11 @@ class World {
 
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
-      if (obj instanceof ThrowableObject) {
-        this.drawThrowableObject(obj);
+      if (obj instanceof Arrow || obj instanceof ThrowableObject) {
+        obj.drawArrow(this.ctx, obj);
       } else {
         this.addToMap(obj);
-      };
+      }
     });
   }
 
@@ -96,8 +95,6 @@ class World {
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
-
-
   }
 
   flipImage(mo) {
