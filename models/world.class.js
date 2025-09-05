@@ -40,6 +40,12 @@ class World {
         // console.log("Character hit, energy:", this.character.energy);
       }
     });
+    this.level.arrows.forEach((arrow) => {
+      if(this.character.isColliding(arrow)) {
+        this.level.arrows.splice(this.level.arrows.indexOf(arrow), 1);
+        this.quiver.addArrow();
+      }
+    });
   }
 
   checkShootArrow() {
