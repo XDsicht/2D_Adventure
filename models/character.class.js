@@ -63,6 +63,19 @@ class Character extends MovableObject {
     'img/2.character/7.dead/Warrior_03__DIE_009.png',
   ];
 
+  IMAGES_ATTACKING = [
+    'img/2.character/5.attack/Warrior_03__ATTACK_000.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_001.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_002.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_003.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_004.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_005.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_006.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_007.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_008.png',
+    'img/2.character/5.attack/Warrior_03__ATTACK_009.png',
+  ];
+
   world; // variable, die es ermöglicht, dass wir über den Character auf die Welt zugreifen können
 
   constructor() {
@@ -71,6 +84,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_ATTACKING);
     this.animate();
     this.applyGravity();
   }
@@ -97,6 +111,11 @@ class Character extends MovableObject {
       // if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isDead()) {
       //   this.currentImage = 0;
       // } ist für counter reset der jump animation
+
+      // TODO: Check point of origin of arrow and speed of attack animation
+      if (this.world.keyboard.D) {
+        this.playAnimation(this.IMAGES_ATTACKING);
+      }
     }, 1000 / 60);
 
 
@@ -104,8 +123,6 @@ class Character extends MovableObject {
 
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
-        // console.log(this.img);
-
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {

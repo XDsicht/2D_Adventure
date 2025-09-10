@@ -3,7 +3,7 @@ class ThrowableObject extends MovableObject {
     speedX = 25;
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
     angle = 42;
-
+    // TODO: Check width and height of arrow accord. to animation
     constructor(x, y) {
         super().loadImage(this.IMAGE);
         this.x = x;
