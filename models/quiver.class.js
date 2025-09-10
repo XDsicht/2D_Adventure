@@ -15,12 +15,4 @@ class Quiver extends StatusBar {
         this.loadImages(this.IMAGES);
         this.setPercentage(0);
     }
-
-    addArrow() {
-        this.percentage += 20;
-        if (this.percentage > 100) {
-            this.percentage = 100;
-        }
-        this.setPercentage(this.percentage);
-    }
 }

@@ -37,13 +37,19 @@ class World {
       if (this.character.isColliding(enemy)) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
-        // console.log("Character hit, energy:", this.character.energy);
       }
     });
-    this.level.arrows.forEach((arrow) => {
-      if(this.character.isColliding(arrow)) {
-        this.level.arrows.splice(this.level.arrows.indexOf(arrow), 1);
-        this.quiver.addArrow();
+    this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
+    this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
+  }
+
+  checkCollisionsWithCollectibles(array, bar) {
+    array.forEach((item) => {
+      if (this.character.isColliding(item)) {
+        if (!bar.checkBarPercentage()) {
+          array.splice(array.indexOf(item), 1);
+          bar.fillBar();
+        }
       }
     });
   }

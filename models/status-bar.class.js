@@ -31,4 +31,18 @@ class StatusBar extends DrawableObject {
             return 0;
         }
     }
+
+    fillBar() {
+        this.percentage += 20;
+        if (this.percentage > 100) {
+            this.percentage = 100;
+        }
+        this.setPercentage(this.percentage);
+    }
+
+    checkBarPercentage() {
+        if (this.percentage === 100) {
+            return true;
+        }
+    }
 }
