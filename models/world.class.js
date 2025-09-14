@@ -8,7 +8,6 @@ class World {
   healthBar = new HealthBar();
   quiver = new Quiver();
   coinBar = new CoinBar();
-  throwableObjects = [];
 
 
 
@@ -56,7 +55,9 @@ class World {
 
   checkShootArrow() {
     if (this.keyboard.D) {
-      let arrow = new ThrowableObject(this.character.x + this.character.width / 3, this.character.y + this.character.height / 3);
+      let arrowX = this.character.x + this.character.width / 3;
+      let arrowY = this.character.y + this.character.height / 3;
+      let arrow = new ThrowableObject(arrowX, arrowY);
       this.level.throwableObjects.push(arrow);
     }
   }
@@ -65,21 +66,17 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas leeren
     this.ctx.translate(this.camera_x, 0); // Kamera verschieben // nochmal anschauen und verstehen!!!!
     this.addObjectsToMap(this.level.backgroundObjects);
-
-    this.ctx.translate(-this.camera_x, 0); // camera back
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.throwableObjects);
     // ------ Space for fixed objects ----- //
-    this.addToMap(this.healthBar);
-    this.addToMap(this.quiver);
-    this.addToMap(this.coinBar);
-    this.ctx.translate(this.camera_x, 0); // camera forward
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.arrows);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
-
+    this.addToMap(this.healthBar);
+    this.addToMap(this.quiver);
+    this.addToMap(this.coinBar);
     // draw wird immer wieder aufgerufen, damit die Animationen laufen
     let self = this;
     requestAnimationFrame(function () {

@@ -19,7 +19,7 @@ class Coin extends MovableObject {
         super().loadImage('img/5.elements/coins/Bronze_30.png');
         this.loadImages(this.IMAGES);
         this.x = 300 + Math.random() * 2000;
-        this.y = 100 + Math.random() * 200;
+        this.y = 155 + Math.random() * 200;
         this.animate();
     }
 

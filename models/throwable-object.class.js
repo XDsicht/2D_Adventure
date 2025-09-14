@@ -3,6 +3,7 @@ class ThrowableObject extends MovableObject {
     speedX = 25;
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
     angle = 42;
+
     // TODO: Check width and height of arrow accord. to animation
     constructor(x, y) {
         super().loadImage(this.IMAGE);
@@ -16,6 +17,8 @@ class ThrowableObject extends MovableObject {
     shoot() {
         this.speedY = 5;
         this.applyGravity();
+        console.log("this.y", this.y);
+        console.log("this.speedY", this.speedY);
         setInterval(() => {
             this.x += this.speedX;
         }, 25);

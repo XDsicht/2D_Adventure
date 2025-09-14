@@ -2,10 +2,6 @@ class DrawableObject {
     img;
     imageCache = {};
     currentImage = 0;
-    x = 120;
-    y = 300;
-    height = 150;
-    width = 200;
 
     // loadImage('img/test.png');
     loadImage(path) {
