@@ -69,15 +69,6 @@ class MovableObject extends DrawableObject {
     if (this instanceof Coin) {
       this.adjustCoinPosition(i);
     }
-    // TODO: Reset animation picture after 1 jump animation?
-
-    if (images === this.IMAGES_JUMPING) {
-      if (i == images.length - 1 && this.isAboveGround()) {
-        this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
-        return;
-      }
-      console.log("i", i);
-    }
   }
 
   moveRight() {

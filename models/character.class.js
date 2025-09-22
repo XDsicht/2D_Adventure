@@ -107,16 +107,12 @@ class Character extends MovableObject {
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.characterJumping = true;
+        this.currentImage = 0;
         this.jump();
       }
       // if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isDead()) {
       //   this.currentImage = 0;
       // } ist für counter reset der jump animation
-
-      // TODO: Check point of origin of arrow and speed of attack animation
-      if (this.world.keyboard.D) {
-        this.playAnimation(this.IMAGES_ATTACKING);
-      }
     }, 1000 / 60);
 
 
@@ -129,13 +125,26 @@ class Character extends MovableObject {
       } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
+        if (this.currentImage === this.IMAGES_JUMPING.length - 1) {
+
+          this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
+          console.log("reset animation");
+        }
       } else {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
           this.playAnimation(this.IMAGES_WALKING);
         }
       }
     }, 1000 / 10);
+
+    setInterval(() => {
+      // TODO: Check point of origin of arrow and speed of attack animation
+      if (this.world.keyboard.D) {
+        this.playAnimation(this.IMAGES_ATTACKING);
+      }
+    }, 100 / 10);
   }
 }
+
 
 // currentImage = 0; resetten, damit die Animation wieder zurückgsetzt wird
