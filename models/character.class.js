@@ -12,6 +12,19 @@ class Character extends MovableObject {
     bottom: 20
   };
 
+  IMAGES_IDLE = [
+    'img/2.character/1.idle/Warrior_03__IDLE_000.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_001.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_002.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_003.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_004.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_005.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_006.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_007.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_008.png',
+    'img/2.character/1.idle/Warrior_03__IDLE_009.png',
+  ];
+
   IMAGES_WALKING = [
     "img/2.character/2.walk/Warrior_03__WALK_000.png",
     "img/2.character/2.walk/Warrior_03__WALK_001.png",
@@ -86,6 +99,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_ATTACKING);
+    this.loadImages(this.IMAGES_IDLE);
     this.animate();
     this.applyGravity();
   }
@@ -110,9 +124,6 @@ class Character extends MovableObject {
         this.currentImage = 0;
         this.jump();
       }
-      // if (this.y === 250 && !(this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isDead()) {
-      //   this.currentImage = 0;
-      // } ist für counter reset der jump animation
     }, 1000 / 60);
 
 
@@ -125,15 +136,13 @@ class Character extends MovableObject {
       } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
-        if (this.currentImage === this.IMAGES_JUMPING.length - 1) {
-
+        if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
           this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
-          console.log("reset animation");
         }
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
       } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING);
-        }
+        this.playAnimation(this.IMAGES_IDLE);
       }
     }, 1000 / 10);
 
@@ -142,7 +151,7 @@ class Character extends MovableObject {
       if (this.world.keyboard.D) {
         this.playAnimation(this.IMAGES_ATTACKING);
       }
-    }, 100 / 10);
+    }, 1000 / 10);
   }
 }
 

@@ -61,6 +61,11 @@ class MovableObject extends DrawableObject {
     return timePassed < 0.8;
   }
 
+  isIdle() {
+    return !this.moveRight() && !this.moveLeft();
+  }
+
+
   playAnimation(images) {
     let i = this.currentImage % images.length;
     let path = images[i];
