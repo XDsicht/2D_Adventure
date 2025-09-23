@@ -55,8 +55,9 @@ class World {
 
   checkShootArrow() {
     if (this.keyboard.D) {
-      let arrowX = this.character.x + this.character.width / 3;
-      let arrowY = this.character.y + this.character.height / 3;
+      // let arrowX = this.character.x + this.character.width / 2;
+      let arrowX = this.character.x + this.character.width - 20;
+      let arrowY = this.character.y + this.character.height - 120;
       let arrow = new ThrowableObject(arrowX, arrowY);
       this.level.throwableObjects.push(arrow);
     }

@@ -141,15 +141,12 @@ class Character extends MovableObject {
         }
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
+      } else if (this.world.keyboard.D) {
+        // this.loadImage("img/2.character/5.attack/Warrior_03__ATTACK_009.png");
+        // debugger;
+        this.playAnimation(this.IMAGES_ATTACKING);
       } else {
         this.playAnimation(this.IMAGES_IDLE);
-      }
-    }, 1000 / 10);
-
-    setInterval(() => {
-      // TODO: Check point of origin of arrow and speed of attack animation
-      if (this.world.keyboard.D) {
-        this.playAnimation(this.IMAGES_ATTACKING);
       }
     }, 1000 / 10);
   }

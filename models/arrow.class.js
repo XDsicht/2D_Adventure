@@ -1,7 +1,7 @@
 class Arrow extends MovableObject {
     y = 420;
     width = 36;
-    height = 36;
+    height = 38;
     angle = 105;
 
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';

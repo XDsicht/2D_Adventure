@@ -9,7 +9,7 @@ class ThrowableObject extends MovableObject {
         super().loadImage(this.IMAGE);
         this.x = x;
         this.y = y;
-        this.width = 36;
+        this.width = 38;
         this.height = 36;
         this.shoot();
     }
