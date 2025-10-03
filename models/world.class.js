@@ -47,11 +47,7 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (
-          item instanceof Arrow &&
-          this.quiver.percentage <= 100 &&
-          this.level.throwableObjects.length < 5
-        ) {
+        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.level.throwableObjects.length < 5) {
           this.addAmmunition();
 
           console.log(this.level.throwableObjects); // Testzwecke
@@ -74,6 +70,8 @@ class World {
       let arrowY = this.character.y + this.character.height - 120;
       let arrow = new ThrowableObject(arrowX, arrowY);
       this.level.throwableObjects.push(arrow);
+      this.level.throwableObjects.splice(0, 1);
+      this.quiver.depleteBar();
     }
   }
 

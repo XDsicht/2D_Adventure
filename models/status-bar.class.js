@@ -40,6 +40,14 @@ class StatusBar extends DrawableObject {
         this.setPercentage(this.percentage);
     }
 
+    depleteBar() {
+        this.percentage -= 20;
+        if (this.percentage < 0) {
+            this.percentage = 0;
+        }
+        this.setPercentage(this.percentage);
+    }
+
     checkBarPercentage() {
         if (this.percentage === 100) {
             return true;
