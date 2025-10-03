@@ -11,7 +11,7 @@ class ThrowableObject extends MovableObject {
         this.y = y;
         this.width = 38;
         this.height = 36;
-        this.shoot();
+        // Don't auto-shoot, wait for manual trigger
     }
 
     shoot() {

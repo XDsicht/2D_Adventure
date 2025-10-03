@@ -5,6 +5,8 @@ class Character extends MovableObject {
   y = 250;
   x = 120;
 
+releaseArrow = false;
+
   offset = {
     top: 35,
     left: 100,
@@ -124,6 +126,11 @@ class Character extends MovableObject {
         this.currentImage = 0;
         this.jump();
       }
+
+      if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
+        this.isAttacking = true;
+        this.currentImage = 0;
+      }
     }, 1000 / 60);
 
 
@@ -141,10 +148,14 @@ class Character extends MovableObject {
         }
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.world.keyboard.D) {
-        // this.loadImage("img/2.character/5.attack/Warrior_03__ATTACK_009.png");
-        // debugger;
+      } else if (this.isAttacking) {
         this.playAnimation(this.IMAGES_ATTACKING);
+        if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
+          this.isAttacking = false;
+          this.releaseArrow = true;
+          console.log(this.releaseArrow);
+          
+        }
       } else {
         this.playAnimation(this.IMAGES_IDLE);
       }
