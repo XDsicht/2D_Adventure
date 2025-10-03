@@ -9,8 +9,6 @@ class World {
   quiver = new Quiver();
   coinBar = new CoinBar();
 
-
-
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -49,8 +47,24 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
+        if (
+          item instanceof Arrow &&
+          this.quiver.percentage <= 100 &&
+          this.level.throwableObjects.length < 5
+        ) {
+          this.addAmmunition();
+
+          console.log(this.level.throwableObjects); // Testzwecke
+        }
       }
     });
+  }
+
+  addAmmunition() {
+    let arrowX = this.character.x + this.character.width - 20;
+    let arrowY = this.character.y + this.character.height - 120;
+    let arrow = new ThrowableObject(arrowX, arrowY);
+    this.level.throwableObjects.push(arrow);
   }
 
   checkShootArrow() {
@@ -68,7 +82,9 @@ class World {
     this.ctx.translate(this.camera_x, 0); // Kamera verschieben // nochmal anschauen und verstehen!!!!
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.throwableObjects);
+    if (this.level.throwableObjects.length > 0) {
+      this.addObjectsToMap(this.level.throwableObjects);
+    }
     // ------ Space for fixed objects ----- //
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.arrows);
@@ -118,5 +134,4 @@ class World {
     this.ctx.restore(); // Restore the original state of the canvas
     mo.x = mo.x * -1; // Adjust the x position for flipped image
   }
-
 }

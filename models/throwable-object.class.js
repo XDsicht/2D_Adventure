@@ -23,4 +23,10 @@ class ThrowableObject extends MovableObject {
             this.x += this.speedX;
         }, 25);
     }
+
+    checkQuiverPercentage() {
+        if (this.quiver.percentage === 0) {
+            return true;
+        }
+    }
 }

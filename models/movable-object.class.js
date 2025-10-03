@@ -76,6 +76,10 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  stopAnimation() {
+
+  }
+
   moveRight() {
     this.x += this.speed;
   }
