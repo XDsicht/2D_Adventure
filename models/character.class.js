@@ -5,7 +5,7 @@ class Character extends MovableObject {
   y = 250;
   x = 120;
 
-releaseArrow = false;
+  releaseArrow = false;
 
   offset = {
     top: 35,
@@ -130,6 +130,11 @@ releaseArrow = false;
       if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
         this.isAttacking = true;
         this.currentImage = 0;
+        // setTimeout(() => {
+        //   this.isAttacking = false;
+        //   this.releaseArrow = true;
+        //   console.log(this.releaseArrow);
+        // }, 1000);
       }
     }, 1000 / 60);
 
@@ -146,22 +151,71 @@ releaseArrow = false;
         if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
           this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
         }
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.playAnimation(this.IMAGES_WALKING);
       } else if (this.isAttacking) {
         this.playAnimation(this.IMAGES_ATTACKING);
         if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
           this.isAttacking = false;
           this.releaseArrow = true;
           console.log(this.releaseArrow);
-          
         }
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
       } else {
         this.playAnimation(this.IMAGES_IDLE);
       }
+      
     }, 1000 / 10);
   }
 }
 
 
 // currentImage = 0; resetten, damit die Animation wieder zurückgsetzt wird
+// Methode schreiben, dass Attacking D immer gedrückt bleibt
+// setTimeout, dass Attacking false wird
+// activateAttack() {
+//         if (!this.attacked) {
+//             this.currentImage = 0;
+//             let DIsPressed = setInterval(() => {
+//                 this.attacked = true;
+//                 this.world.keyboard.D = true;
+//             }, 100)
+
+//             setTimeout(() => {
+                
+//                 clearInterval(DIsPressed)
+//                 this.attacked = false;
+//                 this.world.keyboard.D = false;
+//                 this.world.shootNormalBubble();
+//             }, 500)
+//         }
+
+//     }
+// setInterval(() => {
+//       if (this.isDead()) {
+//         this.playAnimation(this.IMAGES_DEAD);
+//       } else if (this.isHurt()) {
+//         this.playAnimation(this.IMAGES_HURT);
+//       } else if (this.isAboveGround()) {
+//         this.characterJumping = false;
+//         this.playAnimation(this.IMAGES_JUMPING);
+//         if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
+//           this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
+//         }
+//       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+//         this.playAnimation(this.IMAGES_WALKING);
+//       } else if (this.isAttacking && !this.alreadyAttacking) {
+//         this.alreadyAttacking = true;
+//         this.currentImage = 0;
+//         this.playAnimation(this.IMAGES_ATTACKING);
+
+//         setTimeout(() => {
+//           this.isAttacking = false;
+//           this.releaseArrow = true;
+//           this.alreadyAttacking = false;
+//           console.log(this.releaseArrow);
+//           }, 1000)
+          
+//       } else {
+//         this.playAnimation(this.IMAGES_IDLE);
+//       }
+//     }, 1000 / 10); // 100

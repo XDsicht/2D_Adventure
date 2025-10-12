@@ -48,7 +48,7 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory<= 5) {
+        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
           this.addAmmunition();
         }
       }
@@ -62,7 +62,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.keyboard.D && this.arrowInventory > 0) {
+    if (this.character.releaseArrow && this.arrowInventory > 0) {
       // Create arrow at shoot time, not when collected
       let arrowX = this.character.x + this.character.width - 20;
       let arrowY = this.character.y + this.character.height - 120;
@@ -72,6 +72,7 @@ class World {
       this.arrowInventory--; // Remove from inventory
       console.log(this.level.throwableObjects);
       this.quiver.depleteBar();
+      this.character.releaseArrow = false; // Reset shooting state
     }
   }
 
@@ -101,8 +102,8 @@ class World {
     objects.forEach((obj) => {
       if (obj instanceof Arrow) {
         obj.drawArrow(this.ctx, obj);
-    } else if (obj instanceof ThrowableObject) {
-      obj.drawArrow(this.ctx, obj);
+      } else if (obj instanceof ThrowableObject) {
+        obj.drawArrow(this.ctx, obj);
       } else {
         this.addToMap(obj);
       }
