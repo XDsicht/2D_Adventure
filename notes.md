@@ -3,7 +3,7 @@ TODO:
 - fix death animation
 - fix attack animation
 - fix shooting direction of arrow if otherDirection
-- only use number of arrows in quiver
+- only use number of arrows in quiver --> done
 - let enemies turn around
 - let endboss walk as soon as character shows up
 - let endboss turn around if character is behind him

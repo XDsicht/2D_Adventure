@@ -128,13 +128,18 @@ class Character extends MovableObject {
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.characterJumping = true;
-        this.currentImage = 0;
+        this.resetCurrentImage();
         this.jump();
+      }
+
+      if (this.isDead() && !this.dead) {
+        this.resetCurrentImage();
+        return this.dead = true;
       }
 
       if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
         this.isAttacking = true;
-        this.currentImage = 0;
+        this.resetCurrentImage();
       }
     }, 1000 / 60);
   }
@@ -142,30 +147,26 @@ class Character extends MovableObject {
   characterMovementAnimationIntervals() {
     setInterval(() => {
 
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
+      // if (this.isDead() && this.dead) {
+      if (this.dead) {
+        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+        }
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
         if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
-          this.loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
+          this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
         }
-      } else
-        // if (this.isAttacking) {
-        // this.playAnimation(this.IMAGES_ATTACKING);
-        // if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
-        //   this.isAttacking = false;
-        //   this.releaseArrow = true;
-        //   console.log(this.releaseArrow);
-        // }
-        // } else 
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING);
-        } else {
-          this.playAnimation(this.IMAGES_IDLE);
-        }
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
+      } else {
+        this.playAnimation(this.IMAGES_IDLE);
+      }
 
     }, 1000 / 10);
   }
@@ -177,7 +178,6 @@ class Character extends MovableObject {
         if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
           this.isAttacking = false;
           this.releaseArrow = true;
-          console.log(this.releaseArrow);
         }
       }
     }, 1000 / 60);

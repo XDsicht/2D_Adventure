@@ -42,4 +42,8 @@ class DrawableObject {
             this.imageCache[path] = img;
         });
     }
+
+    resetCurrentImage() {
+        this.currentImage = 0;
+    }
 }
