@@ -6,6 +6,8 @@ class Character extends MovableObject {
   x = 120;
 
   releaseArrow = false;
+  shootingTime = 0;
+  checkAlreadyRunning = false;
 
   offset = {
     top: 35,
@@ -136,18 +138,50 @@ class Character extends MovableObject {
         this.resetCurrentImage();
         return this.dead = true;
       }
-
-      if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
-        this.isAttacking = true;
-        this.resetCurrentImage();
-      }
     }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0) {
+        // if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
+        // console.log("dKey pressed first", this.world.keyboard.D && this.shotAllowed());
+        this.activateDKey();
+        // this.playAnimation(this.IMAGES_ATTACKING);
+        // console.log(this.currentImage);
+
+        // this.isAttacking = true;
+      }
+    }, 100);
+  }
+
+
+  activateDKey() {
+    if (!this.isAttacking) {
+      this.resetCurrentImage();
+      // this.dPressed = setInterval(() => {
+      this.isAttacking = true;
+      this.world.keyboard.D = true;
+      // console.log("dKey pressed in interval", this.world.keyboard.D);
+      // console.log("dKey isAttacking in interval", this.isAttacking);
+      // }, 100);
+
+
+      setTimeout(() => {
+        // clearInterval(this.dPressed);
+        this.isAttacking = false;
+        this.world.keyboard.D = false;
+        this.releaseArrow = true;
+        // console.log("setTimeout dKey", this.world.keyboard.D);
+        // console.log("setTimeout isAttacking", this.isAttacking);
+        // console.log("setTimeout releaseArrow", this.releaseArrow);
+      }, 500);
+    }
   }
 
   characterMovementAnimationIntervals() {
     setInterval(() => {
-
-      // if (this.isDead() && this.dead) {
+      if (this.isAttacking) {
+        return;
+      }
       if (this.dead) {
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
@@ -172,14 +206,26 @@ class Character extends MovableObject {
   }
 
   characterAttackAnimationIntervals() {
+    // setInterval(() => {
+    //   if (this.isAttacking) {
+    // this.playAnimation(this.IMAGES_ATTACKING);
+    // if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
+    //   this.isAttacking = false;
+    //   this.releaseArrow = true;
+    // }
+    //   }
+    // }, 1000 / 60);
     setInterval(() => {
       if (this.isAttacking) {
         this.playAnimation(this.IMAGES_ATTACKING);
-        if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
-          this.isAttacking = false;
-          this.releaseArrow = true;
-        }
+        console.log(this.currentImage);
       }
-    }, 1000 / 60);
+    }, 50);
+  }
+
+  shotAllowed() {
+    let timePassed = new Date().getTime() - this.shootingTime; // difference in ms
+    timePassed = timePassed / 1000;
+    return timePassed > 0.5; // difference in seconds
   }
 }

@@ -62,7 +62,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.character.releaseArrow && this.arrowInventory > 0) {
+    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
       // Create arrow at shoot time, not when collected
       let arrowX = this.character.x + this.character.width - 20;
       let arrowY = this.character.y + this.character.height - 120;
@@ -70,9 +70,9 @@ class World {
       arrow.shoot(); // Start shooting immediately
       this.level.throwableObjects.push(arrow); // Add to flying arrows
       this.arrowInventory--; // Remove from inventory
-      console.log(this.level.throwableObjects);
       this.quiver.depleteBar();
       this.character.releaseArrow = false; // Reset shooting state
+      this.character.shootingTime = new Date().getTime(); // Record last shot time
     }
   }
 

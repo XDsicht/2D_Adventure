@@ -6,6 +6,7 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5;
   energy = 100;
   lastHit = 0;
+  isAttacking = false;
   // characterJumping = false;
 
   offset = {
@@ -32,7 +33,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  // character.isColliding(chicken)
   isColliding(mo) {
     return (
       this.x + this.width - this.offset.right > mo.x + mo.offset.right &&
