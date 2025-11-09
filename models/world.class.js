@@ -64,8 +64,8 @@ class World {
   checkShootArrow() {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
       // Create arrow at shoot time, not when collected
-      let arrowX = this.character.x + this.character.width - 20;
-      let arrowY = this.character.y + this.character.height - 120;
+      let arrowX = this.character.x + this.character.width - 21;
+      let arrowY = this.character.y + this.character.height - 111;
       let arrow = new ThrowableObject(arrowX, arrowY);
       arrow.shoot(); // Start shooting immediately
       this.level.throwableObjects.push(arrow); // Add to flying arrows
@@ -100,11 +100,10 @@ class World {
 
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
-      if (obj instanceof Arrow) {
+      if (obj instanceof Arrow || obj instanceof ThrowableObject) {
         obj.drawArrow(this.ctx, obj);
-      } else if (obj instanceof ThrowableObject) {
-        obj.drawArrow(this.ctx, obj);
-      } else {
+      }
+      else {
         this.addToMap(obj);
       }
     });
@@ -116,7 +115,7 @@ class World {
     }
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
-    mo.drawOffset(this.ctx);
+    // mo.drawOffset(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }

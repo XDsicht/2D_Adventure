@@ -98,6 +98,7 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
+    // super().loadImage('img/2.character/5.attack/Warrior_03__ATTACK_009.png');
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
@@ -142,13 +143,7 @@ class Character extends MovableObject {
 
     setInterval(() => {
       if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0) {
-        // if (this.world.keyboard.D && this.world.quiver.percentage > 0) {
-        // console.log("dKey pressed first", this.world.keyboard.D && this.shotAllowed());
         this.activateDKey();
-        // this.playAnimation(this.IMAGES_ATTACKING);
-        // console.log(this.currentImage);
-
-        // this.isAttacking = true;
       }
     }, 100);
   }
@@ -157,23 +152,15 @@ class Character extends MovableObject {
   activateDKey() {
     if (!this.isAttacking) {
       this.resetCurrentImage();
-      // this.dPressed = setInterval(() => {
       this.isAttacking = true;
       this.world.keyboard.D = true;
-      // console.log("dKey pressed in interval", this.world.keyboard.D);
-      // console.log("dKey isAttacking in interval", this.isAttacking);
-      // }, 100);
 
 
       setTimeout(() => {
-        // clearInterval(this.dPressed);
         this.isAttacking = false;
         this.world.keyboard.D = false;
         this.releaseArrow = true;
-        // console.log("setTimeout dKey", this.world.keyboard.D);
-        // console.log("setTimeout isAttacking", this.isAttacking);
-        // console.log("setTimeout releaseArrow", this.releaseArrow);
-      }, 500);
+      }, 300);
     }
   }
 
@@ -206,26 +193,16 @@ class Character extends MovableObject {
   }
 
   characterAttackAnimationIntervals() {
-    // setInterval(() => {
-    //   if (this.isAttacking) {
-    // this.playAnimation(this.IMAGES_ATTACKING);
-    // if (this.currentImage === this.IMAGES_ATTACKING.length - 1) {
-    //   this.isAttacking = false;
-    //   this.releaseArrow = true;
-    // }
-    //   }
-    // }, 1000 / 60);
     setInterval(() => {
       if (this.isAttacking) {
         this.playAnimation(this.IMAGES_ATTACKING);
-        console.log(this.currentImage);
       }
-    }, 50);
+    }, 30);
   }
 
   shotAllowed() {
     let timePassed = new Date().getTime() - this.shootingTime; // difference in ms
     timePassed = timePassed / 1000;
-    return timePassed > 0.5; // difference in seconds
+    return timePassed > 0.2; // difference in seconds
   }
 }
