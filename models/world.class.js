@@ -74,6 +74,9 @@ class World {
       this.character.releaseArrow = false; // Reset shooting state
       this.character.shootingTime = new Date().getTime(); // Record last shot time
     }
+    if (!this.level.throwableObjects[0].isAboveGround()) {
+      this.level.throwableObjects.splice(0, 1);
+    }
   }
 
   draw() {
