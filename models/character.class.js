@@ -110,7 +110,7 @@ class Character extends MovableObject {
   }
 
   animate() {
-    // this.characterMovementAnimationIntervals();
+    this.characterMovementAnimationIntervals();
     this.characterActionsIntervals();
     this.characterAttackAnimationIntervals();
   }
@@ -164,33 +164,33 @@ class Character extends MovableObject {
     }
   }
 
-  // characterMovementAnimationIntervals() {
-  //   setInterval(() => {
-  //     if (this.isAttacking) {
-  //       return;
-  //     }
-  //     if (this.dead) {
-  //       if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-  //         this.playAnimation(this.IMAGES_DEAD);
-  //       } else {
-  //         this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-  //       }
-  //     } else if (this.isHurt()) {
-  //       this.playAnimation(this.IMAGES_HURT);
-  //     } else if (this.isAboveGround()) {
-  //       this.characterJumping = false;
-  //       this.playAnimation(this.IMAGES_JUMPING);
-  //       if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
-  //         this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
-  //       }
-  //     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-  //       this.playAnimation(this.IMAGES_WALKING);
-  //     } else {
-  //       this.playAnimation(this.IMAGES_IDLE);
-  //     }
+  characterMovementAnimationIntervals() {
+    setInterval(() => {
+      if (this.isAttacking) {
+        return;
+      }
+      if (this.dead) {
+        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+        }
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.isAboveGround()) {
+        this.characterJumping = false;
+        this.playAnimation(this.IMAGES_JUMPING);
+        if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
+          this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
+        }
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
+      } else {
+        this.playAnimation(this.IMAGES_IDLE);
+      }
 
-  //   }, 1000 / 10);
-  // }
+    }, 1000 / 10);
+  }
 
   characterAttackAnimationIntervals() {
     setInterval(() => {
