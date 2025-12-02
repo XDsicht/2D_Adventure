@@ -48,7 +48,11 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
+        if (
+          item instanceof Arrow &&
+          this.quiver.percentage <= 100 &&
+          this.arrowInventory <= 5
+        ) {
           this.addAmmunition();
         }
       }
@@ -63,19 +67,23 @@ class World {
 
   checkShootArrow() {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
-      // Create arrow at shoot time, not when collected
       let arrowX = this.character.x + this.character.width - 21;
       let arrowY = this.character.y + this.character.height - 117;
       let arrow = new ThrowableObject(arrowX, arrowY);
-      arrow.shoot(); // Start shooting immediately
-      this.level.throwableObjects.push(arrow); // Add to flying arrows
-      this.arrowInventory--; // Remove from inventory
+      arrow.shoot();
+      this.level.throwableObjects.push(arrow);
+      this.arrowInventory--;
       this.quiver.depleteBar();
-      this.character.releaseArrow = false; // Reset shooting state
-      this.character.shootingTime = new Date().getTime(); // Record last shot time
-    }
-    if (!this.level.throwableObjects[0].isAboveGround()) {
-      this.level.throwableObjects.splice(0, 1);
+      this.character.releaseArrow = false;
+      this.character.shootingTime = new Date().getTime();
+      let checkIfArrowIsFlying = setInterval(() => {
+        if (!this.level.throwableObjects[0].isAboveGround()) {
+          this.level.throwableObjects.splice(0, 1);
+        }
+      }, 150);
+      setTimeout(() => { 
+        clearInterval(checkIfArrowIsFlying); 
+      }, 1100);
     }
   }
 
@@ -105,8 +113,7 @@ class World {
     objects.forEach((obj) => {
       if (obj instanceof Arrow || obj instanceof ThrowableObject) {
         obj.drawArrow(this.ctx, obj);
-      }
-      else {
+      } else {
         this.addToMap(obj);
       }
     });
