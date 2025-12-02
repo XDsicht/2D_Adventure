@@ -69,7 +69,7 @@ class World {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
       let arrowX = this.character.x + this.character.width - 21;
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(arrowX, arrowY);
+      let arrow = new ThrowableObject(arrowX, arrowY, this.character.otherDirection);
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;

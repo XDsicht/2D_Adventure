@@ -1,16 +1,16 @@
 class ThrowableObject extends MovableObject {
     speedX = 20;
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
-    angle = 23; // 42 target
+    angle = 23;
     acceleration = 1;
 
-    constructor(x, y) {
+    constructor(x, y, otherDirection) {
         super().loadImage(this.IMAGE);
         this.x = x;
         this.y = y;
         this.width = 45;
         this.height = 33;
-        // Don't auto-shoot, wait for manual trigger
+        this.otherDirection = otherDirection;
     }
 
     shoot() {
@@ -18,7 +18,11 @@ class ThrowableObject extends MovableObject {
         this.applyGravity();
         setInterval(() => {
             if (this.isAboveGround()) {
-                this.x += this.speedX; //349 - x*20
+                if (this.otherDirection) {
+                    this.x -= this.speedX;
+                } else {
+                    this.x += this.speedX;
+                }
             }
         }, 25);
         setInterval(() => {
