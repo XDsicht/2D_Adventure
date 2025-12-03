@@ -26,6 +26,7 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
+      this.checkCollisionsOfArrows();
       this.checkShootArrow();
     }, 100);
   }
@@ -59,6 +60,19 @@ class World {
     });
   }
 
+  checkCollisionsOfArrows() {
+    this.level.throwableObjects.forEach((arrow) => {
+      this.level.enemies.forEach((enemy) => {
+        if (arrow.isColliding(enemy)) {
+          enemy.hit();
+          this.level.throwableObjects.splice(
+            this.level.throwableObjects.indexOf(arrow), 1
+          );
+        }
+      });
+    });
+  }
+
   addAmmunition() {
     if (this.arrowInventory < 5) {
       this.arrowInventory++; // Simple counter
@@ -85,6 +99,7 @@ class World {
         if (!this.level.throwableObjects[0].isAboveGround()) {
           this.level.throwableObjects.splice(0, 1);
         }
+        // this.checkCollisionsOfArrows();
       }, 150);
       setTimeout(() => {
         clearInterval(checkIfArrowIsFlying);

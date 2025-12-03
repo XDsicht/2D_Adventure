@@ -3,6 +3,12 @@ class ThrowableObject extends MovableObject {
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
     angle = 23;
     acceleration = 1;
+    offset = {
+        top: 5,
+        left: 5,
+        right: 5,
+        bottom: 5
+    };
 
     constructor(x, y, otherDirection) {
         super().loadImage(this.IMAGE);
