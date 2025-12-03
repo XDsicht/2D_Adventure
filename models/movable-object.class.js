@@ -95,6 +95,9 @@ class MovableObject extends DrawableObject {
   drawArrow(ctx, mo) {
     ctx.save();
     ctx.translate(mo.x + mo.width / 2, mo.y + mo.height / 2);
+    if (mo.otherDirection) {
+      ctx.scale(-1, 1);
+    }
     ctx.rotate((mo.angle * Math.PI) / 180);
     ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
     ctx.restore();

@@ -67,7 +67,12 @@ class World {
 
   checkShootArrow() {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
-      let arrowX = this.character.x + this.character.width - 21;
+      let arrowX;
+      if (this.character.otherDirection) {
+        arrowX = this.character.x - 24;
+      } else {
+        arrowX = this.character.x + this.character.width - 21;
+      }
       let arrowY = this.character.y + this.character.height - 117;
       let arrow = new ThrowableObject(arrowX, arrowY, this.character.otherDirection);
       arrow.shoot();
@@ -81,8 +86,8 @@ class World {
           this.level.throwableObjects.splice(0, 1);
         }
       }, 150);
-      setTimeout(() => { 
-        clearInterval(checkIfArrowIsFlying); 
+      setTimeout(() => {
+        clearInterval(checkIfArrowIsFlying);
       }, 1100);
     }
   }
