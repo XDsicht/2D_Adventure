@@ -17,6 +17,7 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    this.startGame();
   }
 
   setWorld() {
@@ -26,10 +27,16 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
-      this.checkCollisionsOfArrows();
+      this.checkCollisionOfArrows();
       this.checkShootArrow();
       this.removeDeadEnemies();
     }, 100);
+  }
+
+  startGame() {
+    setInterval(() => {
+      this.checkCollisionOfArrows();
+    }, 25);
   }
 
   checkCollisions() {
@@ -61,7 +68,7 @@ class World {
     });
   }
 
-  checkCollisionsOfArrows() {
+  checkCollisionOfArrows() {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy)) {
@@ -72,7 +79,6 @@ class World {
     });
   }
 
-  //TODO: ACHTUNG ANIMATION ERST DURCHLAUFEN LASSEN.
   removeDeadEnemies() {
   let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
   deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
@@ -151,7 +157,7 @@ class World {
     }
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
-    // mo.drawOffset(this.ctx);
+    mo.drawOffset(this.ctx);
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
