@@ -28,6 +28,7 @@ class World {
       this.checkCollisions();
       this.checkCollisionsOfArrows();
       this.checkShootArrow();
+      this.removeDeadEnemies();
     }, 100);
   }
 
@@ -69,6 +70,12 @@ class World {
         }
       });
     });
+  }
+
+  //TODO: ACHTUNG ANIMATION ERST DURCHLAUFEN LASSEN.
+  removeDeadEnemies() {
+  let deadEnemies = this.level.enemies.filter((enemy) => enemy.dead);
+  deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
   }
 
   addAmmunition() {

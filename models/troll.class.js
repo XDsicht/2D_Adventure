@@ -78,12 +78,26 @@ class Troll extends MovableObject {
 
   animate() {
     setInterval(() => {
-      if (!this.dead) {
+      if (this.isDead() && !this.dead) {
+       this.resetCurrentImage();
+        return this.dead = true;
+      }
+      if(!this.dead) {
         this.moveLeft();
       }
     }, 1000 / 60);
+
     setInterval(() => {
-      if (this.isHurt()) {
+      if (this.dead) {
+        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+        }
+        setTimeout(() => {
+
+        }, 800);
+      } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else {
         this.playAnimation(this.IMAGES_WALKING);
