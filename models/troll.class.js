@@ -4,6 +4,7 @@ class Troll extends MovableObject {
   y = 225;
   otherDirection = true;
   energy = 10;
+  delete = false;
 
   offset = {
     top: 85,
@@ -79,10 +80,10 @@ class Troll extends MovableObject {
   animate() {
     setInterval(() => {
       if (this.isDead() && !this.dead) {
-       this.resetCurrentImage();
-        return this.dead = true;
+        this.resetCurrentImage();
+        return (this.dead = true);
       }
-      if(!this.dead) {
+      if (!this.dead) {
         this.moveLeft();
       }
     }, 1000 / 60);
@@ -93,10 +94,10 @@ class Troll extends MovableObject {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
           this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+          setTimeout(() => {
+            return (this.delete = true);
+          }, 800);
         }
-        setTimeout(() => {
-
-        }, 800);
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else {

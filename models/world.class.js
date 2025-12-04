@@ -74,7 +74,7 @@ class World {
 
   //TODO: ACHTUNG ANIMATION ERST DURCHLAUFEN LASSEN.
   removeDeadEnemies() {
-  let deadEnemies = this.level.enemies.filter((enemy) => enemy.dead);
+  let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
   deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
   }
 
