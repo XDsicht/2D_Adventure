@@ -3,6 +3,7 @@ class Troll extends MovableObject {
   width = 240;
   y = 225;
   otherDirection = true;
+  energy = 10;
 
   offset = {
     top: 85,
@@ -38,34 +39,37 @@ class Troll extends MovableObject {
   ];
 
   IMAGES_DEAD = [
-    'img/3.enemy/7.dead/Troll_03_1_DIE_000.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_001.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_002.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_003.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_004.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_005.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_006.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_007.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_008.png',
-    'img/3.enemy/7.dead/Troll_03_1_DIE_009.png',
+    "img/3.enemy/7.dead/Troll_03_1_DIE_000.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_001.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_002.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_003.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_004.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_005.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_006.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_007.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_008.png",
+    "img/3.enemy/7.dead/Troll_03_1_DIE_009.png",
   ];
 
   IMAGES_ATTACKING = [
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_000.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_001.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_002.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_003.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_004.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_005.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_006.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_007.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_008.png',
-    'img/3.enemy/5.attack/Troll_03_1_ATTACK_009.png',
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_000.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_001.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_002.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_003.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_004.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_005.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_006.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_007.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_008.png",
+    "img/3.enemy/5.attack/Troll_03_1_ATTACK_009.png",
   ];
 
   constructor() {
     super().loadImage("img/3.enemy/1.idle/Troll_03_1_IDLE_000.png");
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_ATTACKING);
     this.moveLeft();
     this.x = 600 + Math.random() * 500;
     this.speed = 0.15 + Math.random() * 0.25;
@@ -74,10 +78,16 @@ class Troll extends MovableObject {
 
   animate() {
     setInterval(() => {
-      this.moveLeft();
+      if (!this.dead) {
+        this.moveLeft();
+      }
     }, 1000 / 60);
     setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
+      if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
     }, 100);
   }
 }

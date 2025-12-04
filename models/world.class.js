@@ -65,9 +65,7 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy)) {
           enemy.hit();
-          this.level.throwableObjects.splice(
-            this.level.throwableObjects.indexOf(arrow), 1
-          );
+          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
         }
       });
     });
@@ -96,10 +94,11 @@ class World {
       this.character.releaseArrow = false;
       this.character.shootingTime = new Date().getTime();
       let checkIfArrowIsFlying = setInterval(() => {
-        if (!this.level.throwableObjects[0].isAboveGround()) {
+        this.level.throwableObjects.forEach((arrow) => {
+          if (!arrow.isAboveGround()) {
           this.level.throwableObjects.splice(0, 1);
         }
-        // this.checkCollisionsOfArrows();
+        });
       }, 150);
       setTimeout(() => {
         clearInterval(checkIfArrowIsFlying);
