@@ -9,6 +9,7 @@ class World {
   quiver = new Quiver();
   coinBar = new CoinBar();
   arrowInventory = 0; // Store arrows before shooting
+  initialObstacleSpawn = 600;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -22,6 +23,12 @@ class World {
 
   setWorld() {
     this.character.world = this;
+    this.level.enemies.forEach((enemy) => {
+      enemy.world = this;
+      if (enemy instanceof Troll) {
+        enemy.x = enemy.calculateSpawningLocation();
+      }
+    });
   }
 
   run() {
@@ -45,23 +52,19 @@ class World {
       if (this.character.isColliding(enemy)) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
-        enemy.isAttacking = true;
-        enemy.resetCurrentImage();
       }
     });
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
 
-  checkWalkingCollisions(){
+  checkWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if(this.character.isWalkingIntoObstacle(enemy)) {
-        // this.character.hit();
-        // this.healthBar.setPercentage(this.character.energy);
+      if (this.character.isWalkingIntoObstacle(enemy) && !enemy.isAttacking) {
         enemy.isAttacking = true;
         enemy.resetCurrentImage();
       }
-    })
+    });
   }
 
   checkCollisionsWithCollectibles(array, bar) {
@@ -87,15 +90,20 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy)) {
           enemy.hit();
-          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
+          this.level.throwableObjects.splice(
+            this.level.throwableObjects.indexOf(arrow),
+            1
+          );
         }
       });
     });
   }
 
   removeDeadEnemies() {
-  let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
-  deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
+    let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
+    deadEnemies.forEach((enemy) =>
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1)
+    );
   }
 
   addAmmunition() {
@@ -105,7 +113,11 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
+    if (
+      this.character.releaseArrow &&
+      this.arrowInventory > 0 &&
+      this.character.shotAllowed()
+    ) {
       let arrowX;
       if (this.character.otherDirection) {
         arrowX = this.character.x - 24;
@@ -113,7 +125,11 @@ class World {
         arrowX = this.character.x + this.character.width - 21;
       }
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(arrowX, arrowY, this.character.otherDirection);
+      let arrow = new ThrowableObject(
+        arrowX,
+        arrowY,
+        this.character.otherDirection
+      );
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;
@@ -123,8 +139,8 @@ class World {
       let checkIfArrowIsFlying = setInterval(() => {
         this.level.throwableObjects.forEach((arrow) => {
           if (!arrow.isAboveGround()) {
-          this.level.throwableObjects.splice(0, 1);
-        }
+            this.level.throwableObjects.splice(0, 1);
+          }
         });
       }, 150);
       setTimeout(() => {
