@@ -205,4 +205,14 @@ class Character extends MovableObject {
     timePassed = timePassed / 1000;
     return timePassed > 0.2; // difference in seconds
   }
+
+  isWalkingIntoObstacle(enemy) {
+    return (
+      // this.x + this.width - this.offset.right > enemy.x + enemy.offset.right &&
+      this.x + this.width - this.offset.right > enemy.x + (enemy.offset.right*0.8) &&
+      // this.y + this.height - this.offset.bottom > enemy.y + enemy.offset.top &&
+      this.x + (this.offset.left*0.8) < enemy.x + enemy.width - enemy.offset.left 
+      // && this.y + this.offset.top < enemy.y + enemy.height - enemy.offset.bottom
+    );
+  }
 }

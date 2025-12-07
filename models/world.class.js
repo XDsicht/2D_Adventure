@@ -40,14 +40,28 @@ class World {
   }
 
   checkCollisions() {
+    this.checkWalkingCollisions();
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
+        enemy.isAttacking = true;
+        enemy.resetCurrentImage();
       }
     });
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
+  }
+
+  checkWalkingCollisions(){
+    this.level.enemies.forEach((enemy) => {
+      if(this.character.isWalkingIntoObstacle(enemy)) {
+        // this.character.hit();
+        // this.healthBar.setPercentage(this.character.energy);
+        enemy.isAttacking = true;
+        enemy.resetCurrentImage();
+      }
+    })
   }
 
   checkCollisionsWithCollectibles(array, bar) {

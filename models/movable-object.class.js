@@ -76,10 +76,6 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  stopAnimation() {
-
-  }
-
   moveRight() {
     this.x += this.speed;
   }
@@ -89,7 +85,7 @@ class MovableObject extends DrawableObject {
   }
 
   jump() {
-    this.speedY = 25; // Set the speedY to a positive value to make the character jump 25
+    this.speedY = 25;
   }
 
   drawArrow(ctx, mo) {

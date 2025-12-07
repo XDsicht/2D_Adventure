@@ -89,7 +89,9 @@ class Troll extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.dead) {
+      if(this.isAttacking) {
+        this.playAnimation(this.IMAGES_ATTACKING);
+      } else if (this.dead) {
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
