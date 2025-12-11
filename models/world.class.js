@@ -49,7 +49,7 @@ class World {
   checkCollisions() {
     this.checkWalkingCollisions();
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy)) {
+      if (this.character.isColliding(enemy) && !enemy.dead) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
       }
@@ -60,7 +60,11 @@ class World {
 
   checkWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isWalkingIntoObstacle(enemy) && !enemy.isAttacking) {
+      if (
+        this.character.isWalkingIntoObstacle(enemy) &&
+        !enemy.isAttacking &&
+        !enemy.dead
+      ) {
         enemy.isAttacking = true;
         enemy.resetCurrentImage();
       }

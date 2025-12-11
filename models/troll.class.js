@@ -78,8 +78,9 @@ class Troll extends MovableObject {
   }
 
   calculateSpawningLocation() {
-    this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
-    return this.world.initialObstacleSpawn = this.spawningLocation;
+    this.spawningLocation =
+      this.world.initialObstacleSpawn + Math.random() * 500;
+    return (this.world.initialObstacleSpawn = this.spawningLocation);
   }
 
   animate() {
@@ -99,7 +100,7 @@ class Troll extends MovableObject {
           this.playAnimation(this.IMAGES_ATTACKING);
         } else {
           this.isAttacking = false;
-        };
+        }
       } else if (this.dead) {
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
@@ -108,7 +109,7 @@ class Troll extends MovableObject {
           setTimeout(() => {
             return (this.delete = true);
           }, 800);
-        };
+        }
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else {
