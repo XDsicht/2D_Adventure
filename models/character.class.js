@@ -8,6 +8,7 @@ class Character extends MovableObject {
   releaseArrow = false;
   shootingTime = 0;
   checkAlreadyRunning = false;
+  characterJumping = false;
 
   offset = {
     top: 35,
@@ -217,6 +218,13 @@ class Character extends MovableObject {
         enemy.x + enemy.offset.right * 0.8 &&
       this.x + this.offset.left * 0.8 <
         enemy.x + enemy.width - enemy.offset.left
+    );
+  }
+
+  isCollidingVertically(mo) {
+    return (
+      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
     );
   }
 }

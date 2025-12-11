@@ -47,9 +47,14 @@ class World {
   }
 
   checkCollisions() {
-    this.checkWalkingCollisions();
+    this.checkEnemyWalkingCollisions();
+    this.checkCharacterJumpingCollisions();
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !enemy.dead) {
+      if (
+        this.character.isColliding(enemy) &&
+        !this.character.characterJumping &&
+        !enemy.dead
+      ) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
       }
@@ -58,7 +63,7 @@ class World {
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
 
-  checkWalkingCollisions() {
+  checkEnemyWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (
         this.character.isWalkingIntoObstacle(enemy) &&
@@ -67,6 +72,20 @@ class World {
       ) {
         enemy.isAttacking = true;
         enemy.resetCurrentImage();
+      }
+    });
+  }
+
+  checkCharacterJumpingCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (
+        this.character.isCollidingVertically(enemy) &&
+        this.character.isAboveGround()
+      ) {
+        // debugger;
+        enemy.isDead();
+        enemy.resetCurrentImage();
+        enemy.dead == true;
       }
     });
   }
