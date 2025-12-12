@@ -212,7 +212,7 @@ class Character extends MovableObject {
     return timePassed > 0.2; // difference in seconds
   }
 
-  isWalkingIntoObstacle(enemy) {
+  isEncounteringObstacle(enemy) {
     return (
       this.x + this.width - this.offset.right >
         enemy.x + enemy.offset.right * 0.8 &&
@@ -223,8 +223,14 @@ class Character extends MovableObject {
 
   isCollidingVertically(mo) {
     return (
-      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
-      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+      // this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      // this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+      // this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      // this.x + this.offset.left < mo.x + mo.width - mo.offset.right
+      this.y + this.height - this.offset.bottom < mo.y + mo.offset.top &&
+      this.x + this.width - this.offset.right <
+        mo.x + mo.width - mo.offset.right
+      // && this.x + this.offset.left < mo.x + mo.width - mo.offset.right
     );
   }
 }

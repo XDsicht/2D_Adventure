@@ -49,16 +49,7 @@ class World {
   checkCollisions() {
     this.checkEnemyWalkingCollisions();
     this.checkCharacterJumpingCollisions();
-    this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        !this.character.characterJumping &&
-        !enemy.dead
-      ) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
-      }
-    });
+    this.checkCharacterWalkingCollisions();
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
@@ -66,7 +57,8 @@ class World {
   checkEnemyWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (
-        this.character.isWalkingIntoObstacle(enemy) &&
+        this.character.isEncounteringObstacle(enemy) &&
+        // !this.character.characterJumping &&
         !enemy.isAttacking &&
         !enemy.dead
       ) {
@@ -79,13 +71,34 @@ class World {
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (
-        this.character.isCollidingVertically(enemy) &&
-        this.character.isAboveGround()
+        this.character.isCollidingVertically(enemy)
+        // && this.character.isAboveGround()
       ) {
+        console.log(this.character.isCollidingVertically(enemy));
+        console.log(this.character.isAboveGround());
+        console.log(
+          this.character.isCollidingVertically(enemy) &&
+            this.character.isAboveGround()
+        );
+
         // debugger;
         enemy.isDead();
         enemy.resetCurrentImage();
         enemy.dead == true;
+        enemy.isAttacking = false;
+      }
+    });
+  }
+
+  checkCharacterWalkingCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (
+        this.character.isColliding(enemy) &&
+        !this.character.characterJumping &&
+        !enemy.dead
+      ) {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
       }
     });
   }
