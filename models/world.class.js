@@ -56,10 +56,12 @@ class World {
 
   checkEnemyWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
+      let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (this.character.isEncounteringObstacle(enemy) &&
         // !this.character.characterJumping &&
-        !enemy.isAttacking && !enemy.dead) {
+        !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
         enemy.isAttacking = true;
+        enemy.lastAttackTime = new Date().getTime();
         enemy.resetCurrentImage();
       }
     });
@@ -67,17 +69,12 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy)
-        // && this.character.isAboveGround()
+      if (this.character.isCollidingVertically(enemy) &&
+        this.character.isAboveGround()
       ) {
-        console.log(this.character.isCollidingVertically(enemy));
-        console.log(this.character.isAboveGround());
-        console.log(this.character.isCollidingVertically(enemy) && this.character.isAboveGround());
-
-        // debugger;
         enemy.isDead();
         enemy.resetCurrentImage();
-        enemy.dead == true;
+        enemy.dead = true;
         enemy.isAttacking = false;
       }
     });

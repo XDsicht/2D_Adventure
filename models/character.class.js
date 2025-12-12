@@ -216,13 +216,13 @@ class Character extends MovableObject {
 
   isCollidingVertically(mo) {
     return (
-      // this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
-      // this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
-      // this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
-      // this.x + this.offset.left < mo.x + mo.width - mo.offset.right
+      // Character ist über dem Enemy (vertikale Position)
       this.y + this.height - this.offset.bottom < mo.y + mo.offset.top &&
-      this.x + this.width - this.offset.right < mo.x + mo.width - mo.offset.right
-      // && this.x + this.offset.left < mo.x + mo.width - mo.offset.right
+      // Vollständige horizontale Überlappung prüfen
+      mo.x + mo.width - mo.offset.right > this.x + this.offset.left &&
+      mo.x < this.x + this.width - this.offset.right &&
+      // Character bewegt sich nach unten (fallend)
+      this.speedY > 0
     );
   }
 }

@@ -5,6 +5,7 @@ class Troll extends MovableObject {
   otherDirection = true;
   energy = 10;
   delete = false;
+  lastAttackTime = 0;
 
   offset = {
     top: 85,
@@ -100,6 +101,7 @@ class Troll extends MovableObject {
           this.playAnimation(this.IMAGES_ATTACKING);
         } else {
           this.isAttacking = false;
+          this.resetCurrentImage();
         }
       } else if (this.dead) {
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
