@@ -56,12 +56,9 @@ class World {
 
   checkEnemyWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isEncounteringObstacle(enemy) &&
+      if (this.character.isEncounteringObstacle(enemy) &&
         // !this.character.characterJumping &&
-        !enemy.isAttacking &&
-        !enemy.dead
-      ) {
+        !enemy.isAttacking && !enemy.dead) {
         enemy.isAttacking = true;
         enemy.resetCurrentImage();
       }
@@ -70,16 +67,12 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isCollidingVertically(enemy)
+      if (this.character.isCollidingVertically(enemy)
         // && this.character.isAboveGround()
       ) {
         console.log(this.character.isCollidingVertically(enemy));
         console.log(this.character.isAboveGround());
-        console.log(
-          this.character.isCollidingVertically(enemy) &&
-            this.character.isAboveGround()
-        );
+        console.log(this.character.isCollidingVertically(enemy) && this.character.isAboveGround());
 
         // debugger;
         enemy.isDead();
@@ -92,11 +85,7 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        !this.character.characterJumping &&
-        !enemy.dead
-      ) {
+      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
       }
@@ -110,11 +99,7 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (
-          item instanceof Arrow &&
-          this.quiver.percentage <= 100 &&
-          this.arrowInventory <= 5
-        ) {
+        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
           this.addAmmunition();
         }
       }
@@ -126,10 +111,7 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy)) {
           enemy.hit();
-          this.level.throwableObjects.splice(
-            this.level.throwableObjects.indexOf(arrow),
-            1
-          );
+          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
         }
       });
     });
@@ -137,9 +119,7 @@ class World {
 
   removeDeadEnemies() {
     let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
-    deadEnemies.forEach((enemy) =>
-      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1)
-    );
+    deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
   }
 
   addAmmunition() {
@@ -149,10 +129,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (
-      this.character.releaseArrow &&
-      this.arrowInventory > 0 &&
-      this.character.shotAllowed()
+    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()
     ) {
       let arrowX;
       if (this.character.otherDirection) {
@@ -161,11 +138,7 @@ class World {
         arrowX = this.character.x + this.character.width - 21;
       }
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(
-        arrowX,
-        arrowY,
-        this.character.otherDirection
-      );
+      let arrow = new ThrowableObject(arrowX,arrowY, this.character.otherDirection);
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;

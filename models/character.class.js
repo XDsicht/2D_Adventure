@@ -143,12 +143,7 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (
-        this.world.keyboard.D &&
-        this.shotAllowed() &&
-        !this.isAttacking &&
-        this.world.quiver.percentage > 0
-      ) {
+      if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0) {
         this.activateDKey();
       }
     }, 100);
@@ -214,10 +209,8 @@ class Character extends MovableObject {
 
   isEncounteringObstacle(enemy) {
     return (
-      this.x + this.width - this.offset.right >
-        enemy.x + enemy.offset.right * 0.8 &&
-      this.x + this.offset.left * 0.8 <
-        enemy.x + enemy.width - enemy.offset.left
+      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right * 0.8 &&
+      this.x + this.offset.left * 0.8 < enemy.x + enemy.width - enemy.offset.left
     );
   }
 
@@ -228,8 +221,7 @@ class Character extends MovableObject {
       // this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
       // this.x + this.offset.left < mo.x + mo.width - mo.offset.right
       this.y + this.height - this.offset.bottom < mo.y + mo.offset.top &&
-      this.x + this.width - this.offset.right <
-        mo.x + mo.width - mo.offset.right
+      this.x + this.width - this.offset.right < mo.x + mo.width - mo.offset.right
       // && this.x + this.offset.left < mo.x + mo.width - mo.offset.right
     );
   }
