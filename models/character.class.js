@@ -116,42 +116,43 @@ class Character extends MovableObject {
     this.characterAttackAnimationIntervals();
   }
 
-  characterActionsIntervals() {
-    setInterval(() => {
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight();
-        this.otherDirection = false;
-        // this.walking_sound.play();
-      }
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirection = true;
-        // this.walking_sound.play();
-      }
-      this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
+  characterActionsIntervals() {    
+    if (!this.dead) {
+      let actions = setInterval(() => {
+        if (
+          this.world.keyboard.RIGHT &&
+          this.x < this.world.level.level_end_x
+        ) {
+          this.moveRight();
+          this.otherDirection = false;
+          // this.walking_sound.play();
+        }
+        if (this.world.keyboard.LEFT && this.x > 0) {
+          this.moveLeft();
+          this.otherDirection = true;
+          // this.walking_sound.play();
+        }
+        this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
 
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        this.characterJumping = true;
-        this.resetCurrentImage();
-        this.jump();
-      }
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+          this.characterJumping = true;
+          this.resetCurrentImage();
+          this.jump();
+        }
 
-      if (this.isDead() && !this.dead) {
-        this.resetCurrentImage();
-        return (this.dead = true);
-      }
-    }, 1000 / 60);
+        if (this.isDead() && !this.dead) {
+          this.resetCurrentImage();
+          clearInterval(actions)
+          return (this.dead = true);
+        }
+      }, 1000 / 60);
 
-    setInterval(() => {
-      if (
-        this.world.keyboard.D &&
-        this.shotAllowed() &&
-        !this.isAttacking &&
-        this.world.quiver.percentage > 0
-      ) {
-        this.activateDKey();
-      }
-    }, 100);
+      setInterval(() => {
+        if (this.world.keyboard.D &&this.shotAllowed() &&!this.isAttacking &&this.world.quiver.percentage > 0 && !this.dead) {
+          this.activateDKey();
+        }
+      }, 100);
+    }
   }
 
   activateDKey() {
@@ -184,10 +185,7 @@ class Character extends MovableObject {
       } else if (this.isAboveGround()) {
         this.characterJumping = false;
         this.playAnimation(this.IMAGES_JUMPING);
-        if (
-          this.currentImage === this.IMAGES_JUMPING.length - 1 ||
-          !this.isAboveGround()
-        ) {
+        if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
           this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
         }
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -214,10 +212,8 @@ class Character extends MovableObject {
 
   isEncounteringObstacle(enemy) {
     return (
-      this.x + this.width - this.offset.right >
-        enemy.x + enemy.offset.right * 0.8 &&
-      this.x + this.offset.left * 0.8 <
-        enemy.x + enemy.width - enemy.offset.left
+      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right * 0.8 &&
+      this.x + this.offset.left * 0.8 < enemy.x + enemy.width - enemy.offset.left
     );
   }
 

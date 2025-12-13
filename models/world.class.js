@@ -57,9 +57,7 @@ class World {
   checkEnemyWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
-      if (this.character.isEncounteringObstacle(enemy) &&
-        // !this.character.characterJumping &&
-        !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+      if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
         enemy.isAttacking = true;
         enemy.lastAttackTime = new Date().getTime();
         enemy.resetCurrentImage();
@@ -69,9 +67,7 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy) &&
-        this.character.isAboveGround()
-      ) {
+      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead) {
         enemy.isDead();
         enemy.resetCurrentImage();
         enemy.dead = true;
@@ -96,7 +92,11 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
+        if (
+          item instanceof Arrow &&
+          this.quiver.percentage <= 100 &&
+          this.arrowInventory <= 5
+        ) {
           this.addAmmunition();
         }
       }
@@ -108,7 +108,10 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy)) {
           enemy.hit();
-          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
+          this.level.throwableObjects.splice(
+            this.level.throwableObjects.indexOf(arrow),
+            1
+          );
         }
       });
     });
@@ -116,7 +119,9 @@ class World {
 
   removeDeadEnemies() {
     let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
-    deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
+    deadEnemies.forEach((enemy) =>
+      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1)
+    );
   }
 
   addAmmunition() {
@@ -126,8 +131,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()
-    ) {
+    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
       let arrowX;
       if (this.character.otherDirection) {
         arrowX = this.character.x - 24;
@@ -135,7 +139,11 @@ class World {
         arrowX = this.character.x + this.character.width - 21;
       }
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(arrowX,arrowY, this.character.otherDirection);
+      let arrow = new ThrowableObject(
+        arrowX,
+        arrowY,
+        this.character.otherDirection
+      );
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;
