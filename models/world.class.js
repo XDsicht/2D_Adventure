@@ -121,7 +121,7 @@ class World {
 
   addAmmunition() {
     if (this.arrowInventory < 5) {
-      this.arrowInventory++; // Simple counter
+      this.arrowInventory++;
     }
   }
 

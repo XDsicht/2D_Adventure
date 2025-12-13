@@ -143,7 +143,12 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0) {
+      if (
+        this.world.keyboard.D &&
+        this.shotAllowed() &&
+        !this.isAttacking &&
+        this.world.quiver.percentage > 0
+      ) {
         this.activateDKey();
       }
     }, 100);
@@ -209,20 +214,19 @@ class Character extends MovableObject {
 
   isEncounteringObstacle(enemy) {
     return (
-      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right * 0.8 &&
-      this.x + this.offset.left * 0.8 < enemy.x + enemy.width - enemy.offset.left
+      this.x + this.width - this.offset.right >
+        enemy.x + enemy.offset.right * 0.8 &&
+      this.x + this.offset.left * 0.8 <
+        enemy.x + enemy.width - enemy.offset.left
     );
   }
 
   isCollidingVertically(mo) {
     return (
-      // Character ist über dem Enemy (vertikale Position)
+      this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
       this.y + this.height - this.offset.bottom < mo.y + mo.offset.top &&
-      // Vollständige horizontale Überlappung prüfen
-      mo.x + mo.width - mo.offset.right > this.x + this.offset.left &&
-      mo.x < this.x + this.width - this.offset.right &&
-      // Character bewegt sich nach unten (fallend)
-      this.speedY > 0
+      this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      this.speedY != 0
     );
   }
 }
