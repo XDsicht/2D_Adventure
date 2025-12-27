@@ -5,7 +5,7 @@ class Troll extends MovableObject {
   otherDirection = true;
   energy = 10;
   delete = false;
-  lastAttackTime = 0;
+  
 
   offset = {
     top: 85,

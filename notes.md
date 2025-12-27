@@ -6,8 +6,8 @@ TODO:
 <!-- - only use number of arrows in quiver --> done 
 
 <!-- - add bouncing effect for character on enemies while jumping --> done
-- let enemies turn around
-- let endboss walk as soon as character shows up
+<!-- - let enemies turn around --> done
+<!-- - let endboss walk as soon as character shows up --> done
 - let endboss turn around if character is behind him
 
 <!-- - fix hit animation of character --> done 

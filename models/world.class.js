@@ -47,15 +47,15 @@ class World {
   }
 
   checkCollisions() {
-    this.checkEnemyWalkingCollisions();
+    this.checkEnemyWalkingCollisions(this.level.enemies);
     this.checkCharacterJumpingCollisions();
     this.checkCharacterWalkingCollisions();
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
 
-  checkEnemyWalkingCollisions() {
-    this.level.enemies.forEach((enemy) => {
+  checkEnemyWalkingCollisions(enemies) {
+    enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
         enemy.isAttacking = true;
@@ -169,8 +169,8 @@ class World {
     // ------ Space for fixed objects ----- //
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.arrows);
-    this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+    this.addToMap(this.character);
     this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);
