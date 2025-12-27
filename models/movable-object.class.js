@@ -90,6 +90,14 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
+  move() {
+    if (this.otherDirection) {
+      this.moveLeft();
+    } else {
+      this.moveRight();
+    }
+  }
+
   jump() {
     this.speedY = 25;
   }

@@ -5,7 +5,7 @@ TODO:
 <!-- - fix shooting direction of arrow if otherDirection --> done 
 <!-- - only use number of arrows in quiver --> done 
 
-- add bouncing effect for character on enemies while jumping
+<!-- - add bouncing effect for character on enemies while jumping --> done
 - let enemies turn around
 - let endboss walk as soon as character shows up
 - let endboss turn around if character is behind him

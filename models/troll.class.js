@@ -1,7 +1,7 @@
 class Troll extends MovableObject {
   height = 240;
   width = 240;
-  y = 225;
+  y = 226;
   otherDirection = true;
   energy = 10;
   delete = false;
@@ -84,6 +84,15 @@ class Troll extends MovableObject {
     return (this.world.initialObstacleSpawn = this.spawningLocation);
   }
 
+  isCharacterBehind() {
+    if (!this.world || !this.world.character) return false;
+    if (this.otherDirection) {
+      return this.world.character.x > this.x;
+    } else {
+      return this.world.character.x < this.x;
+    }
+  }
+
   animate() {
     setInterval(() => {
       if (this.isDead() && !this.dead) {
@@ -91,7 +100,10 @@ class Troll extends MovableObject {
         return (this.dead = true);
       }
       if (!this.dead) {
-        this.moveLeft();
+        if (this.isCharacterBehind()) {
+          this.otherDirection = !this.otherDirection;
+        }
+        this.move();
       }
     }, 1000 / 60);
 
@@ -104,9 +116,11 @@ class Troll extends MovableObject {
           this.resetCurrentImage();
         }
       } else if (this.dead) {
+        this.y = 228;
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
+          
           this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
           setTimeout(() => {
             return (this.delete = true);
