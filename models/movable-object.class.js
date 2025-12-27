@@ -24,6 +24,10 @@ class MovableObject extends DrawableObject {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
       }
+      if (!this.isAboveGround() && this.speedY < 0) {
+        this.y = 250;
+        this.speedY = 0;
+      }
     }, 1000 / 20);
   }
 
@@ -88,6 +92,10 @@ class MovableObject extends DrawableObject {
 
   jump() {
     this.speedY = 25;
+  }
+
+  bounce() {
+    this.speedY = 20;
   }
 
   drawArrow(ctx, mo) {

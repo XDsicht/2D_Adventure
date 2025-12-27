@@ -119,10 +119,7 @@ class Character extends MovableObject {
   characterActionsIntervals() {    
     if (!this.dead) {
       let actions = setInterval(() => {
-        if (
-          this.world.keyboard.RIGHT &&
-          this.x < this.world.level.level_end_x
-        ) {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
           this.moveRight();
           this.otherDirection = false;
           // this.walking_sound.play();
@@ -220,9 +217,10 @@ class Character extends MovableObject {
   isCollidingVertically(mo) {
     return (
       this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-      this.y + this.height - this.offset.bottom < mo.y + mo.offset.top &&
+      this.y + this.height - this.offset.bottom < mo.y + mo.height - mo.offset.bottom &&
+      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
       this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
-      this.speedY != 0
+      this.speedY < 0
     );
   }
 }

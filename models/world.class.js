@@ -67,7 +67,8 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead) {
+      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
+        this.character.bounce();
         enemy.isDead();
         enemy.resetCurrentImage();
         enemy.dead = true;
@@ -92,11 +93,7 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (
-          item instanceof Arrow &&
-          this.quiver.percentage <= 100 &&
-          this.arrowInventory <= 5
-        ) {
+        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
           this.addAmmunition();
         }
       }
