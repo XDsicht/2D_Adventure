@@ -9,6 +9,8 @@ class Endboss extends MovableObject {
   walkHeight = 360;
   attackWidth = 465;
   attackHeight = 640;
+  walkY = 102;
+  attackY = -158;
 
   IMAGES_WALKING = [
     "img/4.boss/2.walk/Walk_000.png",
@@ -104,6 +106,7 @@ class Endboss extends MovableObject {
 
     setInterval(() => {
       if (this.isAttacking) {
+        this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
@@ -111,10 +114,9 @@ class Endboss extends MovableObject {
         } else {
           this.isAttacking = false;
           this.resetCurrentImage();
-          this.width = this.walkWidth;
-          this.height = this.walkHeight;
         }
       } else {
+        this.y = this.walkY;
         this.width = this.walkWidth;
         this.height = this.walkHeight;
         this.playAnimation(this.IMAGES_WALKING);
