@@ -2,8 +2,6 @@ class Endboss extends MovableObject {
   height = 360;
   width = 340;
   y = 102;
-  otherDirection = true;
-  activated = false;
   speed = 0.9;
   walkWidth = 340;
   walkHeight = 360;
@@ -11,11 +9,19 @@ class Endboss extends MovableObject {
   runWidth = 365;
   runHeight = 550;
   runY = -110;
+  jumpWidth = 400;
+  jumpHeight = 520;
+  jumpY = -40;
   attackWidth = 465;
   attackHeight = 640;
   attackY = -158;
+  otherDirection = true;
+  activated = false;
   isAngry = false;
   isRunning = false;
+  isTransitioning = false;
+  attackAnimationStarted = false;
+  showTransitionImage = false;
 
   IMAGES_WALKING = [
     "img/4.boss/2.walk/Walk_000.png",
@@ -41,6 +47,19 @@ class Endboss extends MovableObject {
     "img/4.boss/3.run/Run_007.png",
     "img/4.boss/3.run/Run_008.png",
     "img/4.boss/3.run/Run_009.png",
+  ];
+
+  IMAGES_JUMP = [
+    "img/4.boss/4.jump/Jump_000.png",
+    "img/4.boss/4.jump/Jump_001.png",
+    "img/4.boss/4.jump/Jump_002.png",
+    "img/4.boss/4.jump/Jump_003.png",
+    "img/4.boss/4.jump/Jump_004.png",
+    "img/4.boss/4.jump/Jump_005.png",
+    "img/4.boss/4.jump/Jump_006.png",
+    "img/4.boss/4.jump/Jump_007.png",
+    "img/4.boss/4.jump/Jump_008.png",
+    "img/4.boss/4.jump/Jump_009.png",
   ];
 
   IMAGES_HURT = [
@@ -86,6 +105,7 @@ class Endboss extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_RUN);
+    this.loadImages(this.IMAGES_JUMP);
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -121,6 +141,19 @@ class Endboss extends MovableObject {
     }
   }
 
+  startAttackTransition() {
+    if (!this.isTransitioning && !this.isAttacking) {
+      this.isTransitioning = true;
+      this.showTransitionImage = true;
+      setTimeout(() => {
+        if (this.isTransitioning) {
+          this.isAttacking = true;
+          this.showTransitionImage = false;
+        }
+      }, 150);
+    }
+  }
+
   animate() {
     setInterval(() => {
       if (this.isInCharacterFrame() && !this.activated) {
@@ -136,16 +169,32 @@ class Endboss extends MovableObject {
 
     setInterval(() => {
       if (this.isAttacking) {
-        this.y = this.attackY;
-        this.width = this.attackWidth;
-        this.height = this.attackHeight;
+        if (!this.attackAnimationStarted) {
+          this.attackAnimationStarted = true;
+        }
+        if (this.attackAnimationStarted) {
+          this.y = this.attackY;
+          this.width = this.attackWidth;
+          this.height = this.attackHeight;
+        }
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
         } else {
           this.isAttacking = false;
+          this.attackAnimationStarted = false;
+          this.isTransitioning = false;
+          this.showTransitionImage = false;
           this.resetCurrentImage();
         }
-      } else if (this.isRunning) {
+      } else if (this.showTransitionImage) {
+        this.y = this.jumpY;
+        this.width = this.jumpWidth;
+        this.height = this.jumpHeight;
+        if (this.currentImage === 0) {
+          debugger;
+        }
+        this.playAnimation(this.IMAGES_JUMP);
+      } else if (this.isTransitioning || this.isRunning) {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;

@@ -58,7 +58,11 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
-        enemy.isAttacking = true;
+        if (enemy.startAttackTransition) {
+          enemy.startAttackTransition();
+        } else {
+          enemy.isAttacking = true;
+        }
         enemy.lastAttackTime = new Date().getTime();
         enemy.resetCurrentImage();
       }
