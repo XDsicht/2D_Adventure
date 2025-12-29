@@ -214,6 +214,13 @@ class Character extends MovableObject {
     );
   }
 
+  isEncounteringEndboss(endboss) {
+return (
+      this.x + this.width - this.offset.right > endboss.x + endboss.offset.right * 0.8 &&
+      this.x + this.offset.left * 0.8 < endboss.x + endboss.width - endboss.offset.left
+    );
+  }
+
   isCollidingVertically(mo) {
     return (
       this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&

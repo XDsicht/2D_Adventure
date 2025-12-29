@@ -4,39 +4,34 @@ TODO:
 <!-- - fix attack animation --> done 
 <!-- - fix shooting direction of arrow if otherDirection --> done 
 <!-- - only use number of arrows in quiver --> done 
-
 <!-- - add bouncing effect for character on enemies while jumping --> done
 <!-- - let enemies turn around --> done
 <!-- - let endboss walk as soon as character shows up --> done
-- let endboss turn around if character is behind him
-
 <!-- - fix hit animation of character --> done 
 <!-- - fix attack animation of character: --> done 
-  <!-- - don't restart attack when D double pressed --> done 
-
-- fix colliding functions for:
-  <!-- - arrows with enemies --> done 
-  <!-- - character with enemies while jumping --> done 
-
-  - character with enemies while colliding?
-  - character with endboss while colliding?
-
-  - add second set of enemies
-
+<!-- - don't restart attack when D double pressed --> done 
+<!-- - fix colliding functions for: --> done
+<!-- - arrows with enemies --> done 
+<!-- - character with enemies while jumping --> done 
+<!-- - character with enemies while colliding? --> done
+<!-- - character with endboss while colliding? --> done
 <!-- - add death animations for enemies --> done 
-
-- and death animation for endboss
-
+<!-- - and death animation for endboss -->
 <!-- - add hurt animations to enemies --> done 
-
-- add hurt animations to endboss
-- add hit animations for enemies and endboss
-
+<!-- - add hurt animations to endboss -->
+<!-- - add hit animations for enemies and endboss -->
 <!-- - add hit logic for enemies --> done 
+<!-- - add hit logic for endboss -->
 
-- add hit logic for endboss
 - add game restart logic
 - make canvas responsive
+- add second set of enemies
+- adjust hit logic for character while attacked by endboss
+- adjust hit frame for endboss for arrows
+- let endboss turn around if character is behind him
+- clean up unused variables and functions
+- clean up functions
+- clean up transition logic of animation for endboss
 
 <!-- geschossen wird, wenn das Objekt erstellt wird, d.h.: 1. Array mit Arrows füllen 2. Shoot ausführen bei Tastendruck -->
 

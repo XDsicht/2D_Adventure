@@ -57,21 +57,35 @@ class World {
   checkEnemyWalkingCollisions(enemies) {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
-      if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
-        if (enemy.startAttackTransition) {
-          enemy.startAttackTransition();
-        } else {
+      if (enemy instanceof Troll) {
+        if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
+          enemy.lastAttackTime = new Date().getTime();
+          enemy.resetCurrentImage();
         }
-        enemy.lastAttackTime = new Date().getTime();
-        enemy.resetCurrentImage();
+      }
+      if (enemy instanceof Endboss) {
+        if (this.character.isEncounteringEndboss(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+            if (!enemy.startAttackTransition()) {
+              enemy.startAttackTransition();
+            } else {
+              enemy.isAttacking = true;
+            }
+            enemy.lastAttackTime = new Date().getTime();
+            enemy.resetCurrentImage();
+        }
       }
     });
   }
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
+      if (
+        this.character.isCollidingVertically(enemy) &&
+        this.character.isAboveGround() &&
+        !this.character.dead &&
+        !enemy.dead
+      ) {
         this.character.bounce();
         enemy.isDead();
         enemy.resetCurrentImage();
@@ -83,7 +97,11 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
+      if (
+        this.character.isColliding(enemy) &&
+        !this.character.characterJumping &&
+        !enemy.dead
+      ) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
       }
@@ -97,7 +115,11 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
+        if (
+          item instanceof Arrow &&
+          this.quiver.percentage <= 100 &&
+          this.arrowInventory <= 5
+        ) {
           this.addAmmunition();
         }
       }
@@ -132,7 +154,11 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
+    if (
+      this.character.releaseArrow &&
+      this.arrowInventory > 0 &&
+      this.character.shotAllowed()
+    ) {
       let arrowX;
       if (this.character.otherDirection) {
         arrowX = this.character.x - 24;

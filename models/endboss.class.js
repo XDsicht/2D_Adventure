@@ -23,6 +23,15 @@ class Endboss extends MovableObject {
   isTransitioning = false;
   attackAnimationStarted = false;
   showTransitionImage = false;
+  baseX = 0;
+  xOffset = 0;
+
+  offset = {
+    top: 160,
+    left: 40,
+    right: 20,
+    bottom: 10,
+  };
 
   IMAGES_WALKING = [
     "img/4.boss/2.walk/Walk_000.png",
@@ -111,6 +120,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.x = 2500;
+    this.baseX = this.x;
     this.animate();
   }
 
@@ -155,6 +165,22 @@ class Endboss extends MovableObject {
     }
   }
 
+  updateXOffset(newWidth) {
+    const widthDifference = newWidth - this.walkWidth;
+    this.xOffset = widthDifference;
+    this.x = this.baseX - this.xOffset;
+  }
+
+  resetXOffset() {
+    this.xOffset = 0;
+    this.x = this.baseX;
+  }
+
+  move() {
+    super.move();
+    this.baseX = this.x + this.xOffset;
+  }
+
   animate() {
     setInterval(() => {
       if (this.isDead() && !this.dead) {
@@ -181,6 +207,7 @@ class Endboss extends MovableObject {
           this.y = this.attackY;
           this.width = this.attackWidth;
           this.height = this.attackHeight;
+          this.updateXOffset(this.attackWidth);
         }
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
@@ -207,6 +234,7 @@ class Endboss extends MovableObject {
         this.y = this.jumpY;
         this.width = this.jumpWidth;
         this.height = this.jumpHeight;
+        this.updateXOffset(this.jumpWidth);
         if (this.currentImage === 0) {
           debugger;
         }
@@ -215,11 +243,13 @@ class Endboss extends MovableObject {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;
+        this.updateXOffset(this.runWidth);
         this.playAnimation(this.IMAGES_RUN);
       } else {
         this.y = this.walkY;
         this.width = this.walkWidth;
         this.height = this.walkHeight;
+        this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 100);
