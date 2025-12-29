@@ -3,16 +3,17 @@ class Endboss extends MovableObject {
   width = 340;
   y = 102;
   speed = 0.9;
+  energy = 20;
   walkWidth = 340;
   walkHeight = 360;
   walkY = 102;
   runWidth = 365;
   runHeight = 550;
   runY = -110;
-  jumpWidth = 400;
-  jumpHeight = 520;
-  jumpY = -40;
-  attackWidth = 465;
+  jumpWidth = 490;
+  jumpHeight = 540;
+  jumpY = -55;
+  attackWidth = 455;
   attackHeight = 640;
   attackY = -158;
   otherDirection = true;
@@ -156,6 +157,10 @@ class Endboss extends MovableObject {
 
   animate() {
     setInterval(() => {
+      if (this.isDead() && !this.dead) {
+        this.resetCurrentImage();
+        return (this.dead = true);
+      }
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
@@ -186,6 +191,18 @@ class Endboss extends MovableObject {
           this.showTransitionImage = false;
           this.resetCurrentImage();
         }
+      } else if (this.dead) {
+        this.y = 228;
+        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+          setTimeout(() => {
+            return (this.delete = true);
+          }, 800);
+        }
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
       } else if (this.showTransitionImage) {
         this.y = this.jumpY;
         this.width = this.jumpWidth;

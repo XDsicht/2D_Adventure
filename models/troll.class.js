@@ -120,7 +120,6 @@ class Troll extends MovableObject {
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
-          
           this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
           setTimeout(() => {
             return (this.delete = true);
