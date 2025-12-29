@@ -7,10 +7,15 @@ class Endboss extends MovableObject {
   speed = 0.9;
   walkWidth = 340;
   walkHeight = 360;
+  walkY = 102;
+  runWidth = 365;
+  runHeight = 550;
+  runY = -110;
   attackWidth = 465;
   attackHeight = 640;
-  walkY = 102;
   attackY = -158;
+  isAngry = false;
+  isRunning = false;
 
   IMAGES_WALKING = [
     "img/4.boss/2.walk/Walk_000.png",
@@ -94,6 +99,28 @@ class Endboss extends MovableObject {
     return characterViewEnd >= this.x;
   }
 
+  isHalfWayToCharacter() {
+    if (!this.world || !this.world.character) return false;
+    if (!this.initialDistance) {
+      this.initialDistance = this.x - this.world.character.x;
+    }
+    const currentDistance = this.x - this.world.character.x;
+    const halfwayPoint = this.initialDistance / 2;
+    if (currentDistance <= halfwayPoint && !this.isRunning) {
+      this.isRunning = true;
+      this.isAngry = true;
+      return true;
+    }
+    return false;
+  }
+
+  sprint() {
+    if (!this.isRunning) {
+      this.speed = 1.8;
+      this.isRunning = true;
+    }
+  }
+
   animate() {
     setInterval(() => {
       if (this.isInCharacterFrame() && !this.activated) {
@@ -101,6 +128,9 @@ class Endboss extends MovableObject {
       }
       if (this.activated) {
         this.move();
+      }
+      if (this.isHalfWayToCharacter()) {
+        this.sprint();
       }
     }, 1000 / 60);
 
@@ -115,6 +145,11 @@ class Endboss extends MovableObject {
           this.isAttacking = false;
           this.resetCurrentImage();
         }
+      } else if (this.isRunning) {
+        this.y = this.runY;
+        this.width = this.runWidth;
+        this.height = this.runHeight;
+        this.playAnimation(this.IMAGES_RUN);
       } else {
         this.y = this.walkY;
         this.width = this.walkWidth;

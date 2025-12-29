@@ -103,7 +103,7 @@ class World {
   checkCollisionOfArrows() {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
-        if (arrow.isColliding(enemy)) {
+        if (arrow.isColliding(enemy) && !enemy.dead) {
           enemy.hit();
           this.level.throwableObjects.splice(
             this.level.throwableObjects.indexOf(arrow),
