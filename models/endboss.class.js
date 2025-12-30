@@ -16,6 +16,9 @@ class Endboss extends MovableObject {
   attackWidth = 455;
   attackHeight = 640;
   attackY = -158;
+  hurtWidth = 360;
+  hurtHeight = 380;
+  hurtY = 62;
   otherDirection = true;
   activated = false;
   isAngry = false;
@@ -229,6 +232,10 @@ class Endboss extends MovableObject {
           }, 800);
         }
       } else if (this.isHurt()) {
+        this.y = this.hurtY;
+        this.width = this.hurtWidth;
+        this.height = this.hurtHeight;
+        this.updateXOffset(this.hurtWidth);
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.showTransitionImage) {
         this.y = this.jumpY;
