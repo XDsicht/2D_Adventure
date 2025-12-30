@@ -99,7 +99,7 @@ class Troll extends MovableObject {
         this.resetCurrentImage();
         return (this.dead = true);
       }
-      if (!this.dead) {
+      if (!this.dead && !this.isAttacking) {
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
         }

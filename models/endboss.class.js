@@ -19,6 +19,9 @@ class Endboss extends MovableObject {
   hurtWidth = 360;
   hurtHeight = 380;
   hurtY = 62;
+  deadWidth = 360;
+  deadHeight = 380;
+  deadY = 152;
   otherDirection = true;
   activated = false;
   isAngry = false;
@@ -36,6 +39,19 @@ class Endboss extends MovableObject {
     bottom: 10,
   };
 
+  IMAGES_IDLE = [
+    "img/4.boss/1.idle/Idle_000.png",
+    "img/4.boss/1.idle/Idle_001.png",
+    "img/4.boss/1.idle/Idle_002.png",
+    "img/4.boss/1.idle/Idle_003.png",
+    "img/4.boss/1.idle/Idle_004.png",
+    "img/4.boss/1.idle/Idle_005.png",
+    "img/4.boss/1.idle/Idle_006.png",
+    "img/4.boss/1.idle/Idle_007.png",
+    "img/4.boss/1.idle/Idle_008.png",
+    "img/4.boss/1.idle/Idle_009.png",
+  ]
+  
   IMAGES_WALKING = [
     "img/4.boss/2.walk/Walk_000.png",
     "img/4.boss/2.walk/Walk_001.png",
@@ -116,6 +132,7 @@ class Endboss extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
+    this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_RUN);
     this.loadImages(this.IMAGES_JUMP);
@@ -129,24 +146,23 @@ class Endboss extends MovableObject {
 
   isInCharacterFrame() {
     if (!this.world || !this.world.character) return false;
-    const characterViewEnd = this.world.character.x + 720;
+    const characterViewEnd = this.world.character.x + 370;
     return characterViewEnd >= this.x;
   }
 
-  isHalfWayToCharacter() {
-    if (!this.world || !this.world.character) return false;
-    if (!this.initialDistance) {
-      this.initialDistance = this.x - this.world.character.x;
-    }
-    const currentDistance = this.x - this.world.character.x;
-    const halfwayPoint = this.initialDistance / 2;
-    if (currentDistance <= halfwayPoint && !this.isRunning) {
-      this.isRunning = true;
-      this.isAngry = true;
-      return true;
-    }
-    return false;
-  }
+  // isHalfWayToCharacter() {
+  //   if (!this.initialDistance) {
+  //     this.initialDistance = this.x - this.world.character.x;
+  //   }
+  //   const currentDistance = this.x - this.world.character.x;
+  //   const halfwayPoint = this.initialDistance / 2;
+  //   if (currentDistance <= halfwayPoint && !this.isRunning) {
+  //     this.isRunning = true;
+  //     this.isAngry = true;
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   sprint() {
     if (!this.isRunning) {
@@ -179,7 +195,7 @@ class Endboss extends MovableObject {
     this.x = this.baseX;
   }
 
-  move() {
+  startMoving() {
     super.move();
     this.baseX = this.x + this.xOffset;
   }
@@ -193,10 +209,10 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (this.activated) {
-        this.move();
+      if (this.activated && !this.isAttacking) {
+        this.startMoving();
       }
-      if (this.isHalfWayToCharacter()) {
+      if (this.isInCharacterFrame()) {
         this.sprint();
       }
     }, 1000 / 60);
@@ -222,7 +238,10 @@ class Endboss extends MovableObject {
           this.resetCurrentImage();
         }
       } else if (this.dead) {
-        this.y = 228;
+        this.y = this.deadY;
+        this.height = this.deadHeight;
+        this.width = this.deadWidth;
+        this.updateXOffset(this.hurtWidth);
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
@@ -257,7 +276,7 @@ class Endboss extends MovableObject {
         this.width = this.walkWidth;
         this.height = this.walkHeight;
         this.resetXOffset();
-        this.playAnimation(this.IMAGES_WALKING);
+        this.playAnimation(this.IMAGES_IDLE);
       }
     }, 100);
   }
