@@ -209,10 +209,10 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (this.activated && !this.isAttacking && !this.world.character.isHurt()) {
+      if (this.activated && !this.isAttacking && !this.shouldStopMoving()) {
         this.startMoving();
       }
-      if (this.isInCharacterFrame() && !this.world.character.isHurt() && !this.isHurt() && !this.isAttacking && this.world.character.speed != 0) {
+      if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.isAttacking) {
         this.sprint();
       }
     }, 1000 / 60);

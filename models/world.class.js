@@ -97,13 +97,10 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        !this.character.characterJumping &&
-        !enemy.dead
-      ) {
+      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.energy);
+        this.character.lastAttacker = enemy;
       }
     });
   }
