@@ -230,4 +230,8 @@ return (
       this.speedY < 0
     );
   }
+
+  isMoving() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
 }
