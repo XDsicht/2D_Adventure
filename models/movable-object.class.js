@@ -8,6 +8,7 @@ class MovableObject extends DrawableObject {
   lastHit = 0;
   isAttacking = false;
   lastAttackTime = 0;
+  hasDealtDamage = false;
   world;
   // initialObstacleSpawn = 600;
   spawningLocation;
@@ -16,7 +17,7 @@ class MovableObject extends DrawableObject {
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
   };
 
   applyGravity() {
@@ -33,7 +34,8 @@ class MovableObject extends DrawableObject {
   }
 
   isAboveGround() {
-    if (this instanceof ThrowableObject) { // ThrowableObjects should always fall
+    if (this instanceof ThrowableObject) {
+      // ThrowableObjects should always fall
       return this.y < 410;
     } else {
       return this.y < 250;
@@ -48,7 +50,6 @@ class MovableObject extends DrawableObject {
       this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
     );
   }
-
 
   hit() {
     this.energy -= 5;
@@ -120,6 +121,10 @@ class MovableObject extends DrawableObject {
 
   shouldStopMoving() {
     if (!this.world || !this.world.character) return false;
-    return this.isHurt() || (this.world.character.isHurt() && this.world.character.lastAttacker === this);
+    return (
+      this.isHurt() ||
+      (this.world.character.isHurt() &&
+        this.world.character.lastAttacker === this)
+    );
   }
 }

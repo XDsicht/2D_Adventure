@@ -58,21 +58,31 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll) {
-        if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+        if (
+          this.character.isEncounteringObstacle(enemy) &&
+          !enemy.isAttacking &&
+          !enemy.dead &&
+          timeSinceLastAttack > 1000
+        ) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss) {
-        if (this.character.isEncounteringEndboss(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
-            if (!enemy.startAttackTransition()) {
-              enemy.startAttackTransition();
-            } else {
-              enemy.isAttacking = true;
-            }
-            enemy.lastAttackTime = new Date().getTime();
-            enemy.resetCurrentImage();
+        if (
+          this.character.isEncounteringEndboss(enemy) &&
+          !enemy.isAttacking &&
+          !enemy.dead &&
+          timeSinceLastAttack > 1000
+        ) {
+          if (!enemy.startAttackTransition()) {
+            enemy.startAttackTransition();
+          } else {
+            enemy.isAttacking = true;
+          }
+          enemy.lastAttackTime = new Date().getTime();
+          enemy.resetCurrentImage();
         }
       }
     });
@@ -97,10 +107,11 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
-        this.character.lastAttacker = enemy;
+      if (
+        this.character.isColliding(enemy) &&
+        !this.character.characterJumping &&
+        !enemy.dead
+      ) {
       }
     });
   }
