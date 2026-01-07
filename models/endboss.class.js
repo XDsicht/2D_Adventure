@@ -27,9 +27,7 @@ class Endboss extends MovableObject {
   isAngry = false;
   isWalking = false;
   isRunning = false;
-  isTransitioning = false;
   attackAnimationStarted = false;
-  showTransitionImage = false;
   baseX = 0;
   xOffset = 0;
 
@@ -119,7 +117,7 @@ class Endboss extends MovableObject {
   ];
 
   IMAGES_ATTACKING = [
-    "img/4.boss/5.attack/Attack_000.png",
+    // "img/4.boss/5.attack/Attack_000.png",
     "img/4.boss/5.attack/Attack_001.png",
     "img/4.boss/5.attack/Attack_002.png",
     "img/4.boss/5.attack/Attack_003.png",
@@ -162,19 +160,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  startAttackTransition() {
-    if (!this.isTransitioning && !this.isAttacking) {
-      this.isTransitioning = true;
-      this.showTransitionImage = true;
-      setTimeout(() => {
-        if (this.isTransitioning) {
-          this.isAttacking = true;
-          this.showTransitionImage = false;
-        }
-      }, 150);
-    }
-  }
-
   updateXOffset(newWidth) {
     const widthDifference = newWidth - this.walkWidth;
     this.xOffset = widthDifference;
@@ -200,20 +185,16 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (this.activated && !this.isAttacking && !this.shouldStopMoving()) {
+      if (!this.dead && this.activated && !this.isAttacking && !this.shouldStopMoving()) {
         this.startMoving();
       }
-      if (
-        this.isInCharacterFrame() &&
-        !this.shouldStopMoving() &&
-        !this.isAttacking
-      ) {
+      if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.isAttacking && !this.dead) {
         this.sprint();
       }
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAttacking) {
+      if (this.isAttacking && !this.dead) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
         }
@@ -225,11 +206,7 @@ class Endboss extends MovableObject {
         }
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
-          if (
-            this.currentImage >= 7 &&
-            !this.hasDealtDamage &&
-            this.world.character.isColliding(this)
-          ) {
+          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
             this.world.character.hit();
             this.world.healthBar.setPercentage(this.world.character.energy);
             this.world.character.lastAttacker = this;
@@ -262,22 +239,13 @@ class Endboss extends MovableObject {
         this.height = this.hurtHeight;
         this.updateXOffset(this.hurtWidth);
         this.playAnimation(this.IMAGES_HURT);
-      } else if (this.showTransitionImage) {
-        this.y = this.jumpY;
-        this.width = this.jumpWidth;
-        this.height = this.jumpHeight;
-        this.updateXOffset(this.jumpWidth);
-        if (this.currentImage === 0) {
-          debugger;
-        }
-        this.playAnimation(this.IMAGES_JUMP);
       } else if (this.isWalking) {
         this.y = this.walkY;
         this.width = this.walkWidth;
         this.height = this.walkHeight;
         this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.isTransitioning || this.isRunning) {
+      } else if (this.isRunning) {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;

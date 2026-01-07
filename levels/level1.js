@@ -1,6 +1,10 @@
 const level1 = new Level(
-    [new Troll(), new Troll(), new Troll(), new Endboss()],
-    [new Cloud(), new Cloud(), new Cloud()],
+    [
+        new Troll(), new Troll(), new Troll(), new Endboss()
+    ],
+    [
+        new Cloud(), new Cloud(), new Cloud()
+    ],
     [
         new BackgroundObject("img/5.elements/background/1.png", -720),
         new BackgroundObject("img/5.elements/background/2.png", -720),
@@ -26,9 +30,13 @@ const level1 = new Level(
         new BackgroundObject("img/5.elements/background/2.png", 2160),
         new BackgroundObject("img/5.elements/background/3.png", 2160),
         new BackgroundObject("img/5.elements/background/4.png", 2160),
-        new BackgroundObject("img/5.elements/background/5.png", 2160),
+        new BackgroundObject("img/5.elements/background/5.png", 2160)
     ],
-    [new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
+    [
+        new Coin(), new Coin(), new Coin(), new Coin(), new Coin()
+    ],
     [],
-    [new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow()]
+    [
+        new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow(), new Arrow()
+    ]
 );

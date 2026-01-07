@@ -76,11 +76,7 @@ class World {
           !enemy.dead &&
           timeSinceLastAttack > 1000
         ) {
-          if (!enemy.startAttackTransition()) {
-            enemy.startAttackTransition();
-          } else {
-            enemy.isAttacking = true;
-          }
+          enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
