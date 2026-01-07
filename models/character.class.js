@@ -116,8 +116,8 @@ class Character extends MovableObject {
     this.characterAttackAnimationIntervals();
   }
 
-  characterActionsIntervals() {    
-    if (!this.dead) {
+  characterActionsIntervals() {
+    if (!this.dead || !this.isHurt()) {
       let actions = setInterval(() => {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
           this.moveRight();
@@ -139,13 +139,13 @@ class Character extends MovableObject {
 
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
-          clearInterval(actions)
+          clearInterval(actions);
           return (this.dead = true);
         }
       }, 1000 / 60);
 
       setInterval(() => {
-        if (this.world.keyboard.D &&this.shotAllowed() &&!this.isAttacking &&this.world.quiver.percentage > 0 && !this.dead) {
+        if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
           this.activateDKey();
         }
       }, 100);
@@ -215,7 +215,7 @@ class Character extends MovableObject {
   }
 
   isEncounteringEndboss(endboss) {
-return (
+    return (
       this.x + this.width - this.offset.right > endboss.x + endboss.offset.right * 0.9 &&
       this.x + this.offset.left * 0.9 < endboss.x + endboss.width - endboss.offset.left
     );

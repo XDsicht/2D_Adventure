@@ -194,7 +194,7 @@ class Endboss extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAttacking && !this.dead) {
+      if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
         }
