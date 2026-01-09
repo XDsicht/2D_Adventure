@@ -58,24 +58,14 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll) {
-        if (
-          this.character.isEncounteringObstacle(enemy) &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 1000
-        ) {
+        if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss) {
-        if (
-          this.character.isEncounteringEndboss(enemy) &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 1000
-        ) {
+        if (this.character.isEncounteringEndboss(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
@@ -86,12 +76,7 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isCollidingVertically(enemy) &&
-        this.character.isAboveGround() &&
-        !this.character.dead &&
-        !enemy.dead
-      ) {
+      if (this.character.isCollidingVertically(enemy) &&  this.character.isAboveGround() && !this.character.dead &&  !enemy.dead) {
         this.character.bounce();
         enemy.isDead();
         enemy.resetCurrentImage();
@@ -103,11 +88,7 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        !this.character.characterJumping &&
-        !enemy.dead
-      ) {
+      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
       }
     });
   }
@@ -158,11 +139,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (
-      this.character.releaseArrow &&
-      this.arrowInventory > 0 &&
-      this.character.shotAllowed()
-    ) {
+    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
       let arrowX;
       if (this.character.otherDirection) {
         arrowX = this.character.x - 24;

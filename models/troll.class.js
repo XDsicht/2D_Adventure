@@ -13,6 +13,19 @@ class Troll extends MovableObject {
     bottom: 35,
   };
 
+  IMAGES_IDLE = [
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_000.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_001.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_002.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_003.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_004.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_005.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_006.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_007.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_008.png",
+    "img/3.enemy/1.idle/Troll_03_1_IDLE_009.png",
+  ];
+
   IMAGES_WALKING = [
     "img/3.enemy/2.walk/Troll_03_1_WALK_000.png",
     "img/3.enemy/2.walk/Troll_03_1_WALK_001.png",
@@ -67,6 +80,7 @@ class Troll extends MovableObject {
 
   constructor() {
     super().loadImage("img/3.enemy/1.idle/Troll_03_1_IDLE_000.png");
+    this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -78,8 +92,7 @@ class Troll extends MovableObject {
   }
 
   calculateSpawningLocation() {
-    this.spawningLocation =
-      this.world.initialObstacleSpawn + Math.random() * 500;
+    this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
     return (this.world.initialObstacleSpawn = this.spawningLocation);
   }
 
@@ -108,18 +121,18 @@ class Troll extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAttacking && !this.world.character.isHurt()) {
+      if (!this.world) {
+        return;
+      } else if (this.world.character.isHurt()) {
+        this.playAnimation(this.IMAGES_IDLE);
+      } else if (this.isAttacking && !this.world.character.isHurt()) {
         if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
           this.isAttacking = false;
           this.hasDealtDamage = false;
           this.resetCurrentImage();
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);
-          if (
-            this.currentImage >= 7 &&
-            !this.hasDealtDamage &&
-            this.world.character.isColliding(this)
-          ) {
+          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
             this.world.character.hit();
             this.world.healthBar.setPercentage(this.world.character.energy);
             this.world.character.lastAttacker = this;
