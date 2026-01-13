@@ -230,4 +230,13 @@ class Character extends MovableObject {
       this.speedY < 0
     );
   }
+
+  isHit() {
+    this.energy -= 20;
+    if (this.energy < 0) {
+      this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
+    }
+  }
 }

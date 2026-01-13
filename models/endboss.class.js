@@ -207,7 +207,7 @@ class Endboss extends MovableObject {
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
-            this.world.character.hit();
+            this.world.character.isHit();
             this.world.healthBar.setPercentage(this.world.character.energy);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
