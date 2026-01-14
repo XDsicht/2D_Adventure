@@ -209,7 +209,7 @@ class Character extends MovableObject {
 
   isEncounteringObstacle(enemy) {
     return (
-      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right * 0.98 &&
+      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right + 10 &&
       this.x + this.offset.left * 0.98 < enemy.x + enemy.width - enemy.offset.left
     );
   }
