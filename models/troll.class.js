@@ -123,7 +123,7 @@ class Troll extends MovableObject {
     setInterval(() => {
       if (!this.world) {
         return;
-      } else if (this.world.character.isHurt()) {
+      } else if (this.world.character.isHurt() && this.isAttacking) {
         this.playAnimation(this.IMAGES_IDLE);
       } else if (this.isAttacking && !this.world.character.isHurt()) {
         if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
@@ -133,8 +133,7 @@ class Troll extends MovableObject {
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
-            this.world.character.isHit();
-            this.world.healthBar.setPercentage(this.world.character.energy);
+            this.world.character.addPendingDamage(this, 20);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
           }

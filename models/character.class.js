@@ -10,6 +10,10 @@ class Character extends MovableObject {
   checkAlreadyRunning = false;
   characterJumping = false;
 
+  // Damage accumulation system
+  pendingDamage = 0;
+  damageFromAttackers = new Set();
+
   offset = {
     top: 35,
     left: 100,
@@ -231,12 +235,35 @@ class Character extends MovableObject {
     );
   }
 
-  isHit() {
-    this.energy -= 20;
+  isHit(damage = 20) {
+    this.energy -= damage;
     if (this.energy < 0) {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime();
     }
+  }
+
+  // Add pending damage from an attacker
+  addPendingDamage(attacker, damage = 20) {
+    if (!this.damageFromAttackers.has(attacker)) {
+      this.pendingDamage += damage;
+      this.damageFromAttackers.add(attacker);
+    }
+  }
+
+  // Apply all accumulated damage at once
+  applyAccumulatedDamage() {
+    if (this.pendingDamage > 0) {
+      this.isHit(this.pendingDamage);
+      this.pendingDamage = 0;
+      this.damageFromAttackers.clear();
+    }
+  }
+
+  // Reset damage accumulation for new frame
+  resetDamageAccumulation() {
+    this.pendingDamage = 0;
+    this.damageFromAttackers.clear();
   }
 }
