@@ -185,16 +185,26 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (!this.dead && this.activated && !this.isAttacking && !this.shouldStopMoving()) {
-        this.startMoving();
-      }
-      if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.isAttacking && !this.dead) {
-        this.sprint();
+      if (!this.isAttacking && this.activated) {
+        if (!this.dead && this.activated && !this.shouldStopMoving()) {
+          this.startMoving();
+        }
+        if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.dead) {
+          this.sprint();
+        }
       }
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
+      if (this.world.character.isHurt() && this.isAttacking) {
+        this.y = this.attackY;
+        this.width = this.attackWidth;
+        this.height = this.attackHeight;
+        this.updateXOffset(this.attackWidth);
+        // this.playAnimation(this.IMAGES_IDLE);
+        // this.loadImage(this.IMAGES_ATTACKING[this.IMAGES_ATTACKING.length - 1]);
+        this.loadImage(this.IMAGES_ATTACKING[2])
+      } else if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
         }

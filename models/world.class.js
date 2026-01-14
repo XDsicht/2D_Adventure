@@ -34,7 +34,6 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
-      console.log(this.character.pendingDamage);
       if (this.character.pendingDamage > 0) {
         this.character.applyAccumulatedDamage(); // Apply all accumulated damage at once
         this.healthBar.setPercentage(this.character.energy); // Update health bar after damage
