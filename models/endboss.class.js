@@ -196,14 +196,16 @@ class Endboss extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.world.character.isHurt() && this.isAttacking) {
+      if (!this.world) {
+        return;
+      } else if (this.world.character.isHurt() && this.isAttacking) {
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
         this.updateXOffset(this.attackWidth);
         // this.playAnimation(this.IMAGES_IDLE);
         // this.loadImage(this.IMAGES_ATTACKING[this.IMAGES_ATTACKING.length - 1]);
-        this.loadImage(this.IMAGES_ATTACKING[2])
+        this.loadImage(this.IMAGES_ATTACKING[2]);
       } else if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
@@ -217,8 +219,9 @@ class Endboss extends MovableObject {
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
-            this.world.character.isHit();
-            this.world.healthBar.setPercentage(this.world.character.energy);
+            this.world.character.addPendingDamage(this, 20);
+            // this.world.character.isHit();
+            // this.world.healthBar.setPercentage(this.world.character.energy);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
           }
@@ -255,7 +258,7 @@ class Endboss extends MovableObject {
         this.height = this.walkHeight;
         this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.isRunning) {
+      } else if (this.isRunning && !this.world.character.isColliding(this)) {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;
