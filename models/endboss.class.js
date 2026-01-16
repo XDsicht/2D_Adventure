@@ -198,7 +198,7 @@ class Endboss extends MovableObject {
     setInterval(() => {
       if (!this.world) {
         return;
-      } else if (this.world.character.isHurt() && this.isAttacking) {
+      } else if (this.world.character.isHurt()) {
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
@@ -228,8 +228,6 @@ class Endboss extends MovableObject {
         } else {
           this.isAttacking = false;
           this.attackAnimationStarted = false;
-          this.isTransitioning = false;
-          this.showTransitionImage = false;
           this.hasDealtDamage = false;
           this.resetCurrentImage();
         }
