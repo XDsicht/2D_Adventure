@@ -196,7 +196,9 @@ class Endboss extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.world.character.isHurt() && this.isAttacking) {
+      if (!this.world) {
+        return;
+      } else if (this.world.character.isHurt()) {
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
@@ -221,8 +223,6 @@ class Endboss extends MovableObject {
         } else {
           this.isAttacking = false;
           this.attackAnimationStarted = false;
-          this.isTransitioning = false;
-          this.showTransitionImage = false;
           this.hasDealtDamage = false;
           this.resetCurrentImage();
         }
@@ -251,7 +251,7 @@ class Endboss extends MovableObject {
         this.height = this.walkHeight;
         this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.isRunning) {
+      } else if (this.isRunning && !this.world.character.isColliding(this)) {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;
