@@ -9,6 +9,7 @@ class MovableObject extends DrawableObject {
   isAttacking = false;
   lastAttackTime = 0;
   hasDealtDamage = false;
+  lastAttacker;
   world;
   // initialObstacleSpawn = 600;
   spawningLocation;

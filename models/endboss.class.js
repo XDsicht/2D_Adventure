@@ -185,7 +185,7 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (!this.isAttacking && this.activated) {
+      if (!this.isAttacking) {
         if (!this.dead && this.activated && !this.shouldStopMoving()) {
           this.startMoving();
         }
@@ -200,10 +200,7 @@ class Endboss extends MovableObject {
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
-        this.updateXOffset(this.attackWidth);
-        // this.playAnimation(this.IMAGES_IDLE);
-        // this.loadImage(this.IMAGES_ATTACKING[this.IMAGES_ATTACKING.length - 1]);
-        this.loadImage(this.IMAGES_ATTACKING[2])
+        this.loadImage(this.IMAGES_ATTACKING[2]);
       } else if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
@@ -217,8 +214,7 @@ class Endboss extends MovableObject {
         if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
           this.playAnimation(this.IMAGES_ATTACKING);
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
-            this.world.character.isHit();
-            this.world.healthBar.setPercentage(this.world.character.energy);
+            this.world.character.addPendingDamage(this, 20);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
           }
