@@ -107,7 +107,9 @@ class Troll extends MovableObject {
 
   animate() {
     setInterval(() => {
-      if (this.isDead() && !this.dead) {
+      if (!this.world || this.world.character.dead || !this.world.character) {
+        return;
+      } else if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
         return (this.dead = true);
       }
@@ -120,7 +122,7 @@ class Troll extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.world) {
+      if (!this.world || this.world.character.dead || !this.world.character) {
         return;
       } else if (this.world.character.isHurt() && this.isAttacking) {
         this.playAnimation(this.IMAGES_IDLE);

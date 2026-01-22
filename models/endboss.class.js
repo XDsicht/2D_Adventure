@@ -172,12 +172,15 @@ class Endboss extends MovableObject {
   }
 
   startMoving() {
-    super.move();
+    this.move();
     this.baseX = this.x + this.xOffset;
   }
 
   animate() {
     setInterval(() => {
+      if(!this.world || this.world.character.dead || !this.world.character) {
+        return;
+      }
       if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
         return (this.dead = true);
@@ -185,46 +188,47 @@ class Endboss extends MovableObject {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-      if (!this.isAttacking) {
-        if (!this.dead && this.activated && !this.shouldStopMoving()) {
+      if (!this.isAttacking && this.activated && !this.world.character.isColliding(this)) {
+        if (!this.dead && !this.shouldStopMoving()) {
           this.startMoving();
         }
         if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.dead) {
           this.sprint();
         }
+      } else {
+        this.isWalking = false;
+        this.isRunning = false;
       }
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.world) {
+      if (!this.world || this.world.character.dead || !this.world.character) {
         return;
-      } else if (this.world.character.isHurt()) {
+      } else if (this.world.character.isHurt() && this.isAttacking) {
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
         this.loadImage(this.IMAGES_ATTACKING[2]);
-      } else if (this.isAttacking && !this.dead && !this.world.character.isHurt()) {
+      } else if (this.isAttacking && !this.world.character.isHurt()) {
         if (!this.attackAnimationStarted) {
           this.attackAnimationStarted = true;
-        }
-        if (this.attackAnimationStarted) {
+        } else if (this.attackAnimationStarted) {
           this.y = this.attackY;
           this.width = this.attackWidth;
           this.height = this.attackHeight;
           this.updateXOffset(this.attackWidth);
-        }
-        if (this.currentImage < this.IMAGES_ATTACKING.length - 1) {
-          this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
-            this.world.character.addPendingDamage(this, 20);
-            this.world.character.lastAttacker = this;
-            this.hasDealtDamage = true;
+          if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
+            this.isAttacking = false;
+            this.hasDealtDamage = false;
+            this.resetCurrentImage();
+          } else {
+            this.playAnimation(this.IMAGES_ATTACKING);
+            if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
+              this.world.character.addPendingDamage(this, 40);
+              this.world.character.lastAttacker = this;
+              this.hasDealtDamage = true;
+            }
           }
-        } else {
-          this.isAttacking = false;
-          this.attackAnimationStarted = false;
-          this.hasDealtDamage = false;
-          this.resetCurrentImage();
         }
       } else if (this.dead) {
         this.y = this.deadY;
@@ -264,6 +268,7 @@ class Endboss extends MovableObject {
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
+      console.log('Walking:', this.isWalking, 'Running:', this.isRunning, 'Attacking:', this.isAttacking);
     }, 100);
   }
 }
