@@ -86,7 +86,6 @@ class Troll extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_ATTACKING);
     this.moveLeft();
-    // this.x = this.calculateSpawningLocation();
     this.speed = 0.15 + Math.random() * 0.25;
     this.animate();
   }
