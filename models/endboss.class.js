@@ -150,15 +150,10 @@ class Endboss extends MovableObject {
   }
 
   sprint() {
-    if (!this.isWalking && !this.isRunning) {
-      this.isWalking = true;
-      setTimeout(() => {
         this.isWalking = false;
         this.isRunning = true;
         this.speed = 1.8;
-      }, 1600);
     }
-  }
 
   updateXOffset(newWidth) {
     const widthDifference = newWidth - this.walkWidth;
@@ -173,12 +168,16 @@ class Endboss extends MovableObject {
 
   startMoving() {
     this.move();
+    this.isWalking = true;
     this.baseX = this.x + this.xOffset;
+    setTimeout(() => {
+        this.sprint();
+      }, 1600);
   }
 
   animate() {
     setInterval(() => {
-      if(!this.world || this.world.character.dead || !this.world.character) {
+      if (!this.world || this.world.character.dead || !this.world.character) {
         return;
       }
       if (this.isDead() && !this.dead) {
@@ -192,12 +191,6 @@ class Endboss extends MovableObject {
         if (!this.dead && !this.shouldStopMoving()) {
           this.startMoving();
         }
-        if (this.isInCharacterFrame() && !this.shouldStopMoving() && !this.dead) {
-          this.sprint();
-        }
-      } else {
-        this.isWalking = false;
-        this.isRunning = false;
       }
     }, 1000 / 60);
 
@@ -220,6 +213,7 @@ class Endboss extends MovableObject {
           if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
             this.isAttacking = false;
             this.hasDealtDamage = false;
+            this.attackAnimationStarted = false;
             this.resetCurrentImage();
           } else {
             this.playAnimation(this.IMAGES_ATTACKING);
@@ -268,7 +262,7 @@ class Endboss extends MovableObject {
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
-      console.log('Walking:', this.isWalking, 'Running:', this.isRunning, 'Attacking:', this.isAttacking);
+      console.log("Walking:", this.isWalking, "Running:", this.isRunning, "Attacking:", this.isAttacking);
     }, 100);
   }
 }
