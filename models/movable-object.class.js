@@ -80,7 +80,7 @@ class MovableObject extends DrawableObject {
     let path = images[i];
     this.img = this.imageCache[path];
     //if (this instanceof Endboss) {
-   //   console.log(path);
+    //  console.log(path);
     //}
     this.currentImage++;
     if (this instanceof Coin) {

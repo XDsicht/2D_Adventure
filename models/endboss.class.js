@@ -215,10 +215,9 @@ class Endboss extends MovableObject {
           this.hasDealtDamage = false;
           this.attackAnimationStarted = false;
           this.isRunning = true;
-          this.resetCurrentImage();
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
+          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
             this.world.character.addPendingDamage(this, 40);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
@@ -244,7 +243,7 @@ class Endboss extends MovableObject {
         this.height = this.hurtHeight;
         this.updateXOffset(this.hurtWidth);
         this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isRunning && !this.world.character.isColliding(this)) {
+      } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
         this.y = this.runY;
         this.width = this.runWidth;
         this.height = this.runHeight;
@@ -256,7 +255,7 @@ class Endboss extends MovableObject {
         this.height = this.walkHeight;
         this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
-      } else {
+      } else if(!this.world.character.isEncounteringEndboss(this) && !this.isWalking && !this.isRunning) {
         this.y = this.walkY;
         this.width = this.walkWidth;
         this.height = this.walkHeight;
