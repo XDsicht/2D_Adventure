@@ -168,8 +168,8 @@ class Endboss extends MovableObject {
   startMoving() {
     this.move();
     this.baseX = this.x + this.xOffset;
-    if(!this.isRunning){
-    this.isWalking = true;
+    if (!this.isRunning) {
+      this.isWalking = true;
     }
     setTimeout(() => {
       this.sprint();
@@ -203,7 +203,9 @@ class Endboss extends MovableObject {
         this.width = this.attackWidth;
         this.height = this.attackHeight;
         this.loadImage(this.IMAGES_ATTACKING[2]);
+        this.resetCurrentImage();
       } else if (this.isAttacking && !this.dead) {
+        this.isRunning = false;
         this.y = this.attackY;
         this.width = this.attackWidth;
         this.height = this.attackHeight;
@@ -212,6 +214,7 @@ class Endboss extends MovableObject {
           this.isAttacking = false;
           this.hasDealtDamage = false;
           this.attackAnimationStarted = false;
+          this.isRunning = true;
           this.resetCurrentImage();
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);
@@ -219,6 +222,7 @@ class Endboss extends MovableObject {
             this.world.character.addPendingDamage(this, 40);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
+            this.resetCurrentImage();
           }
         }
       } else if (this.dead) {
