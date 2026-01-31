@@ -25,8 +25,6 @@ class Endboss extends MovableObject {
   otherDirection = true;
   activated = false;
   isAngry = false;
-  isWalking = false;
-  isRunning = false;
   baseX = 0;
   xOffset = 0;
 

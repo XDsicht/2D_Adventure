@@ -7,6 +7,8 @@ class MovableObject extends DrawableObject {
   energy = 100;
   lastHit = 0;
   isAttacking = false;
+  isWalking = false;
+  isRunning = false;
   lastAttackTime = 0;
   hasDealtDamage = false;
   lastAttacker;

@@ -123,23 +123,30 @@ class Character extends MovableObject {
   characterActionsIntervals() {
     if (!this.dead || !this.isHurt()) {
       let actions = setInterval(() => {
-        if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-          this.moveRight();
-          this.otherDirection = false;
-          // this.walking_sound.play();
-        }
-        if (this.world.keyboard.LEFT && this.x > 0) {
-          this.moveLeft();
-          this.otherDirection = true;
-          // this.walking_sound.play();
+        // Reset walking state at the beginning of each frame
+        this.isWalking = false;
+        if (!this.isAttacking) {
+          if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+            this.isWalking = true;
+            // this.walking_sound.play();
+          }
+          if (this.world.keyboard.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+            this.isWalking = true;
+            // this.walking_sound.play();
+          }
+
+          if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.characterJumping = true;
+            this.isWalking = false;
+            this.resetCurrentImage();
+            this.jump();
+          }
         }
         this.world.camera_x = -this.x + 50; // Kamera folgt dem Character
-
-        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-          this.characterJumping = true;
-          this.resetCurrentImage();
-          this.jump();
-        }
 
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
@@ -189,7 +196,7 @@ class Character extends MovableObject {
         if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
           this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
         }
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      } else if (this.isWalking) {
         this.playAnimation(this.IMAGES_WALKING);
       } else {
         this.playAnimation(this.IMAGES_IDLE);
