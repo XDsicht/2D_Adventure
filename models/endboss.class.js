@@ -252,7 +252,7 @@ class Endboss extends MovableObject {
         this.height = this.runHeight;
         this.updateXOffset(this.runWidth);
         this.playAnimation(this.IMAGES_RUN);
-      } else if (this.isWalking) {
+      } else if (this.isWalking && !this.isRunning) {
         this.y = this.walkY;
         this.width = this.walkWidth;
         this.height = this.walkHeight;
