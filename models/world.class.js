@@ -81,7 +81,7 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy) &&  this.character.isAboveGround() && !this.character.dead &&  !enemy.dead) {
+      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
         this.character.bounce();
         enemy.isDead();
         enemy.resetCurrentImage();
@@ -105,11 +105,7 @@ class World {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
         }
-        if (
-          item instanceof Arrow &&
-          this.quiver.percentage <= 100 &&
-          this.arrowInventory <= 5
-        ) {
+        if (item instanceof Arrow && this.quiver.percentage <= 100 && this.arrowInventory <= 5) {
           this.addAmmunition();
         }
       }
@@ -120,11 +116,11 @@ class World {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy) && !enemy.dead) {
+          if (enemy instanceof Endboss) {
+            if (!enemy.activated) return;
+          }
           enemy.hit();
-          this.level.throwableObjects.splice(
-            this.level.throwableObjects.indexOf(arrow),
-            1
-          );
+          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
         }
       });
     });
@@ -132,9 +128,7 @@ class World {
 
   removeDeadEnemies() {
     let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
-    deadEnemies.forEach((enemy) =>
-      this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1)
-    );
+    deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
   }
 
   addAmmunition() {
@@ -152,11 +146,7 @@ class World {
         arrowX = this.character.x + this.character.width - 21;
       }
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(
-        arrowX,
-        arrowY,
-        this.character.otherDirection
-      );
+      let arrow = new ThrowableObject(arrowX, arrowY, this.character.otherDirection);
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;
