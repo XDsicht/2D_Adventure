@@ -229,7 +229,7 @@ class Endboss extends MovableObject {
         this.y = this.deadY;
         this.height = this.deadHeight;
         this.width = this.deadWidth;
-        this.updateXOffset(this.hurtWidth);
+        this.updateXOffset(this.deadWidth);
         if (this.currentImage < this.IMAGES_DEAD.length - 1) {
           this.playAnimation(this.IMAGES_DEAD);
         } else {
