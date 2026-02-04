@@ -37,6 +37,7 @@ class World {
       if (this.character.pendingDamage > 0) {
         this.character.applyAccumulatedDamage(); // Apply all accumulated damage at once
         this.healthBar.setPercentage(this.character.energy); // Update health bar after damage
+       console.log("CharacterEnergyCheckCollisions:", this.character.energy);
       }
       this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
       this.checkCollisionOfArrows();
@@ -62,14 +63,14 @@ class World {
   checkEnemyWalkingCollisions(enemies) {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
-      if (enemy instanceof Troll) {
+      if (enemy instanceof Troll && !this.character.isHurt()) {
         if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
-      if (enemy instanceof Endboss) {
+      if (enemy instanceof Endboss && !this.character.isHurt()) { 
         if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
@@ -94,7 +95,7 @@ class World {
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking) {
-        this.character.addPendingDamage(enemy, 5);
+        this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
         console.log("CharacterEnergy:", this.character.energy);
