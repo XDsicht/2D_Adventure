@@ -54,6 +54,10 @@ class MovableObject extends DrawableObject {
     );
   }
 
+  isPassing(mo) {
+    return this.x + this.width < mo.x || this.x > mo.x + mo.width;
+  }
+
   hit() {
     this.energy -= 5;
     if (this.energy < 0) {
@@ -81,9 +85,6 @@ class MovableObject extends DrawableObject {
     let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
-    //if (this instanceof Endboss) {
-    //  console.log(path);
-    //}
     this.currentImage++;
     if (this instanceof Coin) {
       this.adjustCoinPosition(i);

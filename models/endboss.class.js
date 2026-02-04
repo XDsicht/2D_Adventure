@@ -263,7 +263,7 @@ class Endboss extends MovableObject {
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
-      console.log("Walking:", this.isWalking, "Running:", this.isRunning, "Attacking:", this.isAttacking);
+      // console.log("Walking:", this.isWalking, "Running:", this.isRunning, "Attacking:", this.isAttacking);
     }, 100);
   }
 }

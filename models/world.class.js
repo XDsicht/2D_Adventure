@@ -63,14 +63,14 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll) {
-        if (this.character.isEncounteringObstacle(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+        if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss) {
-        if (this.character.isEncounteringEndboss(enemy) && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
+        if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
@@ -93,7 +93,11 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.characterJumping && !enemy.dead) {
+      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking) {
+        this.character.addPendingDamage(enemy, 5);
+        this.character.lastAttacker = enemy;
+        enemy.hasDealtDamage = true;
+        console.log("CharacterEnergy:", this.character.energy);
       }
     });
   }
