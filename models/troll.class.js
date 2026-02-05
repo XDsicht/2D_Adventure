@@ -126,9 +126,10 @@ class Troll extends MovableObject {
       } else if (this.world.character.isHurt() && this.isAttacking) {
         this.playAnimation(this.IMAGES_IDLE);
       } else if (this.isAttacking && !this.world.character.isHurt()) {
+        this.hasDealtDamage = false;
         if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
           this.isAttacking = false;
-          this.hasDealtDamage = false;
+
           this.resetCurrentImage();
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);

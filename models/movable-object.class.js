@@ -128,6 +128,6 @@ class MovableObject extends DrawableObject {
 
   shouldStopMoving() {
     if (!this.world || !this.world.character) return false;
-    return this.isHurt() || (this.world.character.isHurt() && this.world.character.lastAttacker === this);
+    return this.isHurt() || (this.world.character.isHurt() && this.world.character.lastAttacker === this && !this.world.character.characterJumping);
   }
 }
