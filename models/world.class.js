@@ -65,26 +65,14 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll && !this.character.isHurt()) {
-        if (
-          this.character.isEncounteringObstacle(enemy) &&
-          !this.character.isWalking &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 1000
-        ) {
+        if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss && !this.character.isHurt()) {
-        if (
-          this.character.isEncounteringEndboss(enemy) &&
-          !this.character.isWalking &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 800
-        ) {
+        if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
@@ -95,26 +83,21 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
-        this.character.bounce();
-        enemy.isDead();
-        enemy.resetCurrentImage();
-        enemy.dead = true;
-        enemy.isAttacking = false;
+      if(!(enemy instanceof Endboss)) {
+        if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
+          this.character.bounce();
+          enemy.isDead();
+          enemy.resetCurrentImage();
+          enemy.dead = true;
+          enemy.isAttacking = false;
+        }
       }
     });
   }
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        this.character.isWalking &&
-        !this.character.characterJumping &&
-        !this.character.isHurt() &&
-        !enemy.dead &&
-        !enemy.isAttacking
-      ) {
+      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -226,6 +209,9 @@ class World {
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
+      if(mo instanceof Character || mo instanceof Troll || mo instanceof Endboss)
+      mo.offset.left = mo.offset.right;
+      mo.offset.right = mo.offset.left;
     }
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
