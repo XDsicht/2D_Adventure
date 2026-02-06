@@ -1,4 +1,4 @@
-class Endboss extends MovableObject {
+class Endboss extends Enemy {
   height = 360;
   width = 340;
   y = 102;
@@ -74,7 +74,7 @@ class Endboss extends MovableObject {
     "img/4.boss/3.run/Run_009.png",
   ];
 
-  IMAGES_JUMP = [
+  IMAGES_JUMPING = [
     "img/4.boss/4.jump/Jump_000.png",
     "img/4.boss/4.jump/Jump_001.png",
     "img/4.boss/4.jump/Jump_002.png",
@@ -131,7 +131,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_RUN);
-    this.loadImages(this.IMAGES_JUMP);
+    this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -149,7 +149,8 @@ class Endboss extends MovableObject {
   sprint() {
     this.isRunning = true;
     this.isWalking = false;
-    this.speed = 1.8;
+    this.speed = 2.0;
+    console.log(this.speed);
   }
 
   updateXOffset(newWidth) {
@@ -170,7 +171,11 @@ class Endboss extends MovableObject {
       this.isWalking = true;
     }
     setTimeout(() => {
-      this.sprint();
+      if (!this.shouldStopMoving) {
+        console.log("Hello");
+        
+        this.sprint();
+      }
     }, 1600);
   }
 
@@ -184,6 +189,9 @@ class Endboss extends MovableObject {
         return (this.dead = true);
       }
       if (!this.isAttacking && this.activated && !this.world.character.isEncounteringEndboss(this)) {
+        if (this.isCharacterBehind()) {
+          this.otherDirection = !this.otherDirection;
+        }
         if (!this.dead && !this.shouldStopMoving()) {
           this.startMoving();
         }

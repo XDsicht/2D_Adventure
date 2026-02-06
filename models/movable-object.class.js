@@ -125,9 +125,4 @@ class MovableObject extends DrawableObject {
     ctx.drawImage(mo.img, -mo.width / 2, -mo.height / 2, mo.width, mo.height);
     ctx.restore();
   }
-
-  shouldStopMoving() {
-    if (!this.world || !this.world.character) return false;
-    return this.isHurt() || (this.world.character.isHurt() && this.world.character.lastAttacker === this && !this.world.character.isAboveGround());
-  }
 }

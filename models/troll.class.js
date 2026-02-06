@@ -1,4 +1,4 @@
-class Troll extends MovableObject {
+class Troll extends Enemy {
   height = 240;
   width = 240;
   y = 226;
@@ -93,15 +93,6 @@ class Troll extends MovableObject {
   calculateSpawningLocation() {
     this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
     return (this.world.initialObstacleSpawn = this.spawningLocation);
-  }
-
-  isCharacterBehind() {
-    if (!this.world || !this.world.character) return false;
-    if (this.otherDirection) {
-      return this.world.character.x > this.x;
-    } else {
-      return this.world.character.x < this.x;
-    }
   }
 
   animate() {
