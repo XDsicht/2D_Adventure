@@ -59,8 +59,7 @@ class World {
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
-  // gleicher troll, der angreift
-  // isWalking nicht resetted bzw. nicht mit isAttacking kombiniert
+
   checkEnemyWalkingCollisions(enemies) {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
@@ -83,7 +82,7 @@ class World {
 
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if(!(enemy instanceof Endboss)) {
+      if (!(enemy instanceof Endboss)) {
         if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
           this.character.bounce();
           enemy.isDead();
@@ -97,7 +96,7 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking) {
+      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -209,8 +208,7 @@ class World {
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
-      if(mo instanceof Character || mo instanceof Troll || mo instanceof Endboss)
-      mo.offset.left = mo.offset.right;
+      if (mo instanceof Character || mo instanceof Troll || mo instanceof Endboss) mo.offset.left = mo.offset.right;
       mo.offset.right = mo.offset.left;
     }
     mo.draw(this.ctx);

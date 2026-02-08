@@ -124,7 +124,7 @@ class Troll extends Enemy {
           this.resetCurrentImage();
         } else {
           this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isColliding(this)) {
+          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringObstacle(this)) {
             this.world.character.addPendingDamage(this, 20);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
