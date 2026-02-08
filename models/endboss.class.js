@@ -150,7 +150,7 @@ class Endboss extends Enemy {
     this.isRunning = true;
     this.isWalking = false;
     this.speed = 2.0;
-    console.log(this.speed);
+    // console.log(this.speed);
   }
 
   updateXOffset(newWidth) {

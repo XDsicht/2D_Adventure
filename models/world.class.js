@@ -98,19 +98,11 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        this.character.isWalking &&
-        !this.character.characterJumping &&
-        !this.character.isHurt() &&
-        !enemy.dead &&
-        !enemy.isAttacking &&
-        !enemy.hasDealtDamage
-      ) {
+      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
-        // console.log("CharacterEnergy:", this.character.energy);
+        console.log("CharacterEnergy:", this.character.energy);
       }
     });
   }

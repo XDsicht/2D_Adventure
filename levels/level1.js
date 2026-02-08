@@ -30,7 +30,12 @@ const level1 = new Level(
         new BackgroundObject("img/5.elements/background/2.png", 2160),
         new BackgroundObject("img/5.elements/background/3.png", 2160),
         new BackgroundObject("img/5.elements/background/4.png", 2160),
-        new BackgroundObject("img/5.elements/background/5.png", 2160)
+        new BackgroundObject("img/5.elements/background/5.png", 2160),
+        new BackgroundObject("img/5.elements/background/1.png", 2880),
+        new BackgroundObject("img/5.elements/background/2.png", 2880),
+        new BackgroundObject("img/5.elements/background/3.png", 2880),
+        new BackgroundObject("img/5.elements/background/4.png", 2880),
+        new BackgroundObject("img/5.elements/background/5.png", 2880)
     ],
     [
         new Coin(), new Coin(), new Coin(), new Coin(), new Coin()
