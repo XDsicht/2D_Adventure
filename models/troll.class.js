@@ -128,6 +128,8 @@ class Troll extends Enemy {
             this.world.character.addPendingDamage(this, 20);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
+            console.log('Damage dealt to character by', this);
+            
           }
         }
       } else if (this.dead) {

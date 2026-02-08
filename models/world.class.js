@@ -34,10 +34,12 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
+      // console.log("Walking?", this.character.isWalking);
+
       if (this.character.pendingDamage > 0) {
         this.character.applyAccumulatedDamage(); // Apply all accumulated damage at once
         this.healthBar.setPercentage(this.character.energy); // Update health bar after damage
-        console.log("CharacterEnergyCheckCollisions:", this.character.energy);
+        // console.log("CharacterEnergyCheckCollisions:", this.character.energy);
       }
       this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
       this.checkCollisionOfArrows();
@@ -96,11 +98,19 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
+      if (
+        this.character.isColliding(enemy) &&
+        this.character.isWalking &&
+        !this.character.characterJumping &&
+        !this.character.isHurt() &&
+        !enemy.dead &&
+        !enemy.isAttacking &&
+        !enemy.hasDealtDamage
+      ) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
-        console.log("CharacterEnergy:", this.character.energy);
+        // console.log("CharacterEnergy:", this.character.energy);
       }
     });
   }

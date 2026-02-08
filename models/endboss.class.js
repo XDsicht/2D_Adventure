@@ -170,9 +170,9 @@ class Endboss extends Enemy {
     if (!this.isRunning) {
       this.isWalking = true;
     }
-    setTimeout(() => {
-      if (!this.shouldStopMoving) {
-        console.log("Hello");
+    setTimeout(() => {      
+      if (!this.shouldStopMoving()) {
+        // console.log("Hello");
         
         this.sprint();
       }
