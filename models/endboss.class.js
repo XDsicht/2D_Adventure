@@ -188,11 +188,11 @@ class Endboss extends Enemy {
         this.resetCurrentImage();
         return (this.dead = true);
       }
-      if (!this.isAttacking && this.activated && !this.world.character.isEncounteringEndboss(this)) {
+      if (!this.isAttacking && this.activated) {
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
         }
-        if (!this.dead && !this.shouldStopMoving()) {
+        if (!this.dead && !this.shouldStopMoving() && !this.world.character.isEncounteringEndboss(this)) {
           this.startMoving();
         }
       }

@@ -104,6 +104,10 @@ class World {
         enemy.hasDealtDamage = true;
         console.log("CharacterEnergy:", this.character.energy);
       }
+
+      if (!this.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
+      enemy.hasDealtDamage = false;
+      }
     });
   }
 
