@@ -133,6 +133,7 @@ class World {
             if (!enemy.activated) return;
           }
           enemy.hit();
+          // enemy.resetCurrentImage();
           this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
         }
       });

@@ -18,7 +18,7 @@ class Endboss extends Enemy {
   attackY = -158;
   hurtWidth = 360;
   hurtHeight = 380;
-  hurtY = 62;
+  hurtY = 52;
   deadWidth = 360;
   deadHeight = 380;
   deadY = 152;
@@ -186,7 +186,7 @@ class Endboss extends Enemy {
       }
       if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
-        return (this.dead = true);
+        return this.dead = true;
       }
       if (!this.isAttacking && this.activated) {
         if (this.isCharacterBehind()) {
@@ -204,35 +204,6 @@ class Endboss extends Enemy {
     setInterval(() => {
       if (!this.world || !this.world.character || this.world.character.dead) {
         return;
-      } else if (this.world.character.isHurt() && this.isAttacking) {
-        this.y = this.attackY;
-        this.width = this.attackWidth;
-        this.height = this.attackHeight;
-        this.loadImage(this.IMAGES_ATTACKING[2]);
-        this.isAttacking = false;
-        this.hasDealtDamage = false;
-        this.attackAnimationStarted = false;
-        this.resetCurrentImage();
-      } else if (this.isAttacking && !this.dead) {
-        this.isRunning = false;
-        this.y = this.attackY;
-        this.width = this.attackWidth;
-        this.height = this.attackHeight;
-        this.updateXOffset(this.attackWidth);
-        if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
-          this.isRunning = true;
-          this.isAttacking = false;
-          this.hasDealtDamage = false;
-          this.attackAnimationStarted = false;
-        } else {
-          this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
-            this.world.character.addPendingDamage(this, 40);
-            this.world.character.lastAttacker = this;
-            this.hasDealtDamage = true;
-            this.resetCurrentImage();
-          }
-        }
       } else if (this.dead) {
         this.y = this.deadY;
         this.height = this.deadHeight;
@@ -252,6 +223,34 @@ class Endboss extends Enemy {
         this.height = this.hurtHeight;
         this.updateXOffset(this.hurtWidth);
         this.playAnimation(this.IMAGES_HURT);
+      } else if (this.world.character.isHurt() && this.isAttacking) {
+        this.y = this.attackY;
+        this.width = this.attackWidth;
+        this.height = this.attackHeight;
+        this.loadImage(this.IMAGES_ATTACKING[2]);
+        this.isAttacking = false;
+        this.attackAnimationStarted = false;
+      } else if (!this.world.character.isHurt() && this.isAttacking) {
+        this.hasDealtDamage = false;
+        if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
+          this.isRunning = true;
+          this.isAttacking = false;
+          this.hasDealtDamage = false;
+          this.attackAnimationStarted = false;
+          this.resetCurrentImage();
+        } else {
+          this.y = this.attackY;
+          this.width = this.attackWidth;
+          this.height = this.attackHeight;
+          this.updateXOffset(this.attackWidth);
+          this.playAnimation(this.IMAGES_ATTACKING);
+          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
+            this.world.character.addPendingDamage(this, 40);
+            this.world.character.lastAttacker = this;
+            this.hasDealtDamage = true;
+            this.resetCurrentImage();
+          }
+        }
       } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
         this.y = this.runY;
         this.width = this.runWidth;

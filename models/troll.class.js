@@ -99,9 +99,10 @@ class Troll extends Enemy {
     setInterval(() => {
       if (!this.world || this.world.character.dead || !this.world.character) {
         return;
-      } else if (this.isDead() && !this.dead) {
+      } 
+      if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
-        return (this.dead = true);
+        return this.dead = true;
       }
       if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
         if (this.isCharacterBehind()) {
@@ -114,6 +115,18 @@ class Troll extends Enemy {
     setInterval(() => {
       if (!this.world || this.world.character.dead || !this.world.character) {
         return;
+      } else if (this.dead) {
+        this.y = 228;
+        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+          this.playAnimation(this.IMAGES_DEAD);
+        } else {
+          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+          setTimeout(() => {
+            return (this.delete = true);
+          }, 800);
+        }
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
       } else if (this.world.character.isHurt() && this.isAttacking) {
         this.playAnimation(this.IMAGES_IDLE);
       } else if (this.isAttacking && !this.world.character.isHurt()) {
@@ -132,18 +145,6 @@ class Troll extends Enemy {
             
           }
         }
-      } else if (this.dead) {
-        this.y = 228;
-        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-          this.playAnimation(this.IMAGES_DEAD);
-        } else {
-          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-          setTimeout(() => {
-            return (this.delete = true);
-          }, 800);
-        }
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
       } else {
         this.playAnimation(this.IMAGES_WALKING);
       }
