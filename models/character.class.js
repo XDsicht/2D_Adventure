@@ -221,7 +221,7 @@ class Character extends MovableObject {
   isEncounteringObstacle(enemy) {
     const offset = this.getEffectiveOffset(enemy);
 
-    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight + 10 && this.x + offset.thisLeft * 0.98 < enemy.x + enemy.width - offset.moLeft;
+    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft;
   }
 
   isEncounteringEndboss(endboss) {
