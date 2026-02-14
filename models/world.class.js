@@ -34,12 +34,10 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
-      // console.log("Walking?", this.character.isWalking);
 
       if (this.character.pendingDamage > 0) {
         this.character.applyAccumulatedDamage(); // Apply all accumulated damage at once
         this.healthBar.setPercentage(this.character.energy); // Update health bar after damage
-        // console.log("CharacterEnergyCheckCollisions:", this.character.energy);
       }
       this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
       this.checkCollisionOfArrows();
@@ -98,7 +96,15 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
+      if (
+        this.character.isColliding(enemy) &&
+        this.character.isWalking &&
+        !this.character.characterJumping &&
+        !this.character.isHurt() &&
+        !enemy.dead &&
+        !enemy.isAttacking &&
+        !enemy.hasDealtDamage
+      ) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -106,7 +112,7 @@ class World {
       }
 
       if (!this.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
-      enemy.hasDealtDamage = false;
+        enemy.hasDealtDamage = false;
       }
     });
   }
@@ -133,7 +139,6 @@ class World {
             if (!enemy.activated) return;
           }
           enemy.hit();
-          // enemy.resetCurrentImage();
           this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
         }
       });
@@ -215,8 +220,6 @@ class World {
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
-      if (mo instanceof Character || mo instanceof Troll || mo instanceof Endboss) mo.offset.left = mo.offset.right;
-      mo.offset.right = mo.offset.left;
     }
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);

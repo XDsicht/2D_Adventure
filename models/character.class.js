@@ -219,25 +219,25 @@ class Character extends MovableObject {
   }
 
   isEncounteringObstacle(enemy) {
-    return (
-      this.x + this.width - this.offset.right > enemy.x + enemy.offset.right + 10 &&
-      this.x + this.offset.left * 0.98 < enemy.x + enemy.width - enemy.offset.left
-    );
+    const offset = this.getEffectiveOffset(enemy);
+
+    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight + 10 && this.x + offset.thisLeft * 0.98 < enemy.x + enemy.width - offset.moLeft;
   }
 
   isEncounteringEndboss(endboss) {
-    return (
-      this.x + this.width - this.offset.right > endboss.x + endboss.offset.right * 0.9 &&
-      this.x + this.offset.left * 0.9 < endboss.x + endboss.width - endboss.offset.left
-    );
+    const offset = this.getEffectiveOffset(endboss);
+
+    return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.9 && this.x + offset.thisLeft * 0.9 < endboss.x + endboss.width - offset.moLeft;
   }
 
   isCollidingVertically(mo) {
+    const offset = this.getEffectiveOffset(mo);
+
     return (
-      this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+      this.x + offset.thisLeft < mo.x + mo.width - offset.moRight &&
       this.y + this.height - this.offset.bottom < mo.y + mo.height - mo.offset.bottom &&
       this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
-      this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+      this.x + this.width - offset.thisRight > mo.x + offset.moLeft &&
       this.speedY < 0
     );
   }
