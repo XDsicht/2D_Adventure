@@ -219,19 +219,19 @@ class Character extends MovableObject {
   }
 
   isEncounteringObstacle(enemy) {
-    const offset = this.getEffectiveOffset(enemy);
+    const offset = this.getDirectionalOffset(enemy);
 
     return this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft;
   }
 
   isEncounteringEndboss(endboss) {
-    const offset = this.getEffectiveOffset(endboss);
+    const offset = this.getDirectionalOffset(endboss);
 
     return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.9 && this.x + offset.thisLeft * 0.9 < endboss.x + endboss.width - offset.moLeft;
   }
 
   isCollidingVertically(mo) {
-    const offset = this.getEffectiveOffset(mo);
+    const offset = this.getDirectionalOffset(mo);
 
     return (
       this.x + offset.thisLeft < mo.x + mo.width - offset.moRight &&

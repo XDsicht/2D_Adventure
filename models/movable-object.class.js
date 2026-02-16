@@ -38,30 +38,44 @@ class MovableObject extends DrawableObject {
 
   isAboveGround() {
     if (this instanceof ThrowableObject) {
-      // ThrowableObjects should always fall
       return this.y < 410;
     } else {
       return this.y < 250;
     }
   }
 
-  getEffectiveOffset(mo) {
+  getCurrentOffset() {
+    if (this.dead && this.offsetDead) return this.offsetDead;
+    if (this.isHurt() && this.offsetHurt) return this.offsetHurt;
+    if (this.isAttacking && this.offsetAttack) return this.offsetAttack;
+    if (this.isRunning && this.offsetRun) return this.offsetRun;
+    if (this.isWalking && this.offsetWalking) return this.offsetWalking;
+    if (this.offsetIdle) return this.offsetIdle;
+    return this.offset;
+  }
+
+  getDirectionalOffset(mo) {
+    const thisOffset = this.getCurrentOffset();
+    const moOffset = mo.getCurrentOffset();
+
     return {
-      thisLeft: this.otherDirection ? this.offset.right : this.offset.left,
-      thisRight: this.otherDirection ? this.offset.left : this.offset.right,
-      moLeft: mo.otherDirection ? mo.offset.right : mo.offset.left,
-      moRight: mo.otherDirection ? mo.offset.left : mo.offset.right,
+      thisLeft: this.otherDirection ? thisOffset.right : thisOffset.left,
+      thisRight: this.otherDirection ? thisOffset.left : thisOffset.right,
+      moLeft: mo.otherDirection ? moOffset.right : moOffset.left,
+      moRight: mo.otherDirection ? moOffset.left : moOffset.right,
     };
   }
 
   isColliding(mo) {
-    const offset = this.getEffectiveOffset(mo);
+    const offset = this.getDirectionalOffset(mo);
+    const thisOffset = this.getCurrentOffset();
+    const moOffset = mo.getCurrentOffset();
 
     return (
       this.x + this.width - offset.thisRight > mo.x + offset.moRight &&
-      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.y + this.height - thisOffset.bottom > mo.y + moOffset.top &&
       this.x + offset.thisLeft < mo.x + mo.width - offset.moLeft &&
-      this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
+      this.y + thisOffset.top < mo.y + mo.height - moOffset.bottom
     );
   }
 
