@@ -35,6 +35,20 @@ class Endboss extends Enemy {
     bottom: 10,
   };
 
+  offsetRun = {
+    top: 160,
+    left: 50,
+    right: 30,
+    bottom: 10,
+  };
+
+  offsetAttack = {
+    top: 180,
+    left: 60,
+    right: 100,
+    bottom: 10,
+  };
+
   IMAGES_IDLE = [
     "img/4.boss/1.idle/Idle_000.png",
     "img/4.boss/1.idle/Idle_001.png",
@@ -140,6 +154,12 @@ class Endboss extends Enemy {
     this.animate();
   }
 
+  getCurrentOffset() {
+    if (this.isAttacking) return this.offsetAttack;
+    if (this.isRunning) return this.offsetRun;
+    return this.offset;
+  }
+
   isInCharacterFrame() {
     if (!this.world || !this.world.character) return false;
     const characterViewEnd = this.world.character.x + 450;
@@ -170,10 +190,10 @@ class Endboss extends Enemy {
     if (!this.isRunning) {
       this.isWalking = true;
     }
-    setTimeout(() => {      
+    setTimeout(() => {
       if (!this.shouldStopMoving()) {
         // console.log("Hello");
-        
+
         this.sprint();
       }
     }, 1600);
@@ -186,7 +206,7 @@ class Endboss extends Enemy {
       }
       if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
-        return this.dead = true;
+        return (this.dead = true);
       }
       if (!this.isAttacking && this.activated) {
         if (this.isCharacterBehind()) {

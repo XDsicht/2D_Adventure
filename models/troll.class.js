@@ -99,10 +99,10 @@ class Troll extends Enemy {
     setInterval(() => {
       if (!this.world || this.world.character.dead || !this.world.character) {
         return;
-      } 
+      }
       if (this.isDead() && !this.dead) {
         this.resetCurrentImage();
-        return this.dead = true;
+        return (this.dead = true);
       }
       if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
         if (this.isCharacterBehind()) {
@@ -142,7 +142,6 @@ class Troll extends Enemy {
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
             // console.log('Damage dealt to character by', this);
-            
           }
         }
       } else {
