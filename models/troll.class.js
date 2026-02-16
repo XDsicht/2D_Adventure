@@ -9,7 +9,7 @@ class Troll extends Enemy {
   offset = {
     top: 85,
     left: 90,
-    right: 60,
+    right: 50,
     bottom: 35,
   };
 
