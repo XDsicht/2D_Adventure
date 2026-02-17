@@ -44,8 +44,8 @@ class Endboss extends Enemy {
 
   offsetAttack = {
     top: 180,
-    left: 60,
-    right: 100,
+    left: 80,
+    right: 50,
     bottom: 10,
   };
 
