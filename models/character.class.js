@@ -226,8 +226,7 @@ class Character extends MovableObject {
 
   isEncounteringEndboss(endboss) {
     const offset = this.getDirectionalOffset(endboss);
-    // console.log(true);
-    return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.9 && this.x + offset.thisLeft * 0.9 < endboss.x + endboss.width - offset.moLeft;
+    return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.99 && this.x + offset.thisLeft * 0.99 < endboss.x + endboss.width - offset.moLeft;
   }
 
   isCollidingVertically(mo) {

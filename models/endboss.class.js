@@ -169,20 +169,27 @@ class Endboss extends Enemy {
   sprint() {
     this.isRunning = true;
     this.isWalking = false;
-    this.speed = 2.0;
-    // console.log(this.speed);
+    this.speed = 3.0;
   }
 
   updateXOffset(newWidth) {
     const widthDifference = newWidth - this.walkWidth
-
+    this.xOffset = widthDifference;
     if (this.otherDirection) {
-      this.xOffset = widthDifference;
-      this.x = this.baseX - this.xOffset;
-      return;
+      if (newWidth == this.attackWidth) {
+        this.x = this.baseX - (this.xOffset / 2);
+      } else {
+        this.x = this.baseX - this.xOffset;
+      }
     } else {
-      this.xOffset = 0;
-      this.x = this.baseX;
+      switch (newWidth) {
+        case this.attackWidth:
+          this.x = this.baseX - (this.xOffset / 2);
+          break;
+        case !this.attackWidth:
+          this.xOffset = 0;
+          this.x = this.baseX;
+      }
     }
   }
 
@@ -199,8 +206,6 @@ class Endboss extends Enemy {
     }
     setTimeout(() => {
       if (!this.shouldStopMoving()) {
-        // console.log("Hello");
-
         this.sprint();
       }
     }, 1600);
@@ -216,8 +221,6 @@ class Endboss extends Enemy {
         return (this.dead = true);
       }
       if (!this.isAttacking && this.activated) {
-
-        // this.otherDirection = this.world.character.x < this.x;
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
         }
