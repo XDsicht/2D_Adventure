@@ -174,9 +174,16 @@ class Endboss extends Enemy {
   }
 
   updateXOffset(newWidth) {
-    const widthDifference = newWidth - this.walkWidth;
-    this.xOffset = widthDifference;
-    this.x = this.baseX - this.xOffset;
+    const widthDifference = newWidth - this.walkWidth
+
+    if (this.otherDirection) {
+      this.xOffset = widthDifference;
+      this.x = this.baseX - this.xOffset;
+      return;
+    } else {
+      this.xOffset = 0;
+      this.x = this.baseX;
+    }
   }
 
   resetXOffset() {
@@ -209,6 +216,8 @@ class Endboss extends Enemy {
         return (this.dead = true);
       }
       if (!this.isAttacking && this.activated) {
+
+        // this.otherDirection = this.world.character.x < this.x;
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
         }
@@ -264,11 +273,15 @@ class Endboss extends Enemy {
           this.height = this.attackHeight;
           this.updateXOffset(this.attackWidth);
           this.playAnimation(this.IMAGES_ATTACKING);
+          console.log("Damage?", this.hasDealtDamage);
+
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
             this.world.character.addPendingDamage(this, 40);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
             this.resetCurrentImage();
+            console.log("hit");
+
           }
         }
       } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
