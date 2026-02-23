@@ -132,6 +132,7 @@ class World {
           }
           enemy.hit();
           this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
+          return;
         }
       });
     });

@@ -123,8 +123,12 @@ class Character extends MovableObject {
   characterActionsIntervals() {
     if (!this.dead || !this.isHurt()) {
       let actions = setInterval(() => {
+
         // Reset walking state at the beginning of each frame
-        this.isWalking = false;
+        if (!this.isAboveGround()) {
+          this.isWalking = false;
+          this.characterJumping = false;
+        }
         if (!this.isAttacking) {
           if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
@@ -191,7 +195,7 @@ class Character extends MovableObject {
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
-        this.characterJumping = false;
+        this.characterJumping = true;
         this.playAnimation(this.IMAGES_JUMPING);
         if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
           this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
