@@ -3,7 +3,7 @@ class ThrowableObject extends MovableObject {
     IMAGE = 'img/5.elements/throwables/arrows/arrow.png';
     angle = 23;
     acceleration = 1;
-
+    groundY = 410;
     constructor(x, y, otherDirection) {
         super().loadImage(this.IMAGE);
         this.x = x;

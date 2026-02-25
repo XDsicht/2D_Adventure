@@ -13,6 +13,7 @@ class MovableObject extends DrawableObject {
   hasDealtDamage = false;
   lastAttacker;
   world;
+  groundY = 250;
   // initialObstacleSpawn = 600;
   spawningLocation;
 
@@ -23,6 +24,10 @@ class MovableObject extends DrawableObject {
     bottom: 0,
   };
 
+  getGroundY() {
+    return this.groundY;
+  }
+
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
@@ -30,18 +35,14 @@ class MovableObject extends DrawableObject {
         this.speedY -= this.acceleration;
       }
       if (!this.isAboveGround() && this.speedY < 0) {
-        this.y = 250;
+        this.y = this.groundY;
         this.speedY = 0;
       }
     }, 1000 / 20);
   }
 
   isAboveGround() {
-    if (this instanceof ThrowableObject) {
-      return this.y < 410;
-    } else {
-      return this.y < 250;
-    }
+    return this.y < this.groundY;
   }
 
   getCurrentOffset() {
