@@ -213,13 +213,8 @@ class Endboss extends Enemy {
 
   animate() {
     setInterval(() => {
-      if (!this.world || this.world.character.dead || !this.world.character) {
-        return;
-      }
-      if (this.isDead() && !this.dead) {
-        this.resetCurrentImage();
-        return (this.dead = true);
-      }
+      this.checkIfWorldExists();
+      this.checkIfEnemyIsDead();
       if (!this.isAttacking && this.activated) {
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
@@ -234,21 +229,13 @@ class Endboss extends Enemy {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.world || !this.world.character || this.world.character.dead) {
-        return;
-      } else if (this.dead) {
+      this.checkIfWorldExists();
+      if (this.dead) {
         this.y = this.deadY;
         this.height = this.deadHeight;
         this.width = this.deadWidth;
         this.updateXOffset(this.deadWidth);
-        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-          this.playAnimation(this.IMAGES_DEAD);
-        } else {
-          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-          setTimeout(() => {
-            return (this.delete = true);
-          }, 800);
-        }
+        this.playEnemyDeadAnimation();
       } else if (this.isHurt()) {
         this.y = this.hurtY;
         this.width = this.hurtWidth;
@@ -276,15 +263,11 @@ class Endboss extends Enemy {
           this.height = this.attackHeight;
           this.updateXOffset(this.attackWidth);
           this.playAnimation(this.IMAGES_ATTACKING);
-          console.log("Damage?", this.hasDealtDamage);
-
           if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
             this.world.character.addPendingDamage(this, 40);
             this.world.character.lastAttacker = this;
             this.hasDealtDamage = true;
             this.resetCurrentImage();
-            console.log("hit");
-
           }
         }
       } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {

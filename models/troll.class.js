@@ -97,13 +97,8 @@ class Troll extends Enemy {
 
   animate() {
     setInterval(() => {
-      if (!this.world || this.world.character.dead || !this.world.character) {
-        return;
-      }
-      if (this.isDead() && !this.dead) {
-        this.resetCurrentImage();
-        return (this.dead = true);
-      }
+      this.checkIfWorldExists();
+      this.checkIfEnemyIsDead();
       if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
         if (this.isCharacterBehind()) {
           this.otherDirection = !this.otherDirection;
@@ -113,37 +108,17 @@ class Troll extends Enemy {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.world || this.world.character.dead || !this.world.character) {
-        return;
-      } else if (this.dead) {
+      this.checkIfWorldExists();
+      if (this.dead) {
         this.y = 228;
-        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-          this.playAnimation(this.IMAGES_DEAD);
-        } else {
-          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-          setTimeout(() => {
-            return (this.delete = true);
-          }, 800);
-        }
+        this.playEnemyDeadAnimation();
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.world.character.isHurt() && this.isAttacking) {
         this.playAnimation(this.IMAGES_IDLE);
       } else if (this.isAttacking && !this.world.character.isHurt()) {
         this.hasDealtDamage = false;
-        if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
-          this.isAttacking = false;
-
-          this.resetCurrentImage();
-        } else {
-          this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringObstacle(this)) {
-            this.world.character.addPendingDamage(this, 20);
-            this.world.character.lastAttacker = this;
-            this.hasDealtDamage = true;
-            // console.log('Damage dealt to character by', this);
-          }
-        }
+        this.playAttackAnimation();
       } else {
         this.playAnimation(this.IMAGES_WALKING);
       }
