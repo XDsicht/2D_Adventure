@@ -119,8 +119,9 @@ class World {
   checkCollisionOfArrows() {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
+        if (this.level.throwableObjects.length == 0) return;
         if (arrow.isColliding(enemy) && !enemy.dead) {
-          if (!enemy.notInFrame()) return;
+          if (!enemy.inFrame()) return;
           if (enemy instanceof Endboss) {
             if (!enemy.activated) return;
           }
