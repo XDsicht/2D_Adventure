@@ -48,4 +48,8 @@ class Enemy extends MovableObject {
       this.hasDealtDamage = true;
     }
   }
+
+  notInFrame() {
+    return this.x + this.width >= -this.world.camera_x && this.x <= -this.world.camera_x + this.world.canvas.width;
+  }
 }

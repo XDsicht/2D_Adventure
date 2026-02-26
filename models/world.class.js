@@ -120,7 +120,7 @@ class World {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy) && !enemy.dead) {
-          if (enemy.x + enemy.width < this.camera_x || enemy.x > this.canvas.width) return;
+          if (!enemy.notInFrame()) return;
           if (enemy instanceof Endboss) {
             if (!enemy.activated) return;
           }
