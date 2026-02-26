@@ -25,9 +25,7 @@ class MovableObject extends DrawableObject {
   };
 
   checkIfWorldExists() {
-    if (!this.world || this.world.character.dead || !this.world.character) {
-      return;
-    }
+    return !this.world || this.world.character.dead || !this.world.character;
   }
 
   getGroundY() {

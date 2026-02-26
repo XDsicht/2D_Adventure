@@ -97,7 +97,7 @@ class Troll extends Enemy {
 
   animate() {
     setInterval(() => {
-      this.checkIfWorldExists();
+      if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
         if (this.isCharacterBehind()) {
@@ -108,7 +108,7 @@ class Troll extends Enemy {
     }, 1000 / 60);
 
     setInterval(() => {
-      this.checkIfWorldExists();
+      if (this.checkIfWorldExists()) return;
       if (this.dead) {
         this.y = 228;
         this.playEnemyDeadAnimation();

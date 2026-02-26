@@ -213,7 +213,7 @@ class Endboss extends Enemy {
 
   animate() {
     setInterval(() => {
-      this.checkIfWorldExists();
+      if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.isAttacking && this.activated) {
         if (this.isCharacterBehind()) {
@@ -229,7 +229,7 @@ class Endboss extends Enemy {
     }, 1000 / 60);
 
     setInterval(() => {
-      this.checkIfWorldExists();
+      if (this.checkIfWorldExists()) return;
       if (this.dead) {
         this.y = this.deadY;
         this.height = this.deadHeight;

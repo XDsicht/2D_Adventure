@@ -18,7 +18,6 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    this.startGame();
   }
 
   setWorld() {
@@ -44,12 +43,6 @@ class World {
       this.checkShootArrow();
       this.removeDeadEnemies();
     }, 100);
-  }
-
-  startGame() {
-    setInterval(() => {
-      this.checkCollisionOfArrows();
-    }, 25);
   }
 
   checkCollisions() {
@@ -127,6 +120,7 @@ class World {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
         if (arrow.isColliding(enemy) && !enemy.dead) {
+          if (enemy.x + enemy.width < this.camera_x || enemy.x > this.canvas.width) return;
           if (enemy instanceof Endboss) {
             if (!enemy.activated) return;
           }
