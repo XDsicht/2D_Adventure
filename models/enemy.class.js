@@ -50,6 +50,14 @@ class Enemy extends MovableObject {
   }
 
   inFrame() {
-    return this.x + this.width >= -this.world.camera_x && this.x <= -this.world.camera_x + this.world.canvas.width;
+    const enemyOffsets = this.getEnemyDirectionalOffset();
+    return this.x + this.width - enemyOffsets.rightOffset >= -this.world.camera_x && this.x + enemyOffsets.leftOffset <= -this.world.camera_x + this.world.canvas.width;
+  }
+
+  getEnemyDirectionalOffset() {
+    return {
+      leftOffset: this.otherDirection ? this.offset.right : this.offset.left,
+      rightOffset: this.otherDirection ? this.offset.left : this.offset.right,
+    };
   }
 }

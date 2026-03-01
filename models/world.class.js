@@ -89,7 +89,15 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
+      if (
+        this.character.isColliding(enemy) &&
+        this.character.isWalking &&
+        !this.character.characterJumping &&
+        !this.character.isHurt() &&
+        !enemy.dead &&
+        !enemy.isAttacking &&
+        !enemy.hasDealtDamage
+      ) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -119,9 +127,11 @@ class World {
   checkCollisionOfArrows() {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
+        if (!enemy.inFrame()) {
+          return;
+        }
         if (this.level.throwableObjects.length == 0) return;
         if (arrow.isColliding(enemy) && !enemy.dead) {
-          if (!enemy.inFrame()) return;
           if (enemy instanceof Endboss) {
             if (!enemy.activated) return;
           }
