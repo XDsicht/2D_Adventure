@@ -150,8 +150,8 @@ class Character extends MovableObject {
             this.jump();
           }
         }
-        this.world.camera_x = -this.x + 100; // Kamera folgt dem Character
-
+        // this.world.camera_x = -this.x + this.world.cameraOffset; // Kamera folgt dem Character
+        this.world.updateCamera();
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
           clearInterval(actions);

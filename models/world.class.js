@@ -5,6 +5,7 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  cameraOffset = 100;
   healthBar = new HealthBar();
   quiver = new Quiver();
   coinBar = new CoinBar();
@@ -57,14 +58,26 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll && !this.character.isHurt()) {
-        if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+        if (
+          this.character.isEncounteringObstacle(enemy) &&
+          !this.character.isWalking &&
+          !enemy.isAttacking &&
+          !enemy.dead &&
+          timeSinceLastAttack > 1000
+        ) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss && !this.character.isHurt()) {
-        if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
+        if (
+          this.character.isEncounteringEndboss(enemy) &&
+          !this.character.isWalking &&
+          !enemy.isAttacking &&
+          !enemy.dead &&
+          timeSinceLastAttack > 800
+        ) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
@@ -180,6 +193,23 @@ class World {
       setTimeout(() => {
         clearInterval(checkIfArrowIsFlying);
       }, 1100);
+    }
+  }
+
+  updateCamera() {
+    let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+    if (this.character.x > endboss.x + endboss.width) {
+      this.cameraOffset = endboss.width / 3;
+      return this.camera_x = -this.character.x + this.cameraOffset;
+    }
+    if (this.character.x < endboss.x) {
+      return (this.camera_x = -this.character.x + this.cameraOffset);
+    }
+    if (this.character.isEncounteringEndboss(endboss)) {
+      if (this.character.x > endboss.x && this.character.x < endboss.x + endboss.width) {
+        this.cameraOffset = endboss.width / 2;
+      }
+      return this.camera_x = -this.character.x + this.cameraOffset;
     }
   }
 
