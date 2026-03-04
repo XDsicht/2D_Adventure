@@ -1,4 +1,4 @@
-class Troll extends Enemy {
+class Troll_1 extends Enemy {
   height = 240;
   width = 240;
   y = 226;

@@ -14,7 +14,7 @@ class DrawableObject {
   }
 
   drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Troll || this instanceof Endboss) {
+    if (this instanceof Character || this instanceof Troll_1 || this instanceof Endboss) {
       ctx.beginPath();
       ctx.lineWidth = "5";
       ctx.strokeStyle = "blue";
@@ -24,7 +24,7 @@ class DrawableObject {
   }
 
   drawOffset(ctx) {
-    if (this instanceof Character || this instanceof Troll || this instanceof Endboss) {
+    if (this instanceof Character || this instanceof Troll_1 || this instanceof Endboss) {
       ctx.beginPath();
       ctx.lineWidth = "4";
       ctx.strokeStyle = "red";

@@ -28,7 +28,7 @@ class World {
     this.character.world = this;
     this.level.enemies.forEach((enemy) => {
       enemy.world = this;
-      if (enemy instanceof Troll) {
+      if (enemy instanceof Troll_1) {
         enemy.x = enemy.calculateSpawningLocation();
       }
     });
@@ -60,7 +60,7 @@ class World {
   checkEnemyWalkingCollisions(enemies) {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
-      if (enemy instanceof Troll && !this.character.isHurt()) {
+      if (enemy instanceof Troll_1 && !this.character.isHurt()) {
         if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
@@ -187,31 +187,31 @@ class World {
     }
   }
 
-updateCamera() {
-  let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
-  const endbossRightEdge = endboss.baseX + endboss.walkWidth;
-  if (!endboss.activated) {
-    return this.camera_x = -this.character.x + this.cameraOffset;
-  }
-  if (this.character.x > endbossRightEdge) {
-    this.cameraOffset = endboss.walkWidth;
-  } else if (this.character.x < endboss.baseX) {
-    this.cameraOffset = 100;
-  } else if (this.character.isEncounteringEndboss(endboss)) {
-    if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
-      this.cameraOffset = endboss.walkWidth / 2;
+  updateCamera() {
+    let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+    const endbossRightEdge = endboss.baseX + endboss.walkWidth;
+    if (!endboss.activated) {
+      return (this.camera_x = -this.character.x + this.cameraOffset);
+    }
+    if (this.character.x > endbossRightEdge) {
+      this.cameraOffset = endboss.walkWidth;
+    } else if (this.character.x < endboss.baseX) {
+      this.cameraOffset = 100;
+    } else if (this.character.isEncounteringEndboss(endboss)) {
+      if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
+        this.cameraOffset = endboss.walkWidth / 2;
+      }
+    }
+
+    this.targetCameraX = -this.character.x + this.cameraOffset;
+    const diff = this.targetCameraX - this.camera_x;
+
+    if (Math.abs(diff) < this.lerpThreshold) {
+      this.camera_x = this.targetCameraX;
+    } else {
+      this.camera_x += diff * this.cameraLerpFactor;
     }
   }
-
-  this.targetCameraX = -this.character.x + this.cameraOffset;
-  const diff = this.targetCameraX - this.camera_x;
-
-  if (Math.abs(diff) < this.lerpThreshold) {
-    this.camera_x = this.targetCameraX;
-  } else {
-    this.camera_x += diff * this.cameraLerpFactor;
-  }
-} 
 
   draw() {
     this.updateCamera();
@@ -236,7 +236,6 @@ updateCamera() {
     });
   }
 
-  
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
       if (obj instanceof Arrow || obj instanceof ThrowableObject) {
