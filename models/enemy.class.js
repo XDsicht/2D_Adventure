@@ -1,4 +1,23 @@
 class Enemy extends MovableObject {
+  height = 240;
+  width = 240;
+  y = 226;
+  otherDirection = true;
+  energy = 10;
+  delete = false;
+
+  offset = {
+    top: 85,
+    left: 90,
+    right: 50,
+    bottom: 35,
+  };
+
+  calculateSpawningLocation() {
+    this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
+    return (this.world.initialObstacleSpawn = this.spawningLocation);
+  }
+
   isCharacterBehind() {
     if (!this.world || !this.world.character) return false;
     if (this.otherDirection) {
@@ -59,5 +78,35 @@ class Enemy extends MovableObject {
       leftOffset: this.otherDirection ? this.offset.right : this.offset.left,
       rightOffset: this.otherDirection ? this.offset.left : this.offset.right,
     };
+  }
+
+  animate() {
+    setInterval(() => {
+      if (this.checkIfWorldExists()) return;
+      this.checkIfEnemyIsDead();
+      if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
+        if (this.isCharacterBehind()) {
+          this.otherDirection = !this.otherDirection;
+        }
+        this.move();
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.checkIfWorldExists()) return;
+      if (this.dead) {
+        this.y = 228;
+        this.playEnemyDeadAnimation();
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.world.character.isHurt() && this.isAttacking) {
+        this.playAnimation(this.IMAGES_IDLE);
+      } else if (this.isAttacking && !this.world.character.isHurt()) {
+        this.hasDealtDamage = false;
+        this.playAttackAnimation();
+      } else {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
+    }, 100);
   }
 }

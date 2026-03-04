@@ -1,17 +1,4 @@
 class Troll_1 extends Enemy {
-  height = 240;
-  width = 240;
-  y = 226;
-  otherDirection = true;
-  energy = 10;
-  delete = false;
-
-  offset = {
-    top: 85,
-    left: 90,
-    right: 50,
-    bottom: 35,
-  };
 
   IMAGES_IDLE = [
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_000.png",
@@ -88,40 +75,5 @@ class Troll_1 extends Enemy {
     this.moveLeft();
     this.speed = 0.15 + Math.random() * 0.25;
     this.animate();
-  }
-
-  calculateSpawningLocation() {
-    this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
-    return (this.world.initialObstacleSpawn = this.spawningLocation);
-  }
-
-  animate() {
-    setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      this.checkIfEnemyIsDead();
-      if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
-        if (this.isCharacterBehind()) {
-          this.otherDirection = !this.otherDirection;
-        }
-        this.move();
-      }
-    }, 1000 / 60);
-
-    setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      if (this.dead) {
-        this.y = 228;
-        this.playEnemyDeadAnimation();
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.world.character.isHurt() && this.isAttacking) {
-        this.playAnimation(this.IMAGES_IDLE);
-      } else if (this.isAttacking && !this.world.character.isHurt()) {
-        this.hasDealtDamage = false;
-        this.playAttackAnimation();
-      } else {
-        this.playAnimation(this.IMAGES_WALKING);
-      }
-    }, 100);
   }
 }
