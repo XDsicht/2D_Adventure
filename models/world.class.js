@@ -58,26 +58,14 @@ class World {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
       if (enemy instanceof Troll && !this.character.isHurt()) {
-        if (
-          this.character.isEncounteringObstacle(enemy) &&
-          !this.character.isWalking &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 1000
-        ) {
+        if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
       if (enemy instanceof Endboss && !this.character.isHurt()) {
-        if (
-          this.character.isEncounteringEndboss(enemy) &&
-          !this.character.isWalking &&
-          !enemy.isAttacking &&
-          !enemy.dead &&
-          timeSinceLastAttack > 800
-        ) {
+        if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
@@ -198,24 +186,25 @@ class World {
 
   updateCamera() {
     let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
-    if (this.character.x > endboss.x + endboss.width) {
-      this.cameraOffset = endboss.width / 3;
+    const endbossRightEdge = endboss.baseX + endboss.walkWidth;
+    if (this.character.x > endbossRightEdge) {
+      this.cameraOffset = endboss.walkWidth / 2;
       return this.camera_x = -this.character.x + this.cameraOffset;
     }
-    if (this.character.x < endboss.x) {
+    if (this.character.x < endboss.baseX) {
       return (this.camera_x = -this.character.x + this.cameraOffset);
     }
     if (this.character.isEncounteringEndboss(endboss)) {
-      if (this.character.x > endboss.x && this.character.x < endboss.x + endboss.width) {
-        this.cameraOffset = endboss.width / 2;
+      if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
+        this.cameraOffset = endboss.walkWidth / 2;
       }
       return this.camera_x = -this.character.x + this.cameraOffset;
     }
   }
 
   draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Canvas leeren
-    this.ctx.translate(this.camera_x, 0); // Kamera verschieben // nochmal anschauen und verstehen!!!!
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
+    this.ctx.translate(this.camera_x, 0); // move camera
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.throwableObjects);
@@ -224,11 +213,11 @@ class World {
     this.addObjectsToMap(this.level.arrows);
     this.addObjectsToMap(this.level.enemies);
     this.addToMap(this.character);
-    this.ctx.translate(-this.camera_x, 0); // Kamera zurücksetzen
+    this.ctx.translate(-this.camera_x, 0); // reset camera
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);
     this.addToMap(this.coinBar);
-    // draw wird immer wieder aufgerufen, damit die Animationen laufen
+    // draw is called repeatedly to keep animations running
     let self = this;
     requestAnimationFrame(function () {
       self.draw();

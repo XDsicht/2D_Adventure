@@ -99,7 +99,7 @@ class Character extends MovableObject {
     "img/2.character/5.attack/Warrior_03__ATTACK_009.png",
   ];
 
-  world; // variable, die es ermöglicht, dass wir über den Character auf die Welt zugreifen können
+  world; // variable to access world properties and methods also with character class
 
   constructor() {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
@@ -150,7 +150,7 @@ class Character extends MovableObject {
             this.jump();
           }
         }
-        // this.world.camera_x = -this.x + this.world.cameraOffset; // Kamera folgt dem Character
+        // this.world.camera_x = -this.x + this.world.cameraOffset; // camera follows character, but with an offset to the left
         this.world.updateCamera();
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
