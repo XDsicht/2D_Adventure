@@ -6,6 +6,9 @@ class World {
   keyboard;
   camera_x = 0;
   cameraOffset = 100;
+  targetCameraX = 0;
+  cameraLerpFactor = 0.1;
+  lerpThreshold = 0.4;
   healthBar = new HealthBar();
   quiver = new Quiver();
   coinBar = new CoinBar();
@@ -184,25 +187,34 @@ class World {
     }
   }
 
-  updateCamera() {
-    let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
-    const endbossRightEdge = endboss.baseX + endboss.walkWidth;
-    if (this.character.x > endbossRightEdge) {
+updateCamera() {
+  let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
+  const endbossRightEdge = endboss.baseX + endboss.walkWidth;
+  if (!endboss.activated) {
+    return this.camera_x = -this.character.x + this.cameraOffset;
+  }
+  if (this.character.x > endbossRightEdge) {
+    this.cameraOffset = endboss.walkWidth;
+  } else if (this.character.x < endboss.baseX) {
+    this.cameraOffset = 100;
+  } else if (this.character.isEncounteringEndboss(endboss)) {
+    if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
       this.cameraOffset = endboss.walkWidth / 2;
-      return this.camera_x = -this.character.x + this.cameraOffset;
-    }
-    if (this.character.x < endboss.baseX) {
-      return (this.camera_x = -this.character.x + this.cameraOffset);
-    }
-    if (this.character.isEncounteringEndboss(endboss)) {
-      if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
-        this.cameraOffset = endboss.walkWidth / 2;
-      }
-      return this.camera_x = -this.character.x + this.cameraOffset;
     }
   }
 
+  this.targetCameraX = -this.character.x + this.cameraOffset;
+  const diff = this.targetCameraX - this.camera_x;
+
+  if (Math.abs(diff) < this.lerpThreshold) {
+    this.camera_x = this.targetCameraX;
+  } else {
+    this.camera_x += diff * this.cameraLerpFactor;
+  }
+} 
+
   draw() {
+    this.updateCamera();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
     this.ctx.translate(this.camera_x, 0); // move camera
     this.addObjectsToMap(this.level.backgroundObjects);
@@ -224,6 +236,7 @@ class World {
     });
   }
 
+  
   addObjectsToMap(objects) {
     objects.forEach((obj) => {
       if (obj instanceof Arrow || obj instanceof ThrowableObject) {

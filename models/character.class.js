@@ -151,7 +151,7 @@ class Character extends MovableObject {
           }
         }
         // this.world.camera_x = -this.x + this.world.cameraOffset; // camera follows character, but with an offset to the left
-        this.world.updateCamera();
+       // this.world.updateCamera();
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
           clearInterval(actions);
