@@ -123,7 +123,6 @@ class Character extends MovableObject {
   characterActionsIntervals() {
     if (!this.dead || !this.isHurt()) {
       let actions = setInterval(() => {
-
         // Reset walking state at the beginning of each frame
         if (!this.isAboveGround()) {
           this.isWalking = false;
@@ -150,8 +149,7 @@ class Character extends MovableObject {
             this.jump();
           }
         }
-        // this.world.camera_x = -this.x + this.world.cameraOffset; // camera follows character, but with an offset to the left
-       // this.world.updateCamera();
+
         if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
           clearInterval(actions);
