@@ -151,7 +151,7 @@ class Endboss extends Enemy {
     this.loadImages(this.IMAGES_DEAD);
     this.x = 2500;
     this.baseX = this.x;
-    this.animate();
+    this.animateEndboss();
   }
 
   getCurrentOffset() {
@@ -173,18 +173,18 @@ class Endboss extends Enemy {
   }
 
   updateXOffset(newWidth) {
-    const widthDifference = newWidth - this.walkWidth
+    const widthDifference = newWidth - this.walkWidth;
     this.xOffset = widthDifference;
     if (this.otherDirection) {
       if (newWidth == this.attackWidth) {
-        this.x = this.baseX - (this.xOffset / 2);
+        this.x = this.baseX - this.xOffset / 2;
       } else {
         this.x = this.baseX - this.xOffset;
       }
     } else {
       switch (newWidth) {
         case this.attackWidth:
-          this.x = this.baseX - (this.xOffset / 2);
+          this.x = this.baseX - this.xOffset / 2;
           break;
         case !this.attackWidth:
           this.xOffset = 0;
@@ -211,14 +211,12 @@ class Endboss extends Enemy {
     }, 1600);
   }
 
-  animate() {
-    setInterval(() => {
+  animateEndboss() {
+    let endbossActionsInterval =setInterval(() => {
       if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.isAttacking && this.activated) {
-        if (this.isCharacterBehind()) {
-          this.otherDirection = !this.otherDirection;
-        }
+        this.getEnemyDirection();
         if (!this.dead && !this.shouldStopMoving() && !this.world.character.isEncounteringEndboss(this)) {
           this.startMoving();
         }
@@ -231,65 +229,83 @@ class Endboss extends Enemy {
     setInterval(() => {
       if (this.checkIfWorldExists()) return;
       if (this.dead) {
-        this.y = this.deadY;
-        this.height = this.deadHeight;
-        this.width = this.deadWidth;
+        this.getDeadDimensions();
         this.updateXOffset(this.deadWidth);
         this.playEnemyDeadAnimation();
       } else if (this.isHurt()) {
-        this.y = this.hurtY;
-        this.width = this.hurtWidth;
-        this.height = this.hurtHeight;
+        this.getHurtDimensions();
         this.updateXOffset(this.hurtWidth);
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.world.character.isHurt() && this.isAttacking) {
-        this.y = this.attackY;
-        this.width = this.attackWidth;
-        this.height = this.attackHeight;
+        this.getAttackDimensions();
         this.loadImage(this.IMAGES_ATTACKING[2]);
         this.isAttacking = false;
-        this.attackAnimationStarted = false;
       } else if (!this.world.character.isHurt() && this.isAttacking) {
         this.hasDealtDamage = false;
         if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
           this.isRunning = true;
           this.isAttacking = false;
           this.hasDealtDamage = false;
-          this.attackAnimationStarted = false;
           this.resetCurrentImage();
         } else {
-          this.y = this.attackY;
-          this.width = this.attackWidth;
-          this.height = this.attackHeight;
+          this.getAttackDimensions();
           this.updateXOffset(this.attackWidth);
           this.playAnimation(this.IMAGES_ATTACKING);
-          if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
-            this.world.character.addPendingDamage(this, 40);
-            this.world.character.lastAttacker = this;
-            this.hasDealtDamage = true;
-            this.resetCurrentImage();
-          }
+          this.endbossDealsDamage();
         }
       } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
-        this.y = this.runY;
-        this.width = this.runWidth;
-        this.height = this.runHeight;
+        this.getRunDimensions();
         this.updateXOffset(this.runWidth);
         this.playAnimation(this.IMAGES_RUN);
       } else if (this.isWalking && !this.isRunning) {
-        this.y = this.walkY;
-        this.width = this.walkWidth;
-        this.height = this.walkHeight;
+        this.getWalkDimensions();
         this.resetXOffset();
         this.playAnimation(this.IMAGES_WALKING);
       } else if (!this.world.character.isEncounteringEndboss(this) && !this.isWalking && !this.isRunning) {
-        this.y = this.walkY;
-        this.width = this.walkWidth;
-        this.height = this.walkHeight;
+        this.getWalkDimensions();
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
       // console.log("Walking:", this.isWalking, "Running:", this.isRunning, "Attacking:", this.isAttacking);
     }, 100);
+  }
+
+  getDeadDimensions() {
+    this.y = this.deadY;
+    this.height = this.deadHeight;
+    this.width = this.deadWidth;
+  }
+
+  getHurtDimensions() {
+    this.y = this.hurtY;
+    this.width = this.hurtWidth;
+    this.height = this.hurtHeight;
+  }
+
+  getAttackDimensions() {
+    this.y = this.attackY;
+    this.width = this.attackWidth;
+    this.height = this.attackHeight;
+  }
+
+  getRunDimensions() {
+    this.y = this.runY;
+    this.width = this.runWidth;
+    this.height = this.runHeight;
+  }
+
+  getWalkDimensions() {
+    this.y = this.walkY;
+    this.width = this.walkWidth;
+    this.height = this.walkHeight;
+  }
+
+  endbossDealsDamage() {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
+      this.world.character.addPendingDamage(this, 40);
+      this.world.character.lastAttacker = this;
+      this.hasDealtDamage = true;
+      this.resetCurrentImage();
+    }
   }
 }

@@ -85,9 +85,7 @@ class Enemy extends MovableObject {
       if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
-        if (this.isCharacterBehind()) {
-          this.otherDirection = !this.otherDirection;
-        }
+        this.getEnemyDirection();
         this.move();
       }
     }, 1000 / 60);
@@ -108,5 +106,11 @@ class Enemy extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING);
       }
     }, 100);
+  }
+
+  getEnemyDirection() {
+    if (this.isCharacterBehind()) {
+      this.otherDirection = !this.otherDirection;
+    }
   }
 }

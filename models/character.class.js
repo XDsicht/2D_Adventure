@@ -9,7 +9,8 @@ class Character extends MovableObject {
   shootingTime = 0;
   checkAlreadyRunning = false;
   characterJumping = false;
-
+  currentDirection;
+  attackDelay = false;
   // Damage accumulation system
   pendingDamage = 0;
   damageFromAttackers = new Set();
@@ -128,7 +129,7 @@ class Character extends MovableObject {
           this.isWalking = false;
           this.characterJumping = false;
         }
-        if (!this.isAttacking) {
+        if (!this.isAttacking && !this.attackDelay) {
           if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
             this.moveRight();
             this.otherDirection = false;
@@ -160,6 +161,7 @@ class Character extends MovableObject {
       setInterval(() => {
         if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
           this.activateDKey();
+          this.setAttackDelay();
         }
       }, 100);
     }
@@ -170,6 +172,8 @@ class Character extends MovableObject {
       this.resetCurrentImage();
       this.isAttacking = true;
       this.world.keyboard.D = true;
+      this.currentDirection = this.otherDirection;
+      this.attackDelay = true;
 
       setTimeout(() => {
         this.isAttacking = false;
@@ -177,6 +181,12 @@ class Character extends MovableObject {
         this.releaseArrow = true;
       }, 300);
     }
+  }
+
+  setAttackDelay() {
+    setTimeout(() => {
+      this.attackDelay = false;
+    }, 400);
   }
 
   characterMovementAnimationIntervals() {
@@ -211,6 +221,9 @@ class Character extends MovableObject {
       if (this.isAttacking) {
         this.playAnimation(this.IMAGES_ATTACKING);
       }
+      // if (!this.isAttacking && this.currentImage >= this.IMAGES_ATTACKING.length) {
+      //   this.attackDelay = false;
+      // }
     }, 30);
   }
 

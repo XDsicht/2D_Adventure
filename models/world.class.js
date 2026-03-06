@@ -159,7 +159,7 @@ class World {
   }
 
   checkShootArrow() {
-    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed()) {
+    if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed() && !this.character.isAttacking) {
       let arrowX;
       if (this.character.otherDirection) {
         arrowX = this.character.x - 24;
@@ -167,7 +167,7 @@ class World {
         arrowX = this.character.x + this.character.width - 21;
       }
       let arrowY = this.character.y + this.character.height - 117;
-      let arrow = new ThrowableObject(arrowX, arrowY, this.character.otherDirection);
+      let arrow = new ThrowableObject(arrowX, arrowY, this.character.currentDirection);
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
       this.arrowInventory--;
@@ -228,6 +228,9 @@ class World {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.arrows);
     this.addObjectsToMap(this.level.enemies);
+    if (this.character.isAttacking && !this.character.releaseArrow) {
+      this.character.otherDirection = this.character.currentDirection;
+    }
     this.addToMap(this.character);
     this.ctx.translate(-this.camera_x, 0); // reset camera
     this.addToMap(this.healthBar);
