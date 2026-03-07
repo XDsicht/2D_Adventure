@@ -40,13 +40,15 @@ class Enemy extends MovableObject {
   }
 
   playEnemyDeadAnimation() {
+    this.y = 228;
     if (this.currentImage < this.IMAGES_DEAD.length - 1) {
       this.playAnimation(this.IMAGES_DEAD);
     } else {
       this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-      setTimeout(() => {
-        return (this.delete = true);
-      }, 800);
+      registerInterval(setTimeout(() => {
+        return this.delete = true;
+      }, 800)
+    );
     }
   }
 
@@ -81,36 +83,44 @@ class Enemy extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      this.checkIfEnemyIsDead();
-      if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
-        this.getEnemyDirection();
-        this.move();
-      }
-    }, 1000 / 60);
-
-    setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      if (this.dead) {
-        this.y = 228;
-        this.playEnemyDeadAnimation();
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.world.character.isHurt() && this.isAttacking) {
-        this.playAnimation(this.IMAGES_IDLE);
-      } else if (this.isAttacking && !this.world.character.isHurt()) {
-        this.hasDealtDamage = false;
-        this.playAttackAnimation();
-      } else {
-        this.playAnimation(this.IMAGES_WALKING);
-      }
-    }, 100);
+    registerInterval(setInterval(() => {
+        if (this.checkIfWorldExists()) return;
+        this.checkIfEnemyIsDead();
+        this.activateEnemy();
+      }, 1000 / 60),
+    );
+    registerInterval(setInterval(() => {
+        if (this.checkIfWorldExists()) return;
+        this.playStatusBasedAnimation();
+      }, 100),
+    );
   }
 
   getEnemyDirection() {
     if (this.isCharacterBehind()) {
       this.otherDirection = !this.otherDirection;
+    }
+  }
+
+  playStatusBasedAnimation() {
+    if (this.dead) {
+      this.playEnemyDeadAnimation();
+    } else if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.world.character.isHurt() && this.isAttacking) {
+      this.playAnimation(this.IMAGES_IDLE);
+    } else if (this.isAttacking && !this.world.character.isHurt()) {
+      this.hasDealtDamage = false;
+      this.playAttackAnimation();
+    } else {
+      this.playAnimation(this.IMAGES_WALKING);
+    }
+  }
+
+  activateEnemy() {
+    if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
+      this.getEnemyDirection();
+      this.move();
     }
   }
 }

@@ -161,7 +161,7 @@ class Character extends MovableObject {
       setInterval(() => {
         if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
           this.activateDKey();
-          this.setAttackDelay();
+          this.resetAttackDelayTimer();
         }
       }, 100);
     }
@@ -174,19 +174,22 @@ class Character extends MovableObject {
       this.world.keyboard.D = true;
       this.currentDirection = this.otherDirection;
       this.attackDelay = true;
+      this.resetAttackVariables();
+    }
+  }
 
-      setTimeout(() => {
+  resetAttackDelayTimer() {
+    setTimeout(() => {
+      this.attackDelay = false;
+    }, 400);
+  }
+
+  resetAttackVariables() {
+    setTimeout(() => {
         this.isAttacking = false;
         this.world.keyboard.D = false;
         this.releaseArrow = true;
       }, 300);
-    }
-  }
-
-  setAttackDelay() {
-    setTimeout(() => {
-      this.attackDelay = false;
-    }, 400);
   }
 
   characterMovementAnimationIntervals() {

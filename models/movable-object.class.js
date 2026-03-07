@@ -33,7 +33,7 @@ class MovableObject extends DrawableObject {
   }
 
   applyGravity() {
-    setInterval(() => {
+    registerInterval(setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
@@ -42,7 +42,7 @@ class MovableObject extends DrawableObject {
         this.y = this.groundY;
         this.speedY = 0;
       }
-    }, 1000 / 20);
+    }, 1000 / 20));
   }
 
   isAboveGround() {
@@ -62,7 +62,6 @@ class MovableObject extends DrawableObject {
   getDirectionalOffset(mo) {
     const thisOffset = this.getCurrentOffset();
     const moOffset = mo.getCurrentOffset();
-
     return {
       thisLeft: this.otherDirection ? thisOffset.right : thisOffset.left,
       thisRight: this.otherDirection ? thisOffset.left : thisOffset.right,
@@ -75,7 +74,6 @@ class MovableObject extends DrawableObject {
     const offset = this.getDirectionalOffset(mo);
     const thisOffset = this.getCurrentOffset();
     const moOffset = mo.getCurrentOffset();
-
     return (
       this.x + this.width - offset.thisRight > mo.x + offset.moRight &&
       this.y + this.height - thisOffset.bottom > mo.y + moOffset.top &&

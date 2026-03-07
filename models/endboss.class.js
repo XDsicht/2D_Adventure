@@ -212,7 +212,7 @@ class Endboss extends Enemy {
   }
 
   animateEndboss() {
-    let endbossActionsInterval =setInterval(() => {
+    let endbossActionsInterval = setInterval(() => {
       if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.isAttacking && this.activated) {
@@ -266,7 +266,6 @@ class Endboss extends Enemy {
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
-      // console.log("Walking:", this.isWalking, "Running:", this.isRunning, "Attacking:", this.isAttacking);
     }, 100);
   }
 

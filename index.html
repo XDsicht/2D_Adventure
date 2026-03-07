@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" type="image/x-icon" href="img/5.elements/coins/Bronze_30.png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" type="image/x-icon" href="img/5.elements/coins/Bronze_30.png" />
     <title>Adventures of Vorga Flammenherz</title>
+    <script src="models/keyboard.class.js"></script>
+    <script src="js/game.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -23,19 +24,17 @@
     <script src="models/coin.class.js"></script>
     <script src="models/arrow.class.js"></script>
     <script src="models/world.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
+
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="levels/level1.js"></script>
-    <script src="js/game.js"></script>
-</head>
+  </head>
 
-<body onload="init()">
+  <body onload="init()">
     <div class="game-container">
-        <h1 class="game-title">Adventures of Vorga Flammenherz</h1>
+      <h1 class="game-title">Adventures of Vorga Flammenherz</h1>
 
-        <canvas width="720" height="480" id="canvas"></canvas>
+      <canvas width="720" height="480" id="canvas"></canvas>
     </div>
-</body>
-
+  </body>
 </html>

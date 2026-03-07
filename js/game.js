@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let intervalRegistery = [];
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -8,7 +9,7 @@ function init() {
   // console.log("My Character is: ", world.character);
 }
 
-window.addEventListener('keydown', async (event) => {
+window.addEventListener("keydown", async (event) => {
   if (event.keyCode == 39) {
     keyboard.RIGHT = true;
   }
@@ -32,7 +33,7 @@ window.addEventListener('keydown', async (event) => {
   }
 });
 
-window.addEventListener('keyup', async (event) => {
+window.addEventListener("keyup", async (event) => {
   if (event.keyCode == 39) {
     keyboard.RIGHT = false;
   }
@@ -56,3 +57,16 @@ window.addEventListener('keyup', async (event) => {
     keyboard.D = false;
   }
 });
+
+function registerInterval(id) {
+  intervalRegistery.push(id);
+  return id;
+}
+
+function clearAllIntervals() {
+  intervalRegistery.forEach(id => {
+    clearInterval(id);
+    clearTimeout(id);
+  });
+  intervalRegistery.length = 0;
+}
