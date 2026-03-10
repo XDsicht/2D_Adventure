@@ -144,7 +144,7 @@ class Character extends MovableObject {
       setInterval(() => {
         this.resetMovementStatus();
         this.getMovements();
-        this.disableMovements();
+        this.disableMovements(movements);
       }, 1000 / 60),
     );
   }
@@ -181,7 +181,7 @@ class Character extends MovableObject {
     }
   }
 
-  disableMovements() {
+  disableMovements(movements) {
     if (this.isDead() && !this.dead) {
           this.resetCurrentImage();
           clearInterval(movements);

@@ -176,20 +176,28 @@ class Endboss extends Enemy {
     const widthDifference = newWidth - this.walkWidth;
     this.xOffset = widthDifference;
     if (this.otherDirection) {
-      if (newWidth == this.attackWidth) {
-        this.x = this.baseX - this.xOffset / 2;
-      } else {
-        this.x = this.baseX - this.xOffset;
-      }
+      this.updateXInOtherDirection(newWidth);
     } else {
-      switch (newWidth) {
-        case this.attackWidth:
-          this.x = this.baseX - this.xOffset / 2;
-          break;
-        case !this.attackWidth:
-          this.xOffset = 0;
-          this.x = this.baseX;
-      }
+      this.updateXInDirection(newWidth);
+    }
+  }
+
+  updateXInOtherDirection(newWidth) {
+    if (newWidth == this.attackWidth) {
+      this.x = this.baseX - this.xOffset / 2;
+    } else {
+      this.x = this.baseX - this.xOffset;
+    }
+  }
+
+  updateXInDirection(newWidth) {
+    switch (newWidth) {
+      case this.attackWidth:
+        this.x = this.baseX - this.xOffset / 2;
+        break;
+      case !this.attackWidth:
+        this.xOffset = 0;
+        this.x = this.baseX;
     }
   }
 
@@ -204,69 +212,134 @@ class Endboss extends Enemy {
     if (!this.isRunning) {
       this.isWalking = true;
     }
-    registerInterval(setTimeout(() => {
-      if (!this.shouldStopMoving()) {
-        this.sprint();
-      }
-    }, 1600));
+    this.startSprinting();
+  }
+
+  startSprinting() {
+    registerInterval(
+      setTimeout(() => {
+        if (!this.shouldStopMoving()) {
+          this.sprint();
+        }
+      }, 1600),
+    );
   }
 
   animateEndboss() {
-    let endbossActionsInterval = registerInterval(setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      this.checkIfEnemyIsDead();
-      if (!this.isAttacking && this.activated) {
-        this.getEnemyDirection();
-        if (!this.dead && !this.shouldStopMoving() && !this.world.character.isEncounteringEndboss(this)) {
-          this.startMoving();
-        }
-      }
-      if (this.isInCharacterFrame() && !this.activated) {
-        this.activated = true;
-      }
-    }, 1000 / 60));
+    this.getEndbossMovementStatus();
+    this.playEndbossAnimations();
+  }
 
-    registerInterval(setInterval(() => {
-      if (this.checkIfWorldExists()) return;
-      if (this.dead) {
-        this.getDeadDimensions();
-        this.updateXOffset(this.deadWidth);
-        this.playEnemyDeadAnimation();
-      } else if (this.isHurt()) {
-        this.getHurtDimensions();
-        this.updateXOffset(this.hurtWidth);
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.world.character.isHurt() && this.isAttacking) {
-        this.getAttackDimensions();
-        this.loadImage(this.IMAGES_ATTACKING[2]);
-        this.isAttacking = false;
-      } else if (!this.world.character.isHurt() && this.isAttacking) {
-        this.hasDealtDamage = false;
-        if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
-          this.isRunning = true;
-          this.isAttacking = false;
-          this.hasDealtDamage = false;
-          this.resetCurrentImage();
-        } else {
-          this.getAttackDimensions();
-          this.updateXOffset(this.attackWidth);
-          this.playAnimation(this.IMAGES_ATTACKING);
-          this.endbossDealsDamage();
+  playEndbossAnimations() {
+    registerInterval(
+      setInterval(() => {
+        if (this.checkIfWorldExists()) return;
+        this.getStatusBasedAnimation();
+      }, 100),
+    );
+  }
+
+  getStatusBasedAnimation() {
+    if (this.dead) {
+      this.playEndbossDeadAnimation();
+    } else if (this.isHurt()) {
+      this.playEndbossHurtAnimation();
+    } else if (this.world.character.isHurt() && this.isAttacking) {
+      this.freezeEndboss();
+    } else if (!this.world.character.isHurt() && this.isAttacking) {
+      this.executeAttack();
+    } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
+      this.playEndbossRunAnimation();
+    } else if (this.isWalking && !this.isRunning) {
+      this.playEndbossWalkAnimation();
+    } else if (!this.world.character.isEncounteringEndboss(this) && !this.isWalking && !this.isRunning) {
+      this.playEndbossIdleAnimation();
+    }
+  }
+
+  executeAttack() {
+    this.hasDealtDamage = false;
+    if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
+      this.resetEndbossStatus();
+    } else {
+      this.playEndbossAttackAnimation();
+    }
+  }
+
+  playEndbossDeadAnimation() {
+    this.getDeadDimensions();
+    this.updateXOffset(this.deadWidth);
+    this.playEnemyDeadAnimation();
+  }
+
+  playEndbossHurtAnimation() {
+    this.getHurtDimensions();
+    this.updateXOffset(this.hurtWidth);
+    this.playAnimation(this.IMAGES_HURT);
+  }
+
+  playEndbossAttackAnimation() {
+    this.getAttackDimensions();
+    this.updateXOffset(this.attackWidth);
+    this.playAnimation(this.IMAGES_ATTACKING);
+    this.endbossDealsDamage();
+  }
+
+  playEndbossRunAnimation() {
+    this.getRunDimensions();
+    this.updateXOffset(this.runWidth);
+    this.playAnimation(this.IMAGES_RUN);
+  }
+
+  playEndbossWalkAnimation() {
+    this.getWalkDimensions();
+    this.resetXOffset();
+    this.playAnimation(this.IMAGES_WALKING);
+  }
+
+  playEndbossIdleAnimation() {
+    this.getWalkDimensions();
+    this.resetXOffset();
+    this.playAnimation(this.IMAGES_IDLE);
+  }
+
+  freezeEndboss() {
+    this.getAttackDimensions();
+    this.loadImage(this.IMAGES_ATTACKING[2]);
+    this.isAttacking = false;
+  }
+
+  resetEndbossStatus() {
+    this.isRunning = true;
+    this.isAttacking = false;
+    this.hasDealtDamage = false;
+    this.resetCurrentImage();
+  }
+
+  getEndbossMovementStatus() {
+    registerInterval(
+      setInterval(() => {
+        if (this.checkIfWorldExists()) return;
+        this.checkIfEnemyIsDead();
+        if (!this.isAttacking && this.activated) {
+          this.getEnemyDirection();
+          this.startEndbossMovement();
         }
-      } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
-        this.getRunDimensions();
-        this.updateXOffset(this.runWidth);
-        this.playAnimation(this.IMAGES_RUN);
-      } else if (this.isWalking && !this.isRunning) {
-        this.getWalkDimensions();
-        this.resetXOffset();
-        this.playAnimation(this.IMAGES_WALKING);
-      } else if (!this.world.character.isEncounteringEndboss(this) && !this.isWalking && !this.isRunning) {
-        this.getWalkDimensions();
-        this.resetXOffset();
-        this.playAnimation(this.IMAGES_IDLE);
-      }
-    }, 100));  
+        this.checkEndbossToCharacterRelation();
+      }, 1000 / 60),
+    );
+  }
+
+  startEndbossMovement() {
+    if (!this.dead && !this.shouldStopMoving() && !this.world.character.isEncounteringEndboss(this)) {
+      this.startMoving();
+    }
+  }
+
+  checkEndbossToCharacterRelation() {
+    if (this.isInCharacterFrame() && !this.activated) {
+      this.activated = true;
+    }
   }
 
   getDeadDimensions() {
