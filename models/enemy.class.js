@@ -5,6 +5,7 @@ class Enemy extends MovableObject {
   otherDirection = true;
   energy = 10;
   delete = false;
+  deadY = 228;
 
   offset = {
     top: 85,
@@ -40,7 +41,7 @@ class Enemy extends MovableObject {
   }
 
   playEnemyDeadAnimation() {
-    this.y = 228;
+    this.y = this.deadY;
     if (this.currentImage < this.IMAGES_DEAD.length - 1) {
       this.playAnimation(this.IMAGES_DEAD);
     } else {
