@@ -123,52 +123,70 @@ class Character extends MovableObject {
 
   characterActionsIntervals() {
     if (!this.dead || !this.isHurt()) {
-      let actions = registerInterval(
-        setInterval(() => {
-          // Reset walking state at the beginning of each frame
-          if (!this.isAboveGround()) {
-            this.isWalking = false;
-            this.characterJumping = false;
-          }
-          if (!this.isAttacking && !this.attackDelay) {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-              this.moveRight();
-              this.otherDirection = false;
-              this.isWalking = true;
-              // this.walking_sound.play();
-            }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-              this.moveLeft();
-              this.otherDirection = true;
-              this.isWalking = true;
-              // this.walking_sound.play();
-            }
-
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-              this.characterJumping = true;
-              this.isWalking = false;
-              this.resetCurrentImage();
-              this.jump();
-            }
-          }
-
-          if (this.isDead() && !this.dead) {
-            this.resetCurrentImage();
-            clearInterval(actions);
-            return (this.dead = true);
-          }
-        }, 1000 / 60),
-      );
-
-      registerInterval(
-        setInterval(() => {
-          if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
-            this.activateDKey();
-            this.resetAttackDelayTimer();
-          }
-        }, 100),
-      );
+      let actions = this.characterActions();
+      let attack = this.characterAttack();
     }
+  }
+
+  characterAttack() {
+    registerInterval(
+      setInterval(() => {
+        if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
+          this.activateDKey();
+          this.resetAttackDelayTimer();
+        }
+      }, 100),
+    );
+  }
+
+  characterActions() {
+    let movements = registerInterval(
+      setInterval(() => {
+        this.resetMovementStatus();
+        this.getMovements();
+        this.disableMovements();
+      }, 1000 / 60),
+    );
+  }
+
+  resetMovementStatus() {
+    if (!this.isAboveGround()) {
+      this.isWalking = false;
+      this.characterJumping = false;
+    }
+  }
+
+  getMovements() {
+    if (!this.isAttacking && !this.attackDelay) {
+      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+        this.moveRight();
+        this.otherDirection = false;
+        this.isWalking = true;
+        // this.walking_sound.play();
+      }
+      if (this.world.keyboard.LEFT && this.x > 0) {
+        this.moveLeft();
+        this.otherDirection = true;
+        this.isWalking = true;
+        // this.walking_sound.play();
+      }
+
+      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+        this.characterJumping = true;
+        this.isWalking = false;
+        this.resetCurrentImage();
+        this.jump();
+        //this.jumping_sound.play();
+      }
+    }
+  }
+
+  disableMovements() {
+    if (this.isDead() && !this.dead) {
+          this.resetCurrentImage();
+          clearInterval(movements);
+          return (this.dead = true);
+        }
   }
 
   activateDKey() {

@@ -204,15 +204,15 @@ class Endboss extends Enemy {
     if (!this.isRunning) {
       this.isWalking = true;
     }
-    setTimeout(() => {
+    registerInterval(setTimeout(() => {
       if (!this.shouldStopMoving()) {
         this.sprint();
       }
-    }, 1600);
+    }, 1600));
   }
 
   animateEndboss() {
-    let endbossActionsInterval = setInterval(() => {
+    let endbossActionsInterval = registerInterval(setInterval(() => {
       if (this.checkIfWorldExists()) return;
       this.checkIfEnemyIsDead();
       if (!this.isAttacking && this.activated) {
@@ -224,9 +224,9 @@ class Endboss extends Enemy {
       if (this.isInCharacterFrame() && !this.activated) {
         this.activated = true;
       }
-    }, 1000 / 60);
+    }, 1000 / 60));
 
-    setInterval(() => {
+    registerInterval(setInterval(() => {
       if (this.checkIfWorldExists()) return;
       if (this.dead) {
         this.getDeadDimensions();
@@ -266,7 +266,7 @@ class Endboss extends Enemy {
         this.resetXOffset();
         this.playAnimation(this.IMAGES_IDLE);
       }
-    }, 100);
+    }, 100));  
   }
 
   getDeadDimensions() {
