@@ -123,47 +123,51 @@ class Character extends MovableObject {
 
   characterActionsIntervals() {
     if (!this.dead || !this.isHurt()) {
-      let actions = setInterval(() => {
-        // Reset walking state at the beginning of each frame
-        if (!this.isAboveGround()) {
-          this.isWalking = false;
-          this.characterJumping = false;
-        }
-        if (!this.isAttacking && !this.attackDelay) {
-          if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-            this.moveRight();
-            this.otherDirection = false;
-            this.isWalking = true;
-            // this.walking_sound.play();
-          }
-          if (this.world.keyboard.LEFT && this.x > 0) {
-            this.moveLeft();
-            this.otherDirection = true;
-            this.isWalking = true;
-            // this.walking_sound.play();
-          }
-
-          if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-            this.characterJumping = true;
+      let actions = registerInterval(
+        setInterval(() => {
+          // Reset walking state at the beginning of each frame
+          if (!this.isAboveGround()) {
             this.isWalking = false;
-            this.resetCurrentImage();
-            this.jump();
+            this.characterJumping = false;
           }
-        }
+          if (!this.isAttacking && !this.attackDelay) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+              this.moveRight();
+              this.otherDirection = false;
+              this.isWalking = true;
+              // this.walking_sound.play();
+            }
+            if (this.world.keyboard.LEFT && this.x > 0) {
+              this.moveLeft();
+              this.otherDirection = true;
+              this.isWalking = true;
+              // this.walking_sound.play();
+            }
 
-        if (this.isDead() && !this.dead) {
-          this.resetCurrentImage();
-          clearInterval(actions);
-          return (this.dead = true);
-        }
-      }, 1000 / 60);
+            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+              this.characterJumping = true;
+              this.isWalking = false;
+              this.resetCurrentImage();
+              this.jump();
+            }
+          }
 
-      setInterval(() => {
-        if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
-          this.activateDKey();
-          this.resetAttackDelayTimer();
-        }
-      }, 100);
+          if (this.isDead() && !this.dead) {
+            this.resetCurrentImage();
+            clearInterval(actions);
+            return (this.dead = true);
+          }
+        }, 1000 / 60),
+      );
+
+      registerInterval(
+        setInterval(() => {
+          if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
+            this.activateDKey();
+            this.resetAttackDelayTimer();
+          }
+        }, 100),
+      );
     }
   }
 
@@ -186,48 +190,52 @@ class Character extends MovableObject {
 
   resetAttackVariables() {
     setTimeout(() => {
-        this.isAttacking = false;
-        this.world.keyboard.D = false;
-        this.releaseArrow = true;
-      }, 300);
+      this.isAttacking = false;
+      this.world.keyboard.D = false;
+      this.releaseArrow = true;
+    }, 300);
   }
 
   characterMovementAnimationIntervals() {
-    setInterval(() => {
-      if (this.isAttacking) {
-        return;
-      }
-      if (this.dead) {
-        if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-          this.playAnimation(this.IMAGES_DEAD);
+    registerInterval(
+      setInterval(() => {
+        if (this.isAttacking) {
+          return;
+        }
+        if (this.dead) {
+          if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+            this.playAnimation(this.IMAGES_DEAD);
+          } else {
+            this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+          }
+        } else if (this.isHurt()) {
+          this.playAnimation(this.IMAGES_HURT);
+        } else if (this.isAboveGround()) {
+          this.characterJumping = true;
+          this.playAnimation(this.IMAGES_JUMPING);
+          if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
+            this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
+          }
+        } else if (this.isWalking) {
+          this.playAnimation(this.IMAGES_WALKING);
         } else {
-          this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+          this.playAnimation(this.IMAGES_IDLE);
         }
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isAboveGround()) {
-        this.characterJumping = true;
-        this.playAnimation(this.IMAGES_JUMPING);
-        if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
-          this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
-        }
-      } else if (this.isWalking) {
-        this.playAnimation(this.IMAGES_WALKING);
-      } else {
-        this.playAnimation(this.IMAGES_IDLE);
-      }
-    }, 1000 / 10);
+      }, 1000 / 10),
+    );
   }
 
   characterAttackAnimationIntervals() {
-    setInterval(() => {
-      if (this.isAttacking) {
-        this.playAnimation(this.IMAGES_ATTACKING);
-      }
-      // if (!this.isAttacking && this.currentImage >= this.IMAGES_ATTACKING.length) {
-      //   this.attackDelay = false;
-      // }
-    }, 30);
+    registerInterval(
+      setInterval(() => {
+        if (this.isAttacking) {
+          this.playAnimation(this.IMAGES_ATTACKING);
+        }
+        // if (!this.isAttacking && this.currentImage >= this.IMAGES_ATTACKING.length) {
+        //   this.attackDelay = false;
+        // }
+      }, 30),
+    );
   }
 
   shotAllowed() {
@@ -239,12 +247,18 @@ class Character extends MovableObject {
   isEncounteringObstacle(enemy) {
     const offset = this.getDirectionalOffset(enemy);
 
-    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft;
+    return (
+      this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 &&
+      this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft
+    );
   }
 
   isEncounteringEndboss(endboss) {
     const offset = this.getDirectionalOffset(endboss);
-    return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.99 && this.x + offset.thisLeft * 0.99 < endboss.x + endboss.width - offset.moLeft;
+    return (
+      this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.99 &&
+      this.x + offset.thisLeft * 0.99 < endboss.x + endboss.width - offset.moLeft
+    );
   }
 
   isCollidingVertically(mo) {
