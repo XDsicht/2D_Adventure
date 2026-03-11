@@ -35,18 +35,21 @@ class World {
   }
 
   run() {
-    setInterval(() => {
+    registerInterval(setInterval(() => {
       this.checkCollisions();
-
-      if (this.character.pendingDamage > 0) {
-        this.character.applyAccumulatedDamage(); // Apply all accumulated damage at once
-        this.healthBar.setPercentage(this.character.energy); // Update health bar after damage
-      }
+      this.applyDamageFromEnemies();
       this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
       this.checkCollisionOfArrows();
       this.checkShootArrow();
       this.removeDeadEnemies();
-    }, 100);
+    }, 100));
+  }
+
+  applyDamageFromEnemies() {
+    if (this.character.pendingDamage > 0) {
+        this.character.applyAccumulatedDamage();
+        this.healthBar.setPercentage(this.character.energy);
+      }
   }
 
   checkCollisions() {

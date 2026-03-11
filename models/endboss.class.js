@@ -244,16 +244,22 @@ class Endboss extends Enemy {
       this.playEndbossDeadAnimation();
     } else if (this.isHurt()) {
       this.playEndbossHurtAnimation();
-    } else if (this.world.character.isHurt() && this.isAttacking) {
-      this.freezeEndboss();
-    } else if (!this.world.character.isHurt() && this.isAttacking) {
-      this.executeAttack();
+    } else if (this.isAttacking) {
+      this.getEndbossAttackState();
     } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
       this.playEndbossRunAnimation();
     } else if (this.isWalking && !this.isRunning) {
       this.playEndbossWalkAnimation();
     } else if (!this.world.character.isEncounteringEndboss(this) && !this.isWalking && !this.isRunning) {
       this.playEndbossIdleAnimation();
+    }
+  }
+
+  getEndbossAttackState() {
+    if (this.world.character.isHurt()) {
+      this.freezeEndboss();
+    } else {
+      this.executeAttack();
     }
   }
 
