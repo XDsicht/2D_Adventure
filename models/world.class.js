@@ -35,21 +35,23 @@ class World {
   }
 
   run() {
-    registerInterval(setInterval(() => {
-      this.checkCollisions();
-      this.applyDamageFromEnemies();
-      this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
-      this.checkCollisionOfArrows();
-      this.checkShootArrow();
-      this.removeDeadEnemies();
-    }, 100));
+    registerInterval(
+      setInterval(() => {
+        this.checkCollisions();
+        this.applyDamageFromEnemies();
+        this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
+        this.checkCollisionOfArrows();
+        this.checkShootArrow();
+        this.removeDeadEnemies();
+      }, 100),
+    );
   }
 
   applyDamageFromEnemies() {
     if (this.character.pendingDamage > 0) {
-        this.character.applyAccumulatedDamage();
-        this.healthBar.setPercentage(this.character.energy);
-      }
+      this.character.applyAccumulatedDamage();
+      this.healthBar.setPercentage(this.character.energy);
+    }
   }
 
   checkCollisions() {
@@ -63,21 +65,29 @@ class World {
   checkEnemyWalkingCollisions(enemies) {
     enemies.forEach((enemy) => {
       let timeSinceLastAttack = new Date().getTime() - enemy.lastAttackTime;
-      if ((enemy instanceof Troll_1 || enemy instanceof Troll_2) && !this.character.isHurt()) {
-        if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
-          enemy.isAttacking = true;
-          enemy.lastAttackTime = new Date().getTime();
-          enemy.resetCurrentImage();
-        }
+      this.handleTrollWalkingCollision(enemy, timeSinceLastAttack);
+      this.handleEndbossWalkingCollision(enemy, timeSinceLastAttack);
+    });
+  }
+
+  handleTrollWalkingCollision(enemy, timeSinceLastAttack) {
+    if ((enemy instanceof Troll_1 || enemy instanceof Troll_2) && !this.character.isHurt()) {
+      if (this.character.isEncounteringObstacle(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+        enemy.isAttacking = true;
+        enemy.lastAttackTime = new Date().getTime();
+        enemy.resetCurrentImage();
       }
-      if (enemy instanceof Endboss && !this.character.isHurt()) {
+    }
+  }
+
+  handleEndbossWalkingCollision(enemy, timeSinceLastAttack) {
+    if (enemy instanceof Endboss && !this.character.isHurt()) {
         if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
           enemy.isAttacking = true;
           enemy.lastAttackTime = new Date().getTime();
           enemy.resetCurrentImage();
         }
       }
-    });
   }
 
   checkCharacterJumpingCollisions() {
@@ -96,21 +106,12 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        this.character.isWalking &&
-        !this.character.characterJumping &&
-        !this.character.isHurt() &&
-        !enemy.dead &&
-        !enemy.isAttacking &&
-        !enemy.hasDealtDamage
-      ) {
+      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
         console.log("CharacterEnergy:", this.character.energy);
       }
-
       if (!this.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
         enemy.hasDealtDamage = false;
       }
