@@ -82,12 +82,12 @@ class World {
 
   handleEndbossWalkingCollision(enemy, timeSinceLastAttack) {
     if (enemy instanceof Endboss && !this.character.isHurt()) {
-        if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
-          enemy.isAttacking = true;
-          enemy.lastAttackTime = new Date().getTime();
-          enemy.resetCurrentImage();
-        }
+      if (this.character.isEncounteringEndboss(enemy) && !this.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
+        enemy.isAttacking = true;
+        enemy.lastAttackTime = new Date().getTime();
+        enemy.resetCurrentImage();
       }
+    }
   }
 
   checkCharacterJumpingCollisions() {
@@ -106,7 +106,15 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && this.character.isWalking && !this.character.characterJumping && !this.character.isHurt() && !enemy.dead && !enemy.isAttacking && !enemy.hasDealtDamage) {
+      if (
+        this.character.isColliding(enemy) &&
+        this.character.isWalking &&
+        !this.character.characterJumping &&
+        !this.character.isHurt() &&
+        !enemy.dead &&
+        !enemy.isAttacking &&
+        !enemy.hasDealtDamage
+      ) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -135,20 +143,32 @@ class World {
   checkCollisionOfArrows() {
     this.level.throwableObjects.forEach((arrow) => {
       this.level.enemies.forEach((enemy) => {
-        if (!enemy.inFrame()) {
-          return;
-        }
-        if (this.level.throwableObjects.length == 0) return;
-        if (arrow.isColliding(enemy) && !enemy.dead) {
-          if (enemy instanceof Endboss) {
-            if (!enemy.activated) return;
-          }
-          enemy.hit();
-          this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
-          return;
-        }
+        if (!enemy.inFrame()) return;
+        if (!this.quiverNotEmpty()) return;
+        if (this.checkArrowCollision(enemy, arrow)) return;
       });
     });
+  }
+
+  checkArrowCollision(enemy, arrow) {
+    if (arrow.isColliding(enemy) && !enemy.dead) {
+      if (!this.checkEndbossActive(enemy)) return true;
+      enemy.hit();
+      this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
+      return true;
+    }
+  }
+
+  checkEndbossActive(enemy) {
+    if (enemy instanceof Endboss) {
+      if (!enemy.activated) return false;
+    }
+    return true;
+  }
+
+  quiverNotEmpty() {
+    if (this.level.throwableObjects.length == 0) return false;
+    return true;
   }
 
   removeDeadEnemies() {
