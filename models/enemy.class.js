@@ -42,14 +42,23 @@ class Enemy extends MovableObject {
 
   playEnemyDeadAnimation() {
     this.y = this.deadY;
-    if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-      this.playAnimation(this.IMAGES_DEAD);
+    let imagesDead = this.getImagesDead();
+    if (this.currentImage < imagesDead.length - 1) {
+      this.playAnimation(imagesDead);
     } else {
-      this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+      this.loadImage(imagesDead[imagesDead.length - 1]);
       registerInterval(setTimeout(() => {
         return this.delete = true;
       }, 800)
     );
+    }
+  }
+
+  getImagesDead() {
+    if (this instanceof Endboss) {
+      return this.ENDBOSS_IMAGES_DEAD;
+    } else {
+      return this.IMAGES_DEAD;
     }
   }
 

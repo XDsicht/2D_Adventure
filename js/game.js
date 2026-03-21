@@ -7,6 +7,7 @@ function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   // console.log("My Character is: ", world.character);
+  registerInterval(setInterval(() => {checkIfGameOver()}, 100));
 }
 
 window.addEventListener("keydown", async (event) => {
@@ -64,9 +65,18 @@ function registerInterval(id) {
 }
 
 function clearAllIntervals() {
-  intervalRegistery.forEach(id => {
+  intervalRegistery.forEach((id) => {
     clearInterval(id);
     clearTimeout(id);
   });
   intervalRegistery.length = 0;
+}
+
+function checkIfGameOver() {
+  let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
+  if ((world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) || (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
+  ) {
+    clearAllIntervals();
+    console.log("Game Over");
+  }
 }

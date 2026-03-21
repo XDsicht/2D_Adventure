@@ -100,11 +100,10 @@ class Character extends MovableObject {
     "img/2.character/5.attack/Warrior_03__ATTACK_009.png",
   ];
 
-  world; // variable to access world properties and methods also with character class
+  world;
 
   constructor() {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
-    // super().loadImage('img/2.character/5.attack/Warrior_03__ATTACK_009.png');
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
@@ -249,17 +248,14 @@ class Character extends MovableObject {
         if (this.isAttacking) {
           this.playAnimation(this.IMAGES_ATTACKING);
         }
-        // if (!this.isAttacking && this.currentImage >= this.IMAGES_ATTACKING.length) {
-        //   this.attackDelay = false;
-        // }
       }, 30),
     );
   }
 
   shotAllowed() {
-    let timePassed = new Date().getTime() - this.shootingTime; // difference in ms
+    let timePassed = new Date().getTime() - this.shootingTime;
     timePassed = timePassed / 1000;
-    return timePassed > 0.2; // difference in seconds
+    return timePassed > 0.2;
   }
 
   isEncounteringObstacle(enemy) {
@@ -300,7 +296,6 @@ class Character extends MovableObject {
     }
   }
 
-  // Add pending damage from an attacker
   addPendingDamage(attacker, damage = 20) {
     if (!this.damageFromAttackers.has(attacker)) {
       this.pendingDamage += damage;
@@ -308,7 +303,6 @@ class Character extends MovableObject {
     }
   }
 
-  // Apply all accumulated damage at once
   applyAccumulatedDamage() {
     if (this.pendingDamage > 0) {
       this.isHit(this.pendingDamage);
@@ -317,7 +311,6 @@ class Character extends MovableObject {
     }
   }
 
-  // Reset damage accumulation for new frame
   resetDamageAccumulation() {
     this.pendingDamage = 0;
     this.damageFromAttackers.clear();
