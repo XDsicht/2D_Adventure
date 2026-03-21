@@ -3,9 +3,8 @@ class DrawableObject {
   imageCache = {};
   currentImage = 0;
 
-  // loadImage('img/test.png');
   loadImage(path) {
-    this.img = new Image(); // this.img = document.getElementById("image"); <img id="image">
+    this.img = new Image();
     this.img.src = path;
   }
 

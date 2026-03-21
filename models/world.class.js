@@ -39,7 +39,7 @@ class World {
       setInterval(() => {
         this.checkCollisions();
         this.applyDamageFromEnemies();
-        this.character.resetDamageAccumulation(); // Reset AFTER applying damage for next frame
+        this.character.resetDamageAccumulation();
         this.checkCollisionOfArrows();
         this.checkShootArrow();
         this.removeDeadEnemies();
@@ -106,24 +106,27 @@ class World {
 
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (
-        this.character.isColliding(enemy) &&
-        this.character.isWalking &&
-        !this.character.characterJumping &&
-        !this.character.isHurt() &&
-        !enemy.dead &&
-        !enemy.isAttacking &&
-        !enemy.hasDealtDamage
-      ) {
+      if (this.checkWalkingCollisionStatus(enemy)) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
-        console.log("CharacterEnergy:", this.character.energy);
       }
       if (!this.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
         enemy.hasDealtDamage = false;
       }
     });
+  }
+
+  checkWalkingCollisionStatus(enemy) {
+    return (
+      this.character.isColliding(enemy) &&
+      this.character.isWalking &&
+      !this.character.characterJumping &&
+      !this.character.isHurt() &&
+      !enemy.dead &&
+      !enemy.isAttacking &&
+      !enemy.hasDealtDamage
+    );
   }
 
   checkCollisionsWithCollectibles(array, bar) {
@@ -184,30 +187,49 @@ class World {
 
   checkShootArrow() {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed() && !this.character.isAttacking) {
-      let arrowX;
-      if (this.character.otherDirection) {
-        arrowX = this.character.x - 24;
-      } else {
-        arrowX = this.character.x + this.character.width - 21;
-      }
+      let arrowX = this.getArrowX();
       let arrowY = this.character.y + this.character.height - 117;
       let arrow = new ThrowableObject(arrowX, arrowY, this.character.currentDirection);
       arrow.shoot();
       this.level.throwableObjects.push(arrow);
-      this.arrowInventory--;
-      this.quiver.depleteBar();
+      this.reduceQuiver();
       this.character.releaseArrow = false;
       this.character.shootingTime = new Date().getTime();
-      let checkIfArrowIsFlying = setInterval(() => {
+      this.checkArrowTrajectory();
+    }
+  }
+
+  checkArrowTrajectory() {
+    let checkIfArrowIsFlying = registerInterval(
+      setInterval(() => {
         this.level.throwableObjects.forEach((arrow) => {
           if (!arrow.isAboveGround()) {
             this.level.throwableObjects.splice(0, 1);
           }
         });
-      }, 150);
+      }, 150),
+    );
+    this.clearFlyingArrow(checkIfArrowIsFlying);
+  }
+
+  clearFlyingArrow(checkIfArrowIsFlying) {
+    registerInterval(
       setTimeout(() => {
         clearInterval(checkIfArrowIsFlying);
-      }, 1100);
+      }, 1100),
+    );
+  }
+
+  reduceQuiver() {
+    this.arrowInventory--;
+    this.quiver.depleteBar();
+  }
+
+  getArrowX() {
+    if (this.character.otherDirection) {
+      return this.character.x - 24;
+    } else {
+      return this.character.x + this.character.width - 21;
     }
   }
 
@@ -215,56 +237,74 @@ class World {
     let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     if (endboss) {
       const endbossRightEdge = endboss.baseX + endboss.walkWidth;
-      if (!endboss.activated) {
-        return (this.camera_x = -this.character.x + this.cameraOffset);
-      }
-      if (this.character.x > endbossRightEdge) {
-        this.cameraOffset = endboss.walkWidth;
-      } else if (this.character.x < endboss.baseX) {
-        this.cameraOffset = 100;
-      } else if (this.character.isEncounteringEndboss(endboss)) {
-        if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
-          this.cameraOffset = endboss.walkWidth / 2;
-        }
-      }
-
+      if (!endboss.activated) return (this.camera_x = -this.character.x + this.cameraOffset);
+      this.setCameraOffset(endboss, endbossRightEdge);
       this.targetCameraX = -this.character.x + this.cameraOffset;
       const diff = this.targetCameraX - this.camera_x;
-
-      if (Math.abs(diff) < this.lerpThreshold) {
-        this.camera_x = this.targetCameraX;
-      } else {
-        this.camera_x += diff * this.cameraLerpFactor;
-      }
+      this.floatCamera(diff, this.targetCameraX);
     } else {
       return (this.camera_x = -this.character.x + 100);
     }
   }
 
+  floatCamera(diff, targetCameraX) {
+    if (Math.abs(diff) < this.lerpThreshold) {
+      return (this.camera_x = targetCameraX);
+    } else {
+      return (this.camera_x += diff * this.cameraLerpFactor);
+    }
+  }
+
+  setCameraOffset(endboss, endbossRightEdge) {
+    if (this.character.x > endbossRightEdge) {
+      this.cameraOffset = endboss.walkWidth;
+    } else if (this.character.x < endboss.baseX) {
+      this.cameraOffset = 100;
+    } else if (this.character.isEncounteringEndboss(endboss)) {
+      if (this.character.x > endboss.baseX && this.character.x < endbossRightEdge) {
+        this.cameraOffset = endboss.walkWidth / 2;
+      }
+    }
+  }
+
   draw() {
     this.updateCamera();
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // clear canvas
-    this.ctx.translate(this.camera_x, 0); // move camera
-    this.addObjectsToMap(this.level.backgroundObjects);
-    this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.throwableObjects);
-    // ------ Space for fixed objects ----- //
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.arrows);
-    this.addObjectsToMap(this.level.enemies);
-    if (this.character.isAttacking && !this.character.releaseArrow) {
-      this.character.otherDirection = this.character.currentDirection;
-    }
-    this.addToMap(this.character);
-    this.ctx.translate(-this.camera_x, 0); // reset camera
-    this.addToMap(this.healthBar);
-    this.addToMap(this.quiver);
-    this.addToMap(this.coinBar);
-    // draw is called repeatedly to keep animations running
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.translate(this.camera_x, 0);
+    this.addStaticObjectsToGame();
+    this.addMovingObjectsToGame();
+    this.ctx.translate(-this.camera_x, 0);
+    this.addCharacterBarsToGame();
     let self = this;
     requestAnimationFrame(function () {
       self.draw();
     });
+  }
+
+  requestCurrentCharacterDirection() {
+    if (this.character.isAttacking && !this.character.releaseArrow) {
+      return this.character.otherDirection = this.character.currentDirection;
+    }
+  }
+
+  addCharacterBarsToGame() {
+    this.addToMap(this.healthBar);
+    this.addToMap(this.quiver);
+    this.addToMap(this.coinBar);
+  }
+
+  addStaticObjectsToGame() {
+    this.addObjectsToMap(this.level.backgroundObjects);
+    this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.throwableObjects);
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.arrows);
+  }
+
+  addMovingObjectsToGame() {
+    this.requestCurrentCharacterDirection();
+    this.addObjectsToMap(this.level.enemies);
+    this.addToMap(this.character);
   }
 
   addObjectsToMap(objects) {
@@ -290,14 +330,14 @@ class World {
   }
 
   flipImage(mo) {
-    this.ctx.save(); // Save the current state of the canvas
-    this.ctx.translate(mo.width, 0); // Translate to flip the image
-    this.ctx.scale(-1, 1); // Flip horizontally
-    mo.x = mo.x * -1; // Adjust the x position for flipped image
+    this.ctx.save();
+    this.ctx.translate(mo.width, 0);
+    this.ctx.scale(-1, 1);
+    mo.x = mo.x * -1;
   }
 
   flipImageBack(mo) {
-    this.ctx.restore(); // Restore the original state of the canvas
-    mo.x = mo.x * -1; // Adjust the x position for flipped image
+    this.ctx.restore();
+    mo.x = mo.x * -1;
   }
 }

@@ -49,106 +49,15 @@ class Endboss extends Enemy {
     bottom: 10,
   };
 
-  IMAGES_IDLE = [
-    "img/4.boss/1.idle/Idle_000.png",
-    "img/4.boss/1.idle/Idle_001.png",
-    "img/4.boss/1.idle/Idle_002.png",
-    "img/4.boss/1.idle/Idle_003.png",
-    "img/4.boss/1.idle/Idle_004.png",
-    "img/4.boss/1.idle/Idle_005.png",
-    "img/4.boss/1.idle/Idle_006.png",
-    "img/4.boss/1.idle/Idle_007.png",
-    "img/4.boss/1.idle/Idle_008.png",
-    "img/4.boss/1.idle/Idle_009.png",
-  ];
-
-  IMAGES_WALKING = [
-    "img/4.boss/2.walk/Walk_000.png",
-    "img/4.boss/2.walk/Walk_001.png",
-    "img/4.boss/2.walk/Walk_002.png",
-    "img/4.boss/2.walk/Walk_003.png",
-    "img/4.boss/2.walk/Walk_004.png",
-    "img/4.boss/2.walk/Walk_005.png",
-    "img/4.boss/2.walk/Walk_006.png",
-    "img/4.boss/2.walk/Walk_007.png",
-    "img/4.boss/2.walk/Walk_008.png",
-    "img/4.boss/2.walk/Walk_009.png",
-  ];
-
-  IMAGES_RUN = [
-    "img/4.boss/3.run/Run_000.png",
-    "img/4.boss/3.run/Run_001.png",
-    "img/4.boss/3.run/Run_002.png",
-    "img/4.boss/3.run/Run_003.png",
-    "img/4.boss/3.run/Run_004.png",
-    "img/4.boss/3.run/Run_005.png",
-    "img/4.boss/3.run/Run_006.png",
-    "img/4.boss/3.run/Run_007.png",
-    "img/4.boss/3.run/Run_008.png",
-    "img/4.boss/3.run/Run_009.png",
-  ];
-
-  IMAGES_JUMPING = [
-    "img/4.boss/4.jump/Jump_000.png",
-    "img/4.boss/4.jump/Jump_001.png",
-    "img/4.boss/4.jump/Jump_002.png",
-    "img/4.boss/4.jump/Jump_003.png",
-    "img/4.boss/4.jump/Jump_004.png",
-    "img/4.boss/4.jump/Jump_005.png",
-    "img/4.boss/4.jump/Jump_006.png",
-    "img/4.boss/4.jump/Jump_007.png",
-    "img/4.boss/4.jump/Jump_008.png",
-    "img/4.boss/4.jump/Jump_009.png",
-  ];
-
-  IMAGES_HURT = [
-    "img/4.boss/6.hurt/Hurt_000.png",
-    "img/4.boss/6.hurt/Hurt_001.png",
-    "img/4.boss/6.hurt/Hurt_002.png",
-    "img/4.boss/6.hurt/Hurt_003.png",
-    "img/4.boss/6.hurt/Hurt_004.png",
-    "img/4.boss/6.hurt/Hurt_005.png",
-    "img/4.boss/6.hurt/Hurt_006.png",
-    "img/4.boss/6.hurt/Hurt_007.png",
-    "img/4.boss/6.hurt/Hurt_008.png",
-    "img/4.boss/6.hurt/Hurt_009.png",
-  ];
-
-  IMAGES_DEAD = [
-    "img/4.boss/7.dead/Dead_000.png",
-    "img/4.boss/7.dead/Dead_001.png",
-    "img/4.boss/7.dead/Dead_002.png",
-    "img/4.boss/7.dead/Dead_003.png",
-    "img/4.boss/7.dead/Dead_004.png",
-    "img/4.boss/7.dead/Dead_005.png",
-    "img/4.boss/7.dead/Dead_006.png",
-    "img/4.boss/7.dead/Dead_007.png",
-    "img/4.boss/7.dead/Dead_008.png",
-    "img/4.boss/7.dead/Dead_009.png",
-  ];
-
-  IMAGES_ATTACKING = [
-    // "img/4.boss/5.attack/Attack_000.png",
-    "img/4.boss/5.attack/Attack_001.png",
-    "img/4.boss/5.attack/Attack_002.png",
-    "img/4.boss/5.attack/Attack_003.png",
-    "img/4.boss/5.attack/Attack_004.png",
-    "img/4.boss/5.attack/Attack_005.png",
-    "img/4.boss/5.attack/Attack_006.png",
-    "img/4.boss/5.attack/Attack_007.png",
-    "img/4.boss/5.attack/Attack_008.png",
-    "img/4.boss/5.attack/Attack_009.png",
-  ];
-
   constructor() {
-    super().loadImage(this.IMAGES_WALKING[0]);
-    this.loadImages(this.IMAGES_IDLE);
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_RUN);
-    this.loadImages(this.IMAGES_JUMPING);
-    this.loadImages(this.IMAGES_ATTACKING);
-    this.loadImages(this.IMAGES_HURT);
-    this.loadImages(this.IMAGES_DEAD);
+    super().loadImage(this.ENDBOSS_IMAGES_WALKING[0]);
+    this.loadImages(this.ENDBOSS_IMAGES_IDLE);
+    this.loadImages(this.ENDBOSS_IMAGES_WALKING);
+    this.loadImages(this.ENDBOSS_IMAGES_RUN);
+    this.loadImages(this.ENDBOSS_IMAGES_JUMPING);
+    this.loadImages(this.ENDBOSS_IMAGES_ATTACKING);
+    this.loadImages(this.ENDBOSS_IMAGES_HURT);
+    this.loadImages(this.ENDBOSS_IMAGES_DEAD);
     this.x = 2500;
     this.baseX = this.x;
     this.animateEndboss();
@@ -265,7 +174,7 @@ class Endboss extends Enemy {
 
   executeAttack() {
     this.hasDealtDamage = false;
-    if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
+    if (this.currentImage >= this.ENDBOSS_IMAGES_ATTACKING.length - 1) {
       this.resetEndbossStatus();
     } else {
       this.playEndbossAttackAnimation();
@@ -281,37 +190,37 @@ class Endboss extends Enemy {
   playEndbossHurtAnimation() {
     this.getHurtDimensions();
     this.updateXOffset(this.hurtWidth);
-    this.playAnimation(this.IMAGES_HURT);
+    this.playAnimation(this.ENDBOSS_IMAGES_HURT);
   }
 
   playEndbossAttackAnimation() {
     this.getAttackDimensions();
     this.updateXOffset(this.attackWidth);
-    this.playAnimation(this.IMAGES_ATTACKING);
+    this.playAnimation(this.ENDBOSS_IMAGES_ATTACKING);
     this.endbossDealsDamage();
   }
 
   playEndbossRunAnimation() {
     this.getRunDimensions();
     this.updateXOffset(this.runWidth);
-    this.playAnimation(this.IMAGES_RUN);
+    this.playAnimation(this.ENDBOSS_IMAGES_RUN);
   }
 
   playEndbossWalkAnimation() {
     this.getWalkDimensions();
     this.resetXOffset();
-    this.playAnimation(this.IMAGES_WALKING);
+    this.playAnimation(this.ENDBOSS_IMAGES_WALKING);
   }
 
   playEndbossIdleAnimation() {
     this.getWalkDimensions();
     this.resetXOffset();
-    this.playAnimation(this.IMAGES_IDLE);
+    this.playAnimation(this.ENDBOSS_IMAGES_IDLE);
   }
 
   freezeEndboss() {
     this.getAttackDimensions();
-    this.loadImage(this.IMAGES_ATTACKING[2]);
+    this.loadImage(this.ENDBOSS_IMAGES_ATTACKING[2]);
     this.isAttacking = false;
   }
 
