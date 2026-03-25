@@ -14,6 +14,14 @@ class Enemy extends MovableObject {
     bottom: 35,
   };
 
+  enemySounds = {
+    isAttackingSound: new Audio('audio/enemy_audio/enemy_attack_sound.mp3'),
+    isWalkingSound: new Audio('audio/enemy_audio/enemy_walking_sound.mp3'), 
+    isHitSound: new Audio('audio/enemy_audio/enemy_arrow_impact_sound.mp3'),
+    isHurtSound: new Audio('audio/enemy_audio/enemy_hurt_sound.mp3'),
+    isDeadSound: new Audio('audio/enemy_audio/enemy_dead_sound.mp3')
+  }
+
   calculateSpawningLocation() {
     this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
     return (this.world.initialObstacleSpawn = this.spawningLocation);

@@ -11,7 +11,6 @@ class Character extends MovableObject {
   characterJumping = false;
   currentDirection;
   attackDelay = false;
-  // Damage accumulation system
   pendingDamage = 0;
   damageFromAttackers = new Set();
 
@@ -21,6 +20,14 @@ class Character extends MovableObject {
     right: 78,
     bottom: 20,
   };
+
+  characterSounds = {
+    isAttackingSound: new Audio('audio/character_audio/character_arrow_shooting_sound.mp3'),
+    isWalkingSound: new Audio('audio/character_audio/character_walking_sound.mp3'), 
+    isJumpingSound: new Audio('audio/character_audio/character_jumping_sound.mp3'),
+    isHurtSound: new Audio('audio/character_audio/character_hurt_sound.mp3'),
+    isDeadSound: new Audio('audio/character_audio/character_dead_sound.mp3')
+  }
 
   IMAGES_IDLE = [
     "img/2.character/1.idle/Warrior_03__IDLE_000.png",
