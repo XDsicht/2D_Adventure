@@ -15,12 +15,12 @@ class Enemy extends MovableObject {
   };
 
   enemySounds = {
-    isAttackingSound: new Audio('audio/enemy_audio/enemy_attack_sound.mp3'),
-    isWalkingSound: new Audio('audio/enemy_audio/enemy_walking_sound.mp3'), 
-    isHitSound: new Audio('audio/enemy_audio/enemy_arrow_impact_sound.mp3'),
-    isHurtSound: new Audio('audio/enemy_audio/enemy_hurt_sound.mp3'),
-    isDeadSound: new Audio('audio/enemy_audio/enemy_dead_sound.mp3')
-  }
+    isAttackingSound: new Audio("audio/enemy_audio/enemy_attack_sound.mp3"),
+    isWalkingSound: new Audio("audio/enemy_audio/enemy_walking_sound.mp3"),
+    isHitSound: new Audio("audio/enemy_audio/enemy_arrow_impact_sound.mp3"),
+    isHurtSound: new Audio("audio/enemy_audio/enemy_hurt_sound.mp3"),
+    isDeadSound: new Audio("audio/enemy_audio/enemy_dead_sound.mp3"),
+  };
 
   calculateSpawningLocation() {
     this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
@@ -43,6 +43,8 @@ class Enemy extends MovableObject {
 
   checkIfEnemyIsDead() {
     if (this.isDead() && !this.dead) {
+      this.enemySounds.isDeadSound.currentTime = 0;
+      this.enemySounds.isDeadSound.play();
       this.resetCurrentImage();
       return (this.dead = true);
     }
@@ -55,10 +57,12 @@ class Enemy extends MovableObject {
       this.playAnimation(imagesDead);
     } else {
       this.loadImage(imagesDead[imagesDead.length - 1]);
-      registerInterval(setTimeout(() => {
-        return this.delete = true;
-      }, 800)
-    );
+      this.enemySounds.isDeadSound.pause();
+      registerInterval(
+        setTimeout(() => {
+          return (this.delete = true);
+        }, 800),
+      );
     }
   }
 
@@ -101,13 +105,15 @@ class Enemy extends MovableObject {
   }
 
   animate() {
-    registerInterval(setInterval(() => {
+    registerInterval(
+      setInterval(() => {
         if (this.checkIfWorldExists()) return;
         this.checkIfEnemyIsDead();
         this.activateEnemy();
       }, 1000 / 60),
     );
-    registerInterval(setInterval(() => {
+    registerInterval(
+      setInterval(() => {
         if (this.checkIfWorldExists()) return;
         this.playStatusBasedAnimation();
       }, 100),

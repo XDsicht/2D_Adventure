@@ -119,6 +119,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.animate();
     this.applyGravity();
+    allSounds.push(this.characterSounds.isAttackingSound, this.characterSounds.isWalkingSound, this.characterSounds.isJumpingSound, this.characterSounds.isHurtSound, this.characterSounds.isDeadSound);
   }
 
   animate() {
@@ -159,6 +160,8 @@ class Character extends MovableObject {
     if (!this.isAboveGround()) {
       this.isWalking = false;
       this.characterJumping = false;
+      this.characterSounds.isWalkingSound.pause();
+      this.characterSounds.isJumpingSound.pause();
     }
   }
 
@@ -168,13 +171,13 @@ class Character extends MovableObject {
         this.moveRight();
         this.otherDirection = false;
         this.isWalking = true;
-        // this.walking_sound.play();
+        this.playWalkingSound();
       }
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
         this.otherDirection = true;
         this.isWalking = true;
-        // this.walking_sound.play();
+        this.playWalkingSound();
       }
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
@@ -182,7 +185,8 @@ class Character extends MovableObject {
         this.isWalking = false;
         this.resetCurrentImage();
         this.jump();
-        //this.jumping_sound.play();
+        this.characterSounds.isWalkingSound.pause();
+        playSound(this.characterSounds.isJumpingSound);
       }
     }
   }
@@ -321,5 +325,11 @@ class Character extends MovableObject {
   resetDamageAccumulation() {
     this.pendingDamage = 0;
     this.damageFromAttackers.clear();
+  }
+
+  playWalkingSound(){
+    if(!this.isAboveGround()){
+        this.characterSounds.isWalkingSound.play();
+    }
   }
 }

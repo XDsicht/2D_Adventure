@@ -2,11 +2,12 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let intervalRegistery = [];
+let allSounds = [];
+let muted = false;
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
-  // console.log("My Character is: ", world.character);
   registerInterval(setInterval(() => {checkIfGameOver()}, 100));
 }
 
@@ -79,4 +80,18 @@ function checkIfGameOver() {
     clearAllIntervals();
     console.log("Game Over");
   }
+}
+
+function playSound(audio) {
+  if (!muted) {
+    audio.currentTime = 0;
+    audio.play();
+  }
+}
+
+function stopAllSounds() {
+  allSounds.forEach((audio) => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
 }
