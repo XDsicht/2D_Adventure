@@ -4,11 +4,21 @@ let keyboard = new Keyboard();
 let intervalRegistery = [];
 let allSounds = [];
 let muted = false;
+let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
-  registerInterval(setInterval(() => {checkIfGameOver()}, 100));
+  backgroundMusic.currentTime = 3;
+  // backgroundMusic.loop = true;
+  // backgroundMusic.volume = 0.2;
+  // backgroundMusic.play();
+  playBackgroundMusic();
+  registerInterval(
+    setInterval(() => {
+      checkIfGameOver();
+    }, 100),
+  );
 }
 
 window.addEventListener("keydown", async (event) => {
@@ -75,7 +85,9 @@ function clearAllIntervals() {
 
 function checkIfGameOver() {
   let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
-  if ((world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) || (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
+  if (
+    (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) ||
+    (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
   ) {
     clearAllIntervals();
     console.log("Game Over");
@@ -94,4 +106,16 @@ function stopAllSounds() {
     audio.pause();
     audio.currentTime = 0;
   });
+}
+
+function playBackgroundMusic() {
+  backgroundMusic.addEventListener("timeupdate", () => {
+    if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
+      backgroundMusic.currentTime = 3;
+    }
+  });
+  backgroundMusic.volume = 0.2;
+  backgroundMusic.loop = true;
+  backgroundMusic.play();
+  allSounds.push(backgroundMusic);
 }

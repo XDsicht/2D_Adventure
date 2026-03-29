@@ -330,6 +330,8 @@ class Character extends MovableObject {
   playWalkingSound(){
     if(!this.isAboveGround()){
         this.characterSounds.isWalkingSound.play();
+    } else {
+      this.characterSounds.isWalkingSound.pause();
     }
   }
 }

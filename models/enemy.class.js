@@ -44,7 +44,7 @@ class Enemy extends MovableObject {
   checkIfEnemyIsDead() {
     if (this.isDead() && !this.dead) {
       this.enemySounds.isDeadSound.currentTime = 0;
-      this.enemySounds.isDeadSound.play();
+      this.enemySounds.isDeadSound.play();      
       this.resetCurrentImage();
       return (this.dead = true);
     }

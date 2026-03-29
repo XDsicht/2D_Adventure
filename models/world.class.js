@@ -156,6 +156,7 @@ class World {
   checkArrowCollision(enemy, arrow) {
     if (arrow.isColliding(enemy) && !enemy.dead) {
       if (!this.checkEndbossActive(enemy)) return true;
+      enemy.enemySounds.isHitSound.play();
       enemy.hit();
       this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
       return true;
