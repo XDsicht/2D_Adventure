@@ -10,9 +10,6 @@ function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   backgroundMusic.currentTime = 3;
-  // backgroundMusic.loop = true;
-  // backgroundMusic.volume = 0.2;
-  // backgroundMusic.play();
   playBackgroundMusic();
   registerInterval(
     setInterval(() => {
@@ -90,6 +87,7 @@ function checkIfGameOver() {
     (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
   ) {
     clearAllIntervals();
+    stopAllSounds();
     console.log("Game Over");
   }
 }

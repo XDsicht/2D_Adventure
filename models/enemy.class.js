@@ -6,6 +6,7 @@ class Enemy extends MovableObject {
   energy = 10;
   delete = false;
   deadY = 228;
+  enemySoundLibrary;
 
   offset = {
     top: 85,
@@ -43,11 +44,29 @@ class Enemy extends MovableObject {
 
   checkIfEnemyIsDead() {
     if (this.isDead() && !this.dead) {
-      this.enemySounds.isDeadSound.currentTime = 0;
-      this.enemySounds.isDeadSound.play();      
+      this.playEnemyBasedDeadSound();
       this.resetCurrentImage();
       return (this.dead = true);
     }
+  }
+
+  playEnemyBasedDeadSound() {
+    if (this instanceof Troll_1 || this instanceof Troll_2) {
+      this.enemySoundLibrary = this.enemySounds;
+      this.enemySoundLibrary.isDeadSound.currentTime = 0;
+      this.enemySoundLibrary.isDeadSound.play();
+    } else {
+      this.enemySoundLibrary = this.endbossSounds;
+      this.enemySoundLibrary.isDeadSound.currentTime = 0;
+      this.enemySoundLibrary.isDeadSound.play();
+    }
+  }
+//  Continue here!
+  playEnemyBasedSounds(){
+    this.playEnemyDeadSound();
+    this.playEnemyWalkingSound();
+    this.playEnemyHurtSound();
+    this.playEnemyAttackingSound();
   }
 
   playEnemyDeadAnimation() {
@@ -57,7 +76,9 @@ class Enemy extends MovableObject {
       this.playAnimation(imagesDead);
     } else {
       this.loadImage(imagesDead[imagesDead.length - 1]);
-      this.enemySounds.isDeadSound.pause();
+      if(this.enemySoundLibrary){
+      this.enemySoundLibrary.isDeadSound.pause();
+      }
       registerInterval(
         setTimeout(() => {
           return (this.delete = true);

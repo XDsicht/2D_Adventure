@@ -22,12 +22,12 @@ class Character extends MovableObject {
   };
 
   characterSounds = {
-    isAttackingSound: new Audio('audio/character_audio/character_arrow_shooting_sound.mp3'),
-    isWalkingSound: new Audio('audio/character_audio/character_walking_sound.mp3'), 
-    isJumpingSound: new Audio('audio/character_audio/character_jumping_sound.mp3'),
-    isHurtSound: new Audio('audio/character_audio/character_hurt_sound.mp3'),
-    isDeadSound: new Audio('audio/character_audio/character_dead_sound.mp3')
-  }
+    isAttackingSound: new Audio("audio/character_audio/character_arrow_shooting_sound.mp3"),
+    isWalkingSound: new Audio("audio/character_audio/character_walking_sound.mp3"),
+    isJumpingSound: new Audio("audio/character_audio/character_jumping_sound.mp3"),
+    isHurtSound: new Audio("audio/character_audio/character_hurt_sound.mp3"),
+    isDeadSound: new Audio("audio/character_audio/character_dead_sound.mp3"),
+  };
 
   IMAGES_IDLE = [
     "img/2.character/1.idle/Warrior_03__IDLE_000.png",
@@ -119,7 +119,13 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.animate();
     this.applyGravity();
-    allSounds.push(this.characterSounds.isAttackingSound, this.characterSounds.isWalkingSound, this.characterSounds.isJumpingSound, this.characterSounds.isHurtSound, this.characterSounds.isDeadSound);
+    allSounds.push(
+      this.characterSounds.isAttackingSound,
+      this.characterSounds.isWalkingSound,
+      this.characterSounds.isJumpingSound,
+      this.characterSounds.isHurtSound,
+      this.characterSounds.isDeadSound,
+    );
   }
 
   animate() {
@@ -193,21 +199,33 @@ class Character extends MovableObject {
 
   disableMovements(movements) {
     if (this.isDead() && !this.dead) {
-          this.resetCurrentImage();
-          clearInterval(movements);
-          return (this.dead = true);
-        }
+      this.resetCurrentImage();
+      clearInterval(movements);
+      this.playDeadSound();
+      return (this.dead = true);
+    }
+  }
+
+  playDeadSound() {
+    this.characterSounds.isDeadSound.currentTime = 0;
+    this.characterSounds.isDeadSound.play();
   }
 
   activateDKey() {
     if (!this.isAttacking) {
       this.resetCurrentImage();
       this.isAttacking = true;
+      this.playAttackingSound();
       this.world.keyboard.D = true;
       this.currentDirection = this.otherDirection;
       this.attackDelay = true;
       this.resetAttackVariables();
     }
+  }
+
+  playAttackingSound() {
+    this.characterSounds.isAttackingSound.currentTime = 0;
+    this.characterSounds.isAttackingSound.play();
   }
 
   resetAttackDelayTimer() {
@@ -238,6 +256,7 @@ class Character extends MovableObject {
           }
         } else if (this.isHurt()) {
           this.playAnimation(this.IMAGES_HURT);
+          this.playHurtSound();
         } else if (this.isAboveGround()) {
           this.characterJumping = true;
           this.playAnimation(this.IMAGES_JUMPING);
@@ -251,6 +270,13 @@ class Character extends MovableObject {
         }
       }, 1000 / 10),
     );
+  }
+
+  playHurtSound() {
+    if (this.currentImage === 0) {
+      this.characterSounds.isHurtSound.currentTime = 0;
+      this.characterSounds.isHurtSound.play();
+    }
   }
 
   characterAttackAnimationIntervals() {
@@ -272,23 +298,16 @@ class Character extends MovableObject {
   isEncounteringObstacle(enemy) {
     const offset = this.getDirectionalOffset(enemy);
 
-    return (
-      this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 &&
-      this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft
-    );
+    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft;
   }
 
   isEncounteringEndboss(endboss) {
     const offset = this.getDirectionalOffset(endboss);
-    return (
-      this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.99 &&
-      this.x + offset.thisLeft * 0.99 < endboss.x + endboss.width - offset.moLeft
-    );
+    return this.x + this.width - offset.thisRight > endboss.x + offset.moRight * 0.99 && this.x + offset.thisLeft * 0.99 < endboss.x + endboss.width - offset.moLeft;
   }
 
   isCollidingVertically(mo) {
     const offset = this.getDirectionalOffset(mo);
-
     return (
       this.x + offset.thisLeft < mo.x + mo.width - offset.moRight &&
       this.y + this.height - this.offset.bottom < mo.y + mo.height - mo.offset.bottom &&
@@ -327,9 +346,9 @@ class Character extends MovableObject {
     this.damageFromAttackers.clear();
   }
 
-  playWalkingSound(){
-    if(!this.isAboveGround()){
-        this.characterSounds.isWalkingSound.play();
+  playWalkingSound() {
+    if (!this.isAboveGround()) {
+      this.characterSounds.isWalkingSound.play();
     } else {
       this.characterSounds.isWalkingSound.pause();
     }
