@@ -6,8 +6,11 @@ let allSounds = [];
 let muted = false;
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 
-function init() {
-  canvas = document.getElementById("canvas");
+function startGame() {
+  canvas = getElement("canvas");
+  overlay = getElement("start_screen");
+  showElement(canvas);
+  hideElement(overlay);
   world = new World(canvas, keyboard);
   backgroundMusic.currentTime = 3;
   playBackgroundMusic();

@@ -35,7 +35,17 @@
     <div class="game-container">
       <h1 class="game-title">Adventures of Vorga Flammenherz</h1>
 
-      <canvas width="720" height="480" id="canvas"><div class="canvas-overlay"></div></canvas>
+      <canvas class="d_none borders" width="720" height="480" id="canvas"></canvas>
+      <div class="start-screen borders" id="start_screen">
+        <div class="overlay-btn-group">
+          <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
+          <button class="start-btn"onclick="startGame()">Start Game</button>
+          <div class="overlay-btn-row">
+            <button class="start-btn secondary-btn">Show Controls</button>
+            <button class="start-btn secondary-btn">Settings</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
