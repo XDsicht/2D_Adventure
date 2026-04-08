@@ -33,6 +33,18 @@ body {
   align-items: center;
 }
 
+.canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: #080808 url("img/5.elements/background/background.png") no-repeat center center;
+}
+
 canvas {
   background-color: black;
   border: 8px solid #735c4a;
