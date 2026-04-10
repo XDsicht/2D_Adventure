@@ -2,15 +2,17 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let intervalRegistery = [];
-let allSounds = [];
+let allGameSounds = [];
 let muted = false;
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
+let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 
 function startGame() {
+  stopLobbyMusic();
   canvas = getElement("canvas");
-  overlay = getElement("start_screen");
+  gameLobby = getElement("lobby");
   showElement(canvas);
-  hideElement(overlay);
+  hideElement(gameLobby);
   world = new World(canvas, keyboard);
   backgroundMusic.currentTime = 3;
   playBackgroundMusic();
@@ -90,7 +92,7 @@ function checkIfGameOver() {
     (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
   ) {
     clearAllIntervals();
-    stopAllSounds();
+    stopallGameSounds();
     console.log("Game Over");
   }
 }
@@ -102,8 +104,8 @@ function playSound(audio) {
   }
 }
 
-function stopAllSounds() {
-  allSounds.forEach((audio) => {
+function stopallGameSounds() {
+  allGameSounds.forEach((audio) => {
     audio.pause();
     audio.currentTime = 0;
   });
@@ -118,5 +120,21 @@ function playBackgroundMusic() {
   backgroundMusic.volume = 0.2;
   backgroundMusic.loop = true;
   backgroundMusic.play();
-  allSounds.push(backgroundMusic);
+  allGameSounds.push(backgroundMusic);
+}
+
+function playLobbyMusic() {
+  lobbyMusic.addEventListener("timeupdate", () => {
+    if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
+      lobbyMusic.currentTime = 0;
+    }
+  });
+  lobbyMusic.volume = 0.2;
+  lobbyMusic.loop = true;
+  lobbyMusic.play();
+}
+
+function stopLobbyMusic() {
+  lobbyMusic.pause();
+  lobbyMusic.currentTime = 0;
 }

@@ -119,7 +119,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.animate();
     this.applyGravity();
-    allSounds.push(
+    allGameSounds.push(
       this.characterSounds.isAttackingSound,
       this.characterSounds.isWalkingSound,
       this.characterSounds.isJumpingSound,

@@ -70,7 +70,7 @@ class Endboss extends Enemy {
     this.x = 2500;
     this.baseX = this.x;
     this.animateEndboss();
-    allSounds.push(this.endbossSounds.isAttackingSound, this.endbossSounds.isWalkingSound, this.endbossSounds.isRunningSound, this.endbossSounds.isHitSound, this.endbossSounds.isHurtSound, this.endbossSounds.isDeadSound);
+    allGameSounds.push(this.endbossSounds.isAttackingSound, this.endbossSounds.isWalkingSound, this.endbossSounds.isRunningSound, this.endbossSounds.isHitSound, this.endbossSounds.isHurtSound, this.endbossSounds.isDeadSound);
   }
 
   getCurrentOffset() {

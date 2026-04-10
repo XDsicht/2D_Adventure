@@ -9,3 +9,7 @@ function hideElement(element) {
 function getElement(elementId) {
     return document.getElementById(elementId);
 }
+
+document.addEventListener("click", () => {
+  playLobbyMusic();
+}, { once: true });
