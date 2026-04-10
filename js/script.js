@@ -10,6 +10,20 @@ function getElement(elementId) {
     return document.getElementById(elementId);
 }
 
+function renderHTML(templateFn, targetId) {
+  getElement(targetId).innerHTML = templateFn();
+}
+
+function renderLobby() {
+  let lobby = getElement("lobby");
+  lobby.innerHTML = getLobbyTemplate();
+}
+
+function renderSoundControls() {
+  let lobby = getElement("lobby");
+  lobby.innerHTML = getSoundControlsTemplate();
+}
+
 document.addEventListener("click", () => {
   playLobbyMusic();
 }, { once: true });

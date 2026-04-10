@@ -138,3 +138,40 @@ function stopLobbyMusic() {
   lobbyMusic.pause();
   lobbyMusic.currentTime = 0;
 }
+
+function setLobbyMusicVolume(value) {
+  lobbyMusic.volume = value;
+}
+
+function setGameSoundsVolume(value) {
+  allGameSounds.forEach((audio) => {
+    audio.volume = value;
+  });
+}
+
+function toggleMute(button) {
+  muted = !muted;
+  button.textContent = muted ? "Unmute All" : "Mute All";
+  lobbyMusic.muted = muted;
+  allGameSounds.forEach((audio) => {
+    audio.muted = muted;
+  });
+  const svg = muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+  let lobbyBtn = getElement("lobby-mute-btn");
+  let gameBtn = getElement("game-mute-btn");
+  if (lobbyBtn) lobbyBtn.innerHTML = svg;
+  if (gameBtn) gameBtn.innerHTML = svg;
+}
+
+function toggleLobbyMusicMute(button) {
+  lobbyMusic.muted = !lobbyMusic.muted;
+  button.innerHTML = lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+}
+
+function toggleGameSoundsMute(button) {
+  let gameMuted = !allGameSounds.every((audio) => audio.muted);
+  allGameSounds.forEach((audio) => {
+    audio.muted = gameMuted;
+  });
+  button.innerHTML = gameMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+}
