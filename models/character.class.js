@@ -119,13 +119,11 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.animate();
     this.applyGravity();
-    allGameSounds.push(
-      this.characterSounds.isAttackingSound,
-      this.characterSounds.isWalkingSound,
-      this.characterSounds.isJumpingSound,
-      this.characterSounds.isHurtSound,
-      this.characterSounds.isDeadSound,
-    );
+    registerGameSound(this.characterSounds.isAttackingSound);
+    registerGameSound(this.characterSounds.isWalkingSound);
+    registerGameSound(this.characterSounds.isJumpingSound);
+    registerGameSound(this.characterSounds.isHurtSound);
+    registerGameSound(this.characterSounds.isDeadSound);
   }
 
   animate() {
@@ -208,7 +206,7 @@ class Character extends MovableObject {
 
   playDeadSound() {
     this.characterSounds.isDeadSound.currentTime = 0;
-    this.characterSounds.isDeadSound.play();
+    playSound(this.characterSounds.isDeadSound);
   }
 
   activateDKey() {
@@ -225,7 +223,7 @@ class Character extends MovableObject {
 
   playAttackingSound() {
     this.characterSounds.isAttackingSound.currentTime = 0;
-    this.characterSounds.isAttackingSound.play();
+    playSound(this.characterSounds.isAttackingSound);
   }
 
   resetAttackDelayTimer() {
@@ -275,7 +273,7 @@ class Character extends MovableObject {
   playHurtSound() {
     if (this.currentImage === 0) {
       this.characterSounds.isHurtSound.currentTime = 0;
-      this.characterSounds.isHurtSound.play();
+      playSound(this.characterSounds.isHurtSound);
     }
   }
 
@@ -348,7 +346,7 @@ class Character extends MovableObject {
 
   playWalkingSound() {
     if (!this.isAboveGround()) {
-      this.characterSounds.isWalkingSound.play();
+      playSound(this.characterSounds.isWalkingSound);
     } else {
       this.characterSounds.isWalkingSound.pause();
     }

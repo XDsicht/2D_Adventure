@@ -1,11 +1,31 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let intervalRegistery = [];
+let intervalRegistry = [];
 let allGameSounds = [];
 let muted = false;
+let lobbyMusicMuted = false;
+let gameSoundsMuted = false;
+let gameSoundsVolume = 0.2;
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
+
+function applyGameSoundState(audio) {
+  audio.volume = gameSoundsVolume;
+  audio.muted = muted || gameSoundsMuted;
+  return audio;
+}
+
+function applyLobbyMusicState() {
+  lobbyMusic.muted = muted || lobbyMusicMuted;
+  return lobbyMusic;
+}
+
+function registerGameSound(audio) {
+  applyGameSoundState(audio);
+  allGameSounds.push(audio);
+  return audio;
+}
 
 function startGame() {
   stopLobbyMusic();
@@ -73,16 +93,16 @@ window.addEventListener("keyup", async (event) => {
 });
 
 function registerInterval(id) {
-  intervalRegistery.push(id);
+  intervalRegistry.push(id);
   return id;
 }
 
 function clearAllIntervals() {
-  intervalRegistery.forEach((id) => {
+  intervalRegistry.forEach((id) => {
     clearInterval(id);
     clearTimeout(id);
   });
-  intervalRegistery.length = 0;
+  intervalRegistry.length = 0;
 }
 
 function checkIfGameOver() {
@@ -92,19 +112,19 @@ function checkIfGameOver() {
     (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
   ) {
     clearAllIntervals();
-    stopallGameSounds();
+    stopAllGameSounds();
     console.log("Game Over");
   }
 }
 
 function playSound(audio) {
-  if (!muted) {
+  if (!audio.muted) {
     audio.currentTime = 0;
     audio.play();
   }
 }
 
-function stopallGameSounds() {
+function stopAllGameSounds() {
   allGameSounds.forEach((audio) => {
     audio.pause();
     audio.currentTime = 0;
@@ -117,10 +137,12 @@ function playBackgroundMusic() {
       backgroundMusic.currentTime = 3;
     }
   });
-  backgroundMusic.volume = 0.2;
+  applyGameSoundState(backgroundMusic);
   backgroundMusic.loop = true;
   backgroundMusic.play();
-  allGameSounds.push(backgroundMusic);
+  if (!allGameSounds.includes(backgroundMusic)) {
+    registerGameSound(backgroundMusic);
+  }
 }
 
 function playLobbyMusic() {
@@ -130,6 +152,7 @@ function playLobbyMusic() {
     }
   });
   lobbyMusic.volume = 0.2;
+  applyLobbyMusicState();
   lobbyMusic.loop = true;
   lobbyMusic.play();
 }
@@ -144,17 +167,18 @@ function setLobbyMusicVolume(value) {
 }
 
 function setGameSoundsVolume(value) {
+  gameSoundsVolume = Number(value);
   allGameSounds.forEach((audio) => {
-    audio.volume = value;
+    applyGameSoundState(audio);
   });
 }
 
 function toggleMute(button) {
   muted = !muted;
   button.textContent = muted ? "Unmute All" : "Mute All";
-  lobbyMusic.muted = muted;
+  applyLobbyMusicState();
   allGameSounds.forEach((audio) => {
-    audio.muted = muted;
+    applyGameSoundState(audio);
   });
   const svg = muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
   let lobbyBtn = getElement("lobby-mute-btn");
@@ -164,14 +188,15 @@ function toggleMute(button) {
 }
 
 function toggleLobbyMusicMute(button) {
-  lobbyMusic.muted = !lobbyMusic.muted;
+  lobbyMusicMuted = !lobbyMusicMuted;
+  applyLobbyMusicState();
   button.innerHTML = lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
 function toggleGameSoundsMute(button) {
-  let gameMuted = !allGameSounds.every((audio) => audio.muted);
+  gameSoundsMuted = !gameSoundsMuted;
   allGameSounds.forEach((audio) => {
-    audio.muted = gameMuted;
+    applyGameSoundState(audio);
   });
-  button.innerHTML = gameMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+  button.innerHTML = gameSoundsMuted || muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
