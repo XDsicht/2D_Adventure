@@ -8,12 +8,12 @@ const SVG_SPEAKER_OFF = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
 
 function getLobbyTemplate() {
   return `
-    <div class="overlay-btn-group">
+    <div class="overlay-btn-group flex-center-column">
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
-      <button class="fantasy-btn start-btn" onclick="startGame()">Start Game</button>
+      <button class="fantasy-btn cursor-pointer start-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
-        <button class="fantasy-btn start-btn secondary-btn">Show Controls</button>
-        <button class="fantasy-btn start-btn secondary-btn" onclick="renderSoundControls()">Sounds</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2">Show Controls</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls()">Sounds</button>
       </div>
     </div>
   `;
@@ -21,22 +21,22 @@ function getLobbyTemplate() {
 
 function getSoundControlsTemplate() {
   return `
-    <div class="overlay-btn-group">
-      <h2 class="sound-settings-title">Sound Settings</h2>
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Sound Settings</h2>
       <div class="sound-control-row">
-        <label for="lobby-volume">Lobby Music</label>
-        <input type="range" id="lobby-volume" min="0" max="1" step="0.05" value="0.2"
+        <label class="text-shadow-standard" for="lobby-volume">Lobby Music</label>
+        <input class="cursor-pointer" type="range" id="lobby-volume" min="0" max="1" step="0.05" value="0.2"
           oninput="setLobbyMusicVolume(this.value)" />
-        <button class="fantasy-btn mute-btn" id="lobby-mute-btn" onclick="toggleLobbyMusicMute(this)">${SVG_SPEAKER_ON}</button>
+        <button class="fantasy-btn cursor-pointer mute-btn" id="lobby-mute-btn" onclick="toggleLobbyMusicMute(this)">${SVG_SPEAKER_ON}</button>
       </div>
       <div class="sound-control-row">
-        <label for="game-volume">Game Sounds</label>
-        <input type="range" id="game-volume" min="0" max="1" step="0.05" value="0.2"
+        <label class="text-shadow-standard" for="game-volume">Game Sounds</label>
+        <input class="cursor-pointer" type="range" id="game-volume" min="0" max="1" step="0.05" value="0.2"
           oninput="setGameSoundsVolume(this.value)" />
-        <button class="fantasy-btn mute-btn" id="game-mute-btn" onclick="toggleGameSoundsMute(this)">${SVG_SPEAKER_ON}</button>
+        <button class="fantasy-btn cursor-pointer mute-btn" id="game-mute-btn" onclick="toggleGameSoundsMute(this)">${SVG_SPEAKER_ON}</button>
       </div>
-      <button class="fantasy-btn start-btn secondary-btn" onclick="toggleMute(this)">Mute All</button>
-      <button class="fantasy-btn start-btn secondary-btn" onclick="renderLobby()">Back</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="toggleMute(this)">Mute All</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby()">Back</button>
     </div>
   `;
 }
