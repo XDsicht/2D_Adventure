@@ -110,8 +110,14 @@ function toggleGameSoundsMute(button) {
   button.innerHTML = gameSoundsMuted || muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
+function updateSoundButtonsState() {
+  lobbyMuteIcon = getLobbyMuteIconState();
+  gameMuteIcon = getGameMuteIconState();
+  muteAllText = getMuteAllText();
+}
+
 function getLobbyMuteIconState() {
-  return muted || lobbyMusicMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON
+  return muted || lobbyMusicMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
 function getGameMuteIconState() {

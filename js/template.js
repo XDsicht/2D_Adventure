@@ -20,8 +20,6 @@ function getLobbyTemplate() {
 }
 
 function getSoundControlsTemplate() {
-  // const state = getSoundControlsState();
-
   return `
     <div class="overlay-btn-group flex-center-column">
       <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Sound Settings</h2>
