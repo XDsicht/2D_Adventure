@@ -3,6 +3,7 @@ let muted = false;
 let lobbyMusicMuted = false;
 let gameSoundsMuted = false;
 let gameSoundsVolume = 0.2;
+let lobbyMusicVolume = 0.2;
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 let lobbyMuteIcon = getLobbyMuteIconState();
@@ -16,6 +17,7 @@ function applyGameSoundState(audio) {
 }
 
 function applyLobbyMusicState() {
+  lobbyMusic.volume = lobbyMusicVolume;
   lobbyMusic.muted = muted || lobbyMusicMuted;
   return lobbyMusic;
 }
@@ -60,7 +62,6 @@ function playLobbyMusic() {
       lobbyMusic.currentTime = 0;
     }
   });
-  lobbyMusic.volume = 0.2;
   applyLobbyMusicState();
   lobbyMusic.loop = true;
   lobbyMusic.play();
@@ -72,7 +73,8 @@ function stopLobbyMusic() {
 }
 
 function setLobbyMusicVolume(value) {
-  lobbyMusic.volume = value;
+  lobbyMusicVolume = Number(value);
+  applyLobbyMusicState();
 }
 
 function setGameSoundsVolume(value) {

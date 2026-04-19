@@ -25,7 +25,7 @@ function getSoundControlsTemplate() {
       <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Sound Settings</h2>
       <div class="sound-control-row">
         <label class="text-shadow-standard" for="lobby-volume">Lobby Music</label>
-        <input class="cursor-pointer" type="range" id="lobby-volume" min="0" max="1" step="0.05" value="${lobbyMusic.volume}"
+        <input class="cursor-pointer" type="range" id="lobby-volume" min="0" max="1" step="0.05" value="${lobbyMusicVolume}"
           oninput="setLobbyMusicVolume(this.value)" />
         <button class="fantasy-btn cursor-pointer mute-btn" id="lobby-mute-btn" onclick="toggleLobbyMusicMute(this)">${lobbyMuteIcon}</button>
       </div>
