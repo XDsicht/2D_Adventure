@@ -5,10 +5,7 @@
 
 body {
   font-family: "Uncial Antiqua", system-ui;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-image: url("img/5.elements/background/website-background.jpg");
   background-position: center;
   margin: 0;
@@ -58,6 +55,9 @@ body {
   height: 480px;
   width: 720px;
   background-image: url("img/5.elements/background/background.png");
+}
+
+.d-flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,9 +189,6 @@ canvas {
 }
 
 .mute-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 2px solid #c49a5a;
   border-radius: 6px;
   padding: 6px;
@@ -205,4 +202,45 @@ canvas {
 
 .mute-btn:active {
   transform: scale(0.94);
+}
+
+.controls-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 280px;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.key-badge {
+  min-width: 44px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #8b5e3c 0%, #5a3820 50%, #3d2410 100%);
+  color: #f5e6c8;
+  border: 2px solid #c49a5a;
+  border-radius: 6px;
+  font-family: "Uncial Antiqua", system-ui;
+  font-size: 22px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+  box-shadow:
+    0 0 8px rgba(180, 120, 40, 0.4),
+    inset 0 1px 0 rgba(255, 220, 140, 0.2),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.controls-label {
+  color: #f5e6c8;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.arrow-keys {
+  font-size: 24px;
+  padding: 4px 10px;
 }

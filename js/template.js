@@ -12,9 +12,36 @@ function getLobbyTemplate() {
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
       <button class="fantasy-btn cursor-pointer start-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2">Show Controls</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderControls()">Show Controls</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls()">Sounds</button>
       </div>
+    </div>
+  `;
+}
+
+function getControlsTemplate() {
+  return `
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Controls</h2>
+      <div class="controls-grid">
+        <div class="controls-row">
+          <kbd class="key-badge arrow-keys d-flex-center">&#8592;</kbd>
+          <span class="text-shadow-standard controls-label">Move Left</span>
+        </div>
+        <div class="controls-row">
+          <kbd class="key-badge arrow-keys d-flex-center">&#8594;</kbd>
+          <span class="text-shadow-standard controls-label">Move Right</span>
+        </div>
+        <div class="controls-row">
+          <kbd class="key-badge d-flex-center">Space</kbd>
+          <span class="text-shadow-standard controls-label">Jump</span>
+        </div>
+        <div class="controls-row">
+          <kbd class="key-badge d-flex-center">D</kbd>
+          <span class="text-shadow-standard controls-label">Shoot Arrow</span>
+        </div>
+      </div>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby()">Back</button>
     </div>
   `;
 }
@@ -27,13 +54,13 @@ function getSoundControlsTemplate() {
         <label class="text-shadow-standard" for="lobby-volume">Lobby Music</label>
         <input class="cursor-pointer" type="range" id="lobby-volume" min="0" max="1" step="0.05" value="${lobbyMusicVolume}"
           oninput="setLobbyMusicVolume(this.value)" />
-        <button class="fantasy-btn cursor-pointer mute-btn" id="lobby-mute-btn" onclick="toggleLobbyMusicMute(this)">${lobbyMuteIcon}</button>
+        <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="lobby-mute-btn" onclick="toggleLobbyMusicMute(this)">${lobbyMuteIcon}</button>
       </div>
       <div class="sound-control-row">
         <label class="text-shadow-standard" for="game-volume">Game Sounds</label>
         <input class="cursor-pointer" type="range" id="game-volume" min="0" max="1" step="0.05" value="${gameSoundsVolume}"
           oninput="setGameSoundsVolume(this.value)" />
-        <button class="fantasy-btn cursor-pointer mute-btn" id="game-mute-btn" onclick="toggleGameSoundsMute(this)">${gameMuteIcon}</button>
+        <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="game-mute-btn" onclick="toggleGameSoundsMute(this)">${gameMuteIcon}</button>
       </div>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="toggleMute(this)">${muteAllText}</button>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby()">Back</button>

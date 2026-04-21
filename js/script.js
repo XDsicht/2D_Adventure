@@ -19,6 +19,11 @@ function renderLobby() {
   lobby.innerHTML = getLobbyTemplate();
 }
 
+function renderControls() {
+  let lobby = getElement("lobby");
+  lobby.innerHTML = getControlsTemplate();
+}
+
 function renderSoundControls() {
   let lobby = getElement("lobby");
   updateSoundButtonsState()
