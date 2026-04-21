@@ -84,14 +84,14 @@ function setGameSoundsVolume(value) {
   });
 }
 
-function toggleMute(button) {
+function toggleMuteAll(button) {
   muted = !muted;
   button.textContent = muted ? "Unmute All" : "Mute All";
   applyLobbyMusicState();
   allGameSounds.forEach((audio) => {
     applyGameSoundState(audio);
   });
-  const svg = muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+  let svg = muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
   let lobbyBtn = getElement("lobby-mute-btn");
   let gameBtn = getElement("game-mute-btn");
   if (lobbyBtn) lobbyBtn.innerHTML = svg;
@@ -112,6 +112,33 @@ function toggleGameSoundsMute(button) {
   button.innerHTML = gameSoundsMuted || muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
+// TODO: hier weiter mit neuen allg. Soundfunction
+
+function toggleMute(id) {
+  muted = changeMusicMuteStatus(id);
+  let button = getElement(id);
+  button.innerHTML = getMuteIconState(muted);
+}
+
+function changeMusicMuteStatus(id) {
+  if (id == "lobby-mute-btn") {
+    return (lobbyMusic.muted = !lobbyMusic.muted);
+  } else {
+    changeGameSoundsState();
+    return (gameSoundsMuted = !gameSoundsMuted);
+  }
+}
+
+function changeGameSoundsState() {
+  allGameSounds.forEach((audio) => {
+    audio.muted = !audio.muted;
+  });
+}
+
+function getMuteIconState(muted) {
+  return muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+}
+
 function updateSoundButtonsState() {
   lobbyMuteIcon = getLobbyMuteIconState();
   gameMuteIcon = getGameMuteIconState();
@@ -119,21 +146,43 @@ function updateSoundButtonsState() {
 }
 
 function getLobbyMuteIconState() {
-  return muted || lobbyMusicMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+  return lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
 function getGameMuteIconState() {
-  return muted || gameSoundsMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+  return gameSoundsMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
 function getMuteAllText() {
   return muted ? "Unmute All" : "Mute All";
 }
 
-// function getSoundControlsState() {
-//   return {
-//     lobbyMuteIcon: muted || lobbyMusicMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON,
-//     gameMuteIcon: muted || gameSoundsMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON,
-//     muteAllText: muted ? "Unmute All" : "Mute All",
-//   };
-// }
+function setVolume(value, id) {
+  let number = Number(value);
+  if (number == 0) {
+    setMute(id);
+  } else {
+    let music = getMusic(id);
+    music.forEach((sound) => (sound.volume = number));
+  }
+}
+
+// TODO: Muted umkehren
+
+function getMusic(id) {
+  if (id == "lobby-volume") {
+    return [lobbyMusic];
+  } else {
+    return allGameSounds;
+  }
+}
+
+function setMute(id) {
+  if (id === "lobby-volume") {
+    lobbyMusic.muted = true;
+  } else {
+    allGameSounds.forEach((sound) => {
+      sound.muted = true;
+    });
+  }
+}
