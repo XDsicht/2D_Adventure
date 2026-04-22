@@ -59,7 +59,7 @@ function getSoundControlsTemplate() {
       <div class="sound-control-row">
         <label class="text-shadow-standard" for="game-volume">Game Sounds</label>
         <input class="cursor-pointer" type="range" id="game-volume" min="0" max="1" step="0.05" value="${gameSoundsVolume}"
-          oninput="setGameSoundsVolume(this.value)" />
+          oninput="setVolume(this.value, 'game-volume')" />
         <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
       </div>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="toggleMuteAll(this)">${muteAllText}</button>

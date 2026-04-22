@@ -116,6 +116,12 @@ function toggleGameSoundsMute(button) {
 
 function toggleMute(id) {
   muted = changeMusicMuteStatus(id);
+  setButton(id);
+ // let button = getElement(id);
+  // button.innerHTML = getMuteIconState(muted);
+}
+
+function setButton(id) {
   let button = getElement(id);
   button.innerHTML = getMuteIconState(muted);
 }
@@ -124,13 +130,13 @@ function changeMusicMuteStatus(id) {
   if (id == "lobby-mute-btn") {
     return (lobbyMusic.muted = !lobbyMusic.muted);
   } else {
-    changeGameSoundsState();
+    changeMusicMuteState(allGameSounds);
     return (gameSoundsMuted = !gameSoundsMuted);
   }
 }
 
-function changeGameSoundsState() {
-  allGameSounds.forEach((audio) => {
+function changeMusicMuteState(music) {
+  music.forEach((audio) => {
     audio.muted = !audio.muted;
   });
 }
@@ -161,13 +167,14 @@ function setVolume(value, id) {
   let number = Number(value);
   if (number == 0) {
     setMute(id);
+    updateSoundButtonsState();
   } else {
     let music = getMusic(id);
+    setUnmute(id);
     music.forEach((sound) => (sound.volume = number));
+    updateSoundButtonsState();
   }
 }
-
-// TODO: Muted umkehren
 
 function getMusic(id) {
   if (id == "lobby-volume") {
@@ -183,6 +190,16 @@ function setMute(id) {
   } else {
     allGameSounds.forEach((sound) => {
       sound.muted = true;
+    });
+  }
+}
+
+function setUnmute(id) {
+  if (id === "lobby-volume") {
+    lobbyMusic.muted = false;
+  } else {
+    allGameSounds.forEach((sound) => {
+      sound.muted = false;
     });
   }
 }
