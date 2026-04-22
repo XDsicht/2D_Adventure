@@ -72,18 +72,6 @@ function stopLobbyMusic() {
   lobbyMusic.currentTime = 0;
 }
 
-function setLobbyMusicVolume(value) {
-  lobbyMusicVolume = Number(value);
-  applyLobbyMusicState();
-}
-
-function setGameSoundsVolume(value) {
-  gameSoundsVolume = Number(value);
-  allGameSounds.forEach((audio) => {
-    applyGameSoundState(audio);
-  });
-}
-
 function toggleMuteAll(button) {
   muted = !muted;
   button.textContent = muted ? "Unmute All" : "Mute All";
@@ -98,11 +86,6 @@ function toggleMuteAll(button) {
   if (gameBtn) gameBtn.innerHTML = svg;
 }
 
-function toggleLobbyMusicMute(button) {
-  lobbyMusicMuted = !lobbyMusicMuted;
-  applyLobbyMusicState();
-  button.innerHTML = lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
-}
 
 function toggleGameSoundsMute(button) {
   gameSoundsMuted = !gameSoundsMuted;
@@ -116,12 +99,10 @@ function toggleGameSoundsMute(button) {
 
 function toggleMute(id) {
   muted = changeMusicMuteStatus(id);
-  setButton(id);
- // let button = getElement(id);
-  // button.innerHTML = getMuteIconState(muted);
+  setButton(id, muted);
 }
 
-function setButton(id) {
+function setButton(id, muted) {
   let button = getElement(id);
   button.innerHTML = getMuteIconState(muted);
 }
@@ -166,13 +147,21 @@ function getMuteAllText() {
 function setVolume(value, id) {
   let number = Number(value);
   if (number == 0) {
-    setMute(id);
-    updateSoundButtonsState();
+    muted = setMute(id);
+    updateButtonState(id, muted);
   } else {
     let music = getMusic(id);
-    setUnmute(id);
+    muted = setUnmute(id);
     music.forEach((sound) => (sound.volume = number));
-    updateSoundButtonsState();
+    updateButtonState(id, muted);
+  }
+}
+
+function updateButtonState(id, muted) {
+  if (id === "lobby-volume") {
+    setButton("lobby-mute-btn", muted);
+  } else {
+    setButton("game-mute-btn", muted);
   }
 }
 
@@ -186,20 +175,22 @@ function getMusic(id) {
 
 function setMute(id) {
   if (id === "lobby-volume") {
-    lobbyMusic.muted = true;
+    return lobbyMusic.muted = true;
   } else {
     allGameSounds.forEach((sound) => {
       sound.muted = true;
     });
+    return gameSoundsMuted = true;
   }
 }
 
 function setUnmute(id) {
   if (id === "lobby-volume") {
-    lobbyMusic.muted = false;
+    return lobbyMusic.muted = false;
   } else {
     allGameSounds.forEach((sound) => {
       sound.muted = false;
     });
+    return gameSoundsMuted = false;
   }
 }
