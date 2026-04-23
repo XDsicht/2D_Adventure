@@ -10,26 +10,23 @@ function getElement(elementId) {
     return document.getElementById(elementId);
 }
 
-function renderHTML(templateFn, targetId) {
-  getElement(targetId).innerHTML = templateFn();
-}
-
-function renderLobby() {
-  let lobby = getElement("lobby");
-  lobby.innerHTML = getLobbyTemplate();
-}
-
-function renderControls() {
-  let lobby = getElement("lobby");
-  lobby.innerHTML = getControlsTemplate();
-}
-
-function renderSoundControls() {
-  let lobby = getElement("lobby");
-  updateSoundButtonsState()
-  lobby.innerHTML = getSoundControlsTemplate();
+function renderHTML(id) {
+  let element = getElement('lobby');
+  element.innerHTML = getTemplate(id);
 }
 
 document.addEventListener("click", () => {
   playLobbyMusic();
 }, { once: true });
+
+function getTemplate(id) {
+  if (id == "lobby") {
+    return getLobbyTemplate();
+  }; 
+  if (id == "controls") {
+    return getControlsTemplate();
+  };
+  if (id == "soundControls") {
+    return getSoundControlsTemplate();
+  }
+}

@@ -12,8 +12,8 @@ function getLobbyTemplate() {
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
       <button class="fantasy-btn cursor-pointer start-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderControls()">Show Controls</button>
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls()">Sounds</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('controls')">Show Controls</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('soundControls')">Sounds</button>
       </div>
     </div>
   `;
@@ -41,7 +41,7 @@ function getControlsTemplate() {
           <span class="text-shadow-standard controls-label">Shoot Arrow</span>
         </div>
       </div>
-      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby()">Back</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
     </div>
   `;
 }
@@ -63,7 +63,7 @@ function getSoundControlsTemplate() {
         <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
       </div>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="toggleMuteAll(this)">${muteAllText}</button>
-      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby()">Back</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
     </div>
   `;
 }
