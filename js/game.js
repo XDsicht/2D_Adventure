@@ -11,7 +11,8 @@ function startGame() {
   hideElement(gameLobby);
   world = new World(canvas, keyboard);
   backgroundMusic.currentTime = 3;
-  playBackgroundMusic();
+  playSound(backgroundMusic, gameSoundsVolume);
+  registerGameSound(backgroundMusic);
   registerInterval(
     setInterval(() => {
       checkIfGameOver();
@@ -26,15 +27,12 @@ window.addEventListener("keydown", async (event) => {
   if (event.keyCode == 37) {
     keyboard.LEFT = true;
   }
-
   if (event.keyCode == 38) {
     keyboard.UP = true;
   }
-
   if (event.keyCode == 40) {
     keyboard.DOWN = true;
   }
-
   if (event.keyCode == 32) {
     keyboard.SPACE = true;
   }
@@ -50,19 +48,15 @@ window.addEventListener("keyup", async (event) => {
   if (event.keyCode == 37) {
     keyboard.LEFT = false;
   }
-
   if (event.keyCode == 38) {
     keyboard.UP = false;
   }
-
   if (event.keyCode == 40) {
     keyboard.DOWN = false;
   }
-
   if (event.keyCode == 32) {
     keyboard.SPACE = false;
   }
-
   if (event.keyCode == 68) {
     keyboard.D = false;
   }

@@ -15,10 +15,6 @@ function renderHTML(id) {
   element.innerHTML = getTemplate(id);
 }
 
-document.addEventListener("click", () => {
-  playLobbyMusic();
-}, { once: true });
-
 function getTemplate(id) {
   if (id == "lobby") {
     return getLobbyTemplate();
@@ -30,3 +26,8 @@ function getTemplate(id) {
     return getSoundControlsTemplate();
   }
 }
+
+document.addEventListener("click", () => {
+  // playLobbyMusic();
+  playSound(lobbyMusic, lobbyMusicVolume);
+}, { once: true });

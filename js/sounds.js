@@ -16,10 +16,18 @@ function applyGameSoundState(audio) {
   return audio;
 }
 
-function applyLobbyMusicState() {
-  lobbyMusic.volume = lobbyMusicVolume;
-  lobbyMusic.muted = muted || lobbyMusicMuted;
-  return lobbyMusic;
+function applyAudioState(audio, audioVolume) {
+  audio.volume = audioVolume;;
+  audio.muted = muted || lobbyMusicMuted;
+  return audio;
+}
+
+function getMuteStatus(audio) {
+  if (audio === lobbyMusic) {
+    return lobbyMusicMuted;
+  } else {
+    return audio.muted;
+  }
 }
 
 function registerGameSound(audio) {
@@ -28,11 +36,45 @@ function registerGameSound(audio) {
   return audio;
 }
 
-function playSound(audio) {
-  if (!audio.muted) {
-    audio.currentTime = 0;
-    audio.play();
+function playSound(audio, audioVolume) {
+  activateListener(audio);
+  activateLoop(audio);
+  getMuteStatus(audio);
+  applyAudioState(audio, audioVolume);
+  audio.play();
+}
+
+// TODO: New play and stop functions
+
+function activateListener(audio) {
+  if (audio === lobbyMusic) {
+    activateLobbyMusicListener();
   }
+  if(audio === backgroundMusic) {
+    activateBackgroundMusicListener();
+  }
+}
+
+function activateLoop(audio) {
+  if (audio === lobbyMusic || audio === backgroundMusic) {
+    audio.loop = true;
+  }
+}
+
+function activateLobbyMusicListener() {
+  lobbyMusic.addEventListener("timeupdate", () => {
+    if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
+      lobbyMusic.currentTime = 0;
+    }
+  });
+}
+
+function activateBackgroundMusicListener() {
+  backgroundMusic.addEventListener("timeupdate", () => {
+    if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
+      backgroundMusic.currentTime = 3;
+    }
+  });
 }
 
 function stopAllGameSounds() {
@@ -40,31 +82,6 @@ function stopAllGameSounds() {
     audio.pause();
     audio.currentTime = 0;
   });
-}
-
-function playBackgroundMusic() {
-  backgroundMusic.addEventListener("timeupdate", () => {
-    if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
-      backgroundMusic.currentTime = 3;
-    }
-  });
-  applyGameSoundState(backgroundMusic);
-  backgroundMusic.loop = true;
-  backgroundMusic.play();
-  if (!allGameSounds.includes(backgroundMusic)) {
-    registerGameSound(backgroundMusic);
-  }
-}
-
-function playLobbyMusic() {
-  lobbyMusic.addEventListener("timeupdate", () => {
-    if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
-      lobbyMusic.currentTime = 0;
-    }
-  });
-  applyLobbyMusicState();
-  lobbyMusic.loop = true;
-  lobbyMusic.play();
 }
 
 function stopLobbyMusic() {
