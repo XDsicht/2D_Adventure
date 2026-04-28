@@ -4,7 +4,7 @@ let keyboard = new Keyboard();
 let intervalRegistry = [];
 
 function startGame() {
-  stopLobbyMusic();
+  stopSound(lobbyMusic);
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
   showElement(canvas);
