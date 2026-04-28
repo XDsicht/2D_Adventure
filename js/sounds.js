@@ -115,13 +115,13 @@ function toggleGameSoundsMute(button) {
 // TODO: hier weiter mit neuen allg. Soundfunction
 
 function toggleMute(id) {
-  muted = changeMusicMuteStatus(id);
-  setButton(id, muted);
+  musicMuteStatus = changeMusicMuteStatus(id);
+  setButton(id, musicMuteStatus);
 }
 
-function setButton(id, muted) {
+function setButton(id, musicMuteStatus) {
   let button = getElement(id);
-  button.innerHTML = getMuteIconState(muted);
+  button.innerHTML = getMuteIconState(musicMuteStatus);
 }
 
 function changeMusicMuteStatus(id) {
@@ -139,8 +139,8 @@ function changeMusicMuteState(music) {
   });
 }
 
-function getMuteIconState(muted) {
-  return muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+function getMuteIconState(muteState) {
+  return muteState ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }
 
 function updateSoundButtonsState() {
@@ -149,13 +149,13 @@ function updateSoundButtonsState() {
   muteAllText = getMuteAllText();
 }
 
-function getLobbyMuteIconState() {
-  return lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
-}
+// function getLobbyMuteIconState() {
+//   return lobbyMusic.muted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+// }
 
-function getGameMuteIconState() {
-  return gameSoundsMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
-}
+// function getGameMuteIconState() {
+//   return gameSoundsMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+// }
 
 function getMuteAllText() {
   return muted ? "Unmute All" : "Mute All";
