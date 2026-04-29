@@ -10,18 +10,20 @@ let lobbyMuteIcon = getLobbyMuteIconState();
 let gameMuteIcon = getGameMuteIconState();
 let muteAllText = getMuteAllText();
 
-function applyGameSoundState(audio) {
-  audio.volume = gameSoundsVolume;
-  audio.muted = muted || gameSoundsMuted;
-  return audio;
-}
+// function applyGameSoundState(audio) {
+//   audio.volume = gameSoundsVolume;
+//   audio.muted = muted || gameSoundsMuted;
+//   return audio;
+// }
 
+//  used
 function applyAudioState(audio, audioVolume) {
-  audio.volume = audioVolume;;
+  audio.volume = audioVolume;
   audio.muted = muted || lobbyMusicMuted;
   return audio;
 }
 
+// used
 function getMuteStatus(audio) {
   if (audio === lobbyMusic) {
     return lobbyMusicMuted;
@@ -30,13 +32,16 @@ function getMuteStatus(audio) {
   }
 }
 
+// used
 function registerGameSound(audio) {
-  applyGameSoundState(audio);
+  // applyGameSoundState(audio);
+  applyAudioState(audio, gameSoundsVolume)
   allGameSounds.push(audio);
   return audio;
 }
-// backgroundmusics
 
+// backgroundmusics
+//  used for bg music
 function playSound(audio, audioVolume) {
   activateListener(audio);
   activateLoop(audio);
@@ -45,13 +50,14 @@ function playSound(audio, audioVolume) {
   audio.play();
 }
 
+// used
 function stopSound(audio) {
   audio.pause();
   audio.currentTime = 0;
 };
 
 // TODO: New play and stop functions
-
+// used
 function activateListener(audio) {
   if (audio === lobbyMusic) {
     activateLobbyMusicListener();
@@ -60,13 +66,13 @@ function activateListener(audio) {
     activateBackgroundMusicListener();
   }
 }
-
+//  used
 function activateLoop(audio) {
   if (audio === lobbyMusic || audio === backgroundMusic) {
     audio.loop = true;
   }
 }
-
+// used
 function activateLobbyMusicListener() {
   lobbyMusic.addEventListener("timeupdate", () => {
     if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
@@ -74,7 +80,7 @@ function activateLobbyMusicListener() {
     }
   });
 }
-
+//  used
 function activateBackgroundMusicListener() {
   backgroundMusic.addEventListener("timeupdate", () => {
     if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
@@ -83,6 +89,7 @@ function activateBackgroundMusicListener() {
   });
 }
 
+// used
 function stopAllGameSounds() {
   allGameSounds.forEach((audio) => {
     audio.pause();
@@ -90,9 +97,9 @@ function stopAllGameSounds() {
   });
 }
 
-function toggleMuteAll(button) {
+function toggleMuteAll(id) {
   muted = !muted;
-  button.textContent = muted ? "Unmute All" : "Mute All";
+  let button = getElement(id);
   applyLobbyMusicState();
   allGameSounds.forEach((audio) => {
     applyGameSoundState(audio);
@@ -106,16 +113,18 @@ function toggleMuteAll(button) {
 
 // TODO: hier weiter mit neuen allg. Soundfunction
 
+function muteAll() {}
+// used
 function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
 }
-
+// used
 function setButton(id, musicMuteStatus) {
   let button = getElement(id);
   button.innerHTML = getMuteIconState(musicMuteStatus);
 }
-
+// used
 function changeMusicMuteStatus(id) {
   if (id == "lobby-mute-btn") {
     return (lobbyMusic.muted = !lobbyMusic.muted);
@@ -124,13 +133,13 @@ function changeMusicMuteStatus(id) {
     return (gameSoundsMuted = !gameSoundsMuted);
   }
 }
-
+// used
 function changeMusicMuteState(music) {
   music.forEach((audio) => {
     audio.muted = !audio.muted;
   });
 }
-
+// used
 function getMuteIconState(muteState) {
   return muteState ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
 }

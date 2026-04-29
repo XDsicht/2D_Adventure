@@ -28,6 +28,5 @@ function getTemplate(id) {
 }
 
 document.addEventListener("click", () => {
-  // playLobbyMusic();
   playSound(lobbyMusic, lobbyMusicVolume);
 }, { once: true });
