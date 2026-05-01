@@ -33,10 +33,20 @@ function getTemplate(id) {
   }
 }
 
-document.addEventListener(
-  "click",
-  () => {
-    playSound(lobbyMusic, lobbyMusicVolume);
-  },
-  { once: true },
-);
+function startLobbyMusic(event) {
+    if (!event.target.closest('#start-game-btn')) {
+        playSound(lobbyMusic, lobbyMusicVolume);
+        document.removeEventListener('click', startLobbyMusic);
+    }
+}
+
+document.addEventListener('click', startLobbyMusic)
+// document.addEventListener(
+//   "click",
+//   (event) => {
+//     if(!event.target.closest('#start-game-btn')){
+//     playSound(lobbyMusic, lobbyMusicVolume);
+//     }
+//   },
+//   { once: true },
+// );

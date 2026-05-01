@@ -10,7 +10,7 @@ function getLobbyTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
-      <button class="fantasy-btn cursor-pointer start-btn" onclick="startGame()">Start Game</button>
+      <button class="fantasy-btn cursor-pointer start-btn" id="start-game-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('controls')">Show Controls</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls('soundControls')">Sounds</button>
