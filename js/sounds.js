@@ -10,7 +10,6 @@ let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 let lobbyMuteIcon;
 let gameMuteIcon;
 let musicMuteStatus;
-// let muteAllText = getMuteAllText();
 
 function applyAudioState(audio, audioVolume) {
   audio.volume = audioVolume;
@@ -27,7 +26,6 @@ function getMuteStatus(audio) {
 }
 
 function registerGameSound(audio) {
-  // applyGameSoundState(audio);
   applyAudioState(audio, gameSoundsVolume);
   allGameSounds.push(audio);
   return audio;
@@ -150,17 +148,13 @@ function toggleMuteAll(id) {
   let button = getElement(id);
   muted = !muted;
   if (muted) {
-    muteMusic(music);
+    muteMusic(allSounds);
     musicMuteStatus = setAllToMute();
-    setButton("lobby-mute-btn", musicMuteStatus);
-    setButton("game-sound-btn", musicMuteStatus);
-    button.textContent = getMuteAllButtonState(musicMuteStatus);
+    setCorrectMuteButtons(button, musicMuteStatus);
   } else {
-    unmuteMusic(music);
+    unmuteMusic(allSounds);
     musicMuteStatus = setAllToUnmute();
-    setButton("lobby-mute-btn", musicMuteStatus);
-    setButton("game-sound-btn", musicMuteStatus);
-    button.textContent = getMuteAllButtonState(musicMuteStatus);
+    setCorrectMuteButtons(button, musicMuteStatus);
   }
 }
 
@@ -169,7 +163,7 @@ function muteMusic(music) {
 }
 
 function getMuteAllButtonState(muteStatus) {
-  return muteStatus ? "Unmute All Sounds" : "Mute All Sounds";
+  return muteStatus ? "Unmute All" : "Mute All";
 }
 
 function setAllToMute() {
@@ -179,7 +173,27 @@ function setAllToMute() {
 }
 
 function setAllToUnmute() {
-    gameSoundsMuted = false;
-    lobbyMusicMuted = false;
-    return false;
+  gameSoundsMuted = false;
+  lobbyMusicMuted = false;
+  return false;
 }
+
+function setCorrectMuteButtons(button, musicMuteStatus) {
+  if (musicMuteStatus) {
+    setButton("lobby-mute-btn", musicMuteStatus);
+    setButton("game-mute-btn", musicMuteStatus);
+    button.textContent = getMuteAllButtonState(musicMuteStatus);
+  } else if (!musicMuteStatus) {
+    setButton("lobby-mute-btn", musicMuteStatus);
+    setButton("game-mute-btn", musicMuteStatus);
+    button.textContent = getMuteAllButtonState(musicMuteStatus);
+  }
+}
+
+function createAllSoundsArray(){
+  allSounds.push(allGameSounds);
+  allSounds.push(lobbyMusic);
+}
+
+//TODO: if both volumes are 0 => toggleMuteAll() behavior
+// TODO: reset All mute if one is unmuted

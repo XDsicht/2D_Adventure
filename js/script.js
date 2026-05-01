@@ -16,6 +16,17 @@ function renderSoundControls(id) {
   gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
 }
 
+function renderLobby(id) {
+  renderHTML(id);
+  checkIfSoundArrayExists();
+}
+
+function checkIfSoundArrayExists() {
+  if(allSounds.length == 0) {
+    createAllSoundsArray();
+  }
+}
+
 function renderHTML(id) {
   let element = getElement("lobby");
   element.innerHTML = getTemplate(id);
@@ -34,19 +45,10 @@ function getTemplate(id) {
 }
 
 function startLobbyMusic(event) {
-    if (!event.target.closest('#start-game-btn')) {
-        playSound(lobbyMusic, lobbyMusicVolume);
-        document.removeEventListener('click', startLobbyMusic);
-    }
+  if (!event.target.closest("#start-game-btn")) {
+    playSound(lobbyMusic, lobbyMusicVolume);
+    document.removeEventListener("click", startLobbyMusic);
+  }
 }
 
-document.addEventListener('click', startLobbyMusic)
-// document.addEventListener(
-//   "click",
-//   (event) => {
-//     if(!event.target.closest('#start-game-btn')){
-//     playSound(lobbyMusic, lobbyMusicVolume);
-//     }
-//   },
-//   { once: true },
-// );
+document.addEventListener("click", startLobbyMusic);

@@ -62,7 +62,7 @@ function getSoundControlsTemplate() {
           oninput="changeVolume(this.value, 'game-mute-btn')" />
         <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
       </div>
-      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" id="mute-all-btn" onclick="toggleMuteAll(this)">Mute All</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" id="mute-all-btn" onclick="toggleMuteAll('mute-all-btn')">Mute All</button>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
     </div>
   `;
