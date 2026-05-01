@@ -13,7 +13,7 @@ function getLobbyTemplate() {
       <button class="fantasy-btn cursor-pointer start-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('controls')">Show Controls</button>
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('soundControls')">Sounds</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls('soundControls')">Sounds</button>
       </div>
     </div>
   `;
@@ -53,16 +53,16 @@ function getSoundControlsTemplate() {
       <div class="sound-control-row">
         <label class="text-shadow-standard" for="lobby-volume">Lobby Music</label>
         <input class="cursor-pointer" type="range" id="lobby-volume" min="0" max="1" step="0.05" value="${lobbyMusicVolume}"
-          oninput="setVolume(this.value, 'lobby-volume')" />
+          oninput="changeVolume(this.value, 'lobby-mute-btn')" />
         <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="lobby-mute-btn" onclick="toggleMute('lobby-mute-btn')">${lobbyMuteIcon}</button>
       </div>
       <div class="sound-control-row">
         <label class="text-shadow-standard" for="game-volume">Game Sounds</label>
         <input class="cursor-pointer" type="range" id="game-volume" min="0" max="1" step="0.05" value="${gameSoundsVolume}"
-          oninput="setVolume(this.value, 'game-volume')" />
+          oninput="changeVolume(this.value, 'game-mute-btn')" />
         <button class="fantasy-btn cursor-pointer mute-btn d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
       </div>
-      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" id="mute-all-btn" onclick="toggleMuteAll(this)">${muteAllText}</button>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" id="mute-all-btn" onclick="toggleMuteAll(this)">Mute All</button>
       <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
     </div>
   `;

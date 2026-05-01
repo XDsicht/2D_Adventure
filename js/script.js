@@ -7,26 +7,36 @@ function hideElement(element) {
 }
 
 function getElement(elementId) {
-    return document.getElementById(elementId);
+  return document.getElementById(elementId);
+}
+
+function renderSoundControls(id) {
+  renderHTML(id);
+  lobbyMuteIcon = setButton("lobby-mute-btn", lobbyMusicMuted);
+  gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
 }
 
 function renderHTML(id) {
-  let element = getElement('lobby');
+  let element = getElement("lobby");
   element.innerHTML = getTemplate(id);
 }
 
 function getTemplate(id) {
   if (id == "lobby") {
     return getLobbyTemplate();
-  }; 
+  }
   if (id == "controls") {
     return getControlsTemplate();
-  };
+  }
   if (id == "soundControls") {
     return getSoundControlsTemplate();
   }
 }
 
-document.addEventListener("click", () => {
-  playSound(lobbyMusic, lobbyMusicVolume);
-}, { once: true });
+document.addEventListener(
+  "click",
+  () => {
+    playSound(lobbyMusic, lobbyMusicVolume);
+  },
+  { once: true },
+);
