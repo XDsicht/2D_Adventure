@@ -5,6 +5,7 @@ let lobbyMusicMuted = false;
 let gameSoundsMuted = false;
 let gameSoundsVolume = 0.2;
 let lobbyMusicVolume = 0.2;
+let defaultVolume = Number(0.4);
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 let lobbyMuteIcon;
@@ -115,25 +116,47 @@ function getMuteIconState(muteState) {
 
 function changeVolume(value, id) {
   let number = Number(value);
-  if (number === 0) {
+  if (number <= 0.1) {
     toggleMute(id);
+    console.log('lobbyMusicVolume', lobbyMusic.volume);
+     
   } else {
     let music = getMusic(id);
     setVolume(music, number);
     musicMuteStatus = unmuteMusic(music);
     setButton(id, musicMuteStatus);
   }
+  console.log("lobbyMute:", lobbyMusicMuted);
+  console.log("gameMute:", gameSoundsMuted);
+
+  checkMuteStatus("mute-all-btn");
 }
 
 function setVolume(music, number) {
+  if(!Array.isArray(music)) {
+    music = [music];
+  }
   music.forEach((audio) => (audio.volume = number));
 }
 
 function unmuteMusic(music) {
   music.forEach((audio) => (audio.muted = false));
-  gameSoundsMuted = false;
-  lobbyMusicMuted = false;
+  unmuteCorrectMuteVariable(music);
   return false;
+}
+
+function unmuteCorrectMuteVariable(music) {
+  switch (music) {
+    case lobbyMusic:
+      lobbyMusicMuted = false;
+      break;
+    case allGameSounds:
+      gameSoundsMuted = false;
+      break;
+    default:
+      gameSoundsMuted = false;
+      lobbyMusicMuted = false;
+  }
 }
 
 function getMusic(id) {
@@ -155,6 +178,27 @@ function toggleMuteAll(id) {
     unmuteMusic(allSounds);
     musicMuteStatus = setAllToUnmute();
     setCorrectMuteButtons(button, musicMuteStatus);
+    setMinVolume(allSounds);
+  }
+}
+
+function setMinVolume(allSounds) {
+  allSounds.forEach((audio) => {
+    if (audio.volume <= 0.2) {
+      setVolume(audio, defaultVolume);
+      setVolumeSlider(audio);
+    }
+  });
+}
+
+function setVolumeSlider(audio) {
+  let volumeSlider;
+  if (audio == lobbyMusic) {
+    volumeSlider = getElement("lobby-volume");
+    volumeSlider.value = defaultVolume;
+  } else {
+    volumeSlider = getElement("game-volume");
+    volumeSlider.value = defaultVolume;
   }
 }
 
@@ -190,10 +234,15 @@ function setCorrectMuteButtons(button, musicMuteStatus) {
   }
 }
 
-function createAllSoundsArray(){
+function createAllSoundsArray() {
   allSounds.push(allGameSounds);
   allSounds.push(lobbyMusic);
 }
 
+function checkMuteStatus(id) {
+  if (lobbyMusicMuted && gameSoundsMuted) {
+    toggleMuteAll(id);
+  }
+}
 //TODO: if both volumes are 0 => toggleMuteAll() behavior
 // TODO: reset All mute if one is unmuted
