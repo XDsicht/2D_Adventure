@@ -86,6 +86,7 @@ function stopAllGameSounds() {
 function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
+  allGameSounds.forEach(audio => console.log(audio.muted))
 }
 
 function setButton(id, musicMuteStatus) {
@@ -116,46 +117,57 @@ function getMuteIconState(muteState) {
 
 function changeVolume(value, id) {
   let number = Number(value);
-  if (number <= 0.1) {
-    toggleMute(id);
-    console.log('lobbyMusicVolume', lobbyMusic.volume);
-     
-  } else {
-    let music = getMusic(id);
+  let music = getMusic(id);
+  if (number <= 0.02) {
+    musicMuteStatus = muteMusic(music, id);
+    // console.log("lobbyMusicVolume", lobbyMusic.volume);
     setVolume(music, number);
-    musicMuteStatus = unmuteMusic(music);
+    setButton(id, musicMuteStatus);
+  } else {
+    setVolume(music, number);
+    musicMuteStatus = unmuteMusic(music, id);
     setButton(id, musicMuteStatus);
   }
-  console.log("lobbyMute:", lobbyMusicMuted);
-  console.log("gameMute:", gameSoundsMuted);
-
+  // console.log("lobbyMute:", lobbyMusicMuted);
+  // console.log("gameMute:", gameSoundsMuted);
   checkMuteStatus("mute-all-btn");
 }
 
 function setVolume(music, number) {
-  if(!Array.isArray(music)) {
+  if (!Array.isArray(music)) {
     music = [music];
   }
   music.forEach((audio) => (audio.volume = number));
 }
 
-function unmuteMusic(music) {
+function unmuteMusic(music, id) {
   music.forEach((audio) => (audio.muted = false));
-  unmuteCorrectMuteVariable(music);
+  unmuteCorrectMuteVariable(id);
   return false;
 }
 
-function unmuteCorrectMuteVariable(music) {
-  switch (music) {
-    case lobbyMusic:
+function unmuteCorrectMuteVariable(id) {
+  switch (id) {
+    case "lobby-mute-btn":
       lobbyMusicMuted = false;
       break;
-    case allGameSounds:
+    case "game-mute-btn":
       gameSoundsMuted = false;
       break;
-    default:
+    case "mute-all-btn":
       gameSoundsMuted = false;
       lobbyMusicMuted = false;
+  }
+}
+
+function muteCorrectMuteVariable(id) {
+  switch (id) {
+    case "lobby-mute-btn":
+      lobbyMusicMuted = true;
+      break;
+    case "game-mute-btn":
+      gameSoundsMuted = true;
+      break;
   }
 }
 
@@ -171,7 +183,7 @@ function toggleMuteAll(id) {
   let button = getElement(id);
   muted = !muted;
   if (muted) {
-    muteMusic(allSounds);
+    muteMusic(allSounds, id);
     musicMuteStatus = setAllToMute();
     setCorrectMuteButtons(button, musicMuteStatus);
   } else {
@@ -202,8 +214,10 @@ function setVolumeSlider(audio) {
   }
 }
 
-function muteMusic(music) {
+function muteMusic(music, id) {
   music.forEach((audio) => (audio.muted = true));
+  muteCorrectMuteVariable(id);
+  return true;
 }
 
 function getMuteAllButtonState(muteStatus) {
@@ -235,14 +249,20 @@ function setCorrectMuteButtons(button, musicMuteStatus) {
 }
 
 function createAllSoundsArray() {
-  allSounds.push(allGameSounds);
+  allGameSounds.forEach((sound) => allSounds.push(sound));
   allSounds.push(lobbyMusic);
+  // console.log(allSounds);
 }
 
 function checkMuteStatus(id) {
-  if (lobbyMusicMuted && gameSoundsMuted) {
+  if (lobbyMusicMuted && gameSoundsMuted && !muted) {
     toggleMuteAll(id);
+    // console.log("both muted?", lobbyMusicMuted && gameSoundsMuted);
+  } else if (!(lobbyMusicMuted && gameSoundsMuted) && muted) {
+    let button = getElement("mute-all-btn")
+    muted = !muted;
+    button.textContent = getMuteAllButtonState(muted)
   }
 }
-//TODO: if both volumes are 0 => toggleMuteAll() behavior
-// TODO: reset All mute if one is unmuted
+//TODO: stopSound(lobbyMusic) does not work
+//TODO: GameSounds are not muted
