@@ -224,10 +224,12 @@ function setVolumeSlider(audio) {
   if (audio == lobbyMusic) {
     volumeSlider = getElement("lobby-volume");
     volumeSlider.value = defaultVolume;
+    lobbyMusicVolume = defaultVolume;
   } 
   if(audio != lobbyMusic) {
     volumeSlider = getElement("game-volume");
     volumeSlider.value = defaultVolume;
+    gameSoundsVolume = defaultVolume;
   }
 }
 
