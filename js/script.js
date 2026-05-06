@@ -14,6 +14,7 @@ function renderSoundControls(id) {
   renderHTML(id);
   lobbyMuteIcon = setButton("lobby-mute-btn", lobbyMusicMuted);
   gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
+  allMuteIcon = setMuteAllButton("mute-all-btn", muted);
 }
 
 function renderLobby(id) {
@@ -22,7 +23,7 @@ function renderLobby(id) {
 }
 
 function checkIfSoundArrayExists() {
-  if(allSounds.length == 0) {
+  if (allSounds.length == 0) {
     createAllSoundsArray();
   }
 }

@@ -11,11 +11,11 @@ let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 let lobbyMuteIcon;
 let gameMuteIcon;
+let allMuteIcon;
 let musicMuteStatus;
 
 function applyAudioState(audio, audioVolume) {
   audio.volume = audioVolume;
-  // audio.muted = muted || lobbyMusicMuted;
   audio.muted = resolveMuted(audio);
   return audio;
 }
@@ -131,7 +131,6 @@ function changeVolume(value, id) {
   setVolumeVariable(id, number);
   if (number <= 0.02) {
     musicMuteStatus = muteMusic(music, id);
-    // console.log("lobbyMusicVolume", lobbyMusic.volume);
     setVolume(music, number);
     setButton(id, musicMuteStatus);
   } else {
@@ -139,8 +138,6 @@ function changeVolume(value, id) {
     musicMuteStatus = unmuteMusic(music, id);
     setButton(id, musicMuteStatus);
   }
-  // console.log("lobbyMute:", lobbyMusicMuted);
-  // console.log("gameMute:", gameSoundsMuted);
   checkMuteStatus("mute-all-btn");
 }
 
@@ -227,7 +224,8 @@ function setVolumeSlider(audio) {
   if (audio == lobbyMusic) {
     volumeSlider = getElement("lobby-volume");
     volumeSlider.value = defaultVolume;
-  } else {
+  } 
+  if(audio != lobbyMusic) {
     volumeSlider = getElement("game-volume");
     volumeSlider.value = defaultVolume;
   }
@@ -270,18 +268,21 @@ function setCorrectMuteButtons(button, musicMuteStatus) {
 function createAllSoundsArray() {
   allGameSounds.forEach((sound) => allSounds.push(sound));
   allSounds.push(lobbyMusic);
-  // console.log(allSounds);
 }
 
 function checkMuteStatus(id) {
   if (lobbyMusicMuted && gameSoundsMuted && !muted) {
     toggleMuteAll(id);
-    // console.log("both muted?", lobbyMusicMuted && gameSoundsMuted);
   } else if (!(lobbyMusicMuted && gameSoundsMuted) && muted) {
-    let button = getElement("mute-all-btn");
     muted = !muted;
-    button.textContent = getMuteAllButtonState(muted);
+    setMuteAllButton(id, muted);
   }
 }
-//TODO: stopSound(lobbyMusic) does not work
-//TODO: GameSounds are not muted
+
+function setMuteAllButton(id, muted) {
+  let button = getElement(id);
+  button.textContent = getMuteAllButtonState(muted);
+  return button;
+}
+
+//TODO: Volume sliders are 0, when music was set to 0 and the unmuted, exit sound settings then enter sound settings --> tbf.
