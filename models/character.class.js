@@ -243,31 +243,45 @@ class Character extends MovableObject {
   characterMovementAnimationIntervals() {
     registerInterval(
       setInterval(() => {
-        if (this.isAttacking) {
-          return;
-        }
-        if (this.dead) {
-          if (this.currentImage < this.IMAGES_DEAD.length - 1) {
-            this.playAnimation(this.IMAGES_DEAD);
-          } else {
-            this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
-          }
-        } else if (this.isHurt()) {
-          this.playAnimation(this.IMAGES_HURT);
-          this.playHurtSound();
-        } else if (this.isAboveGround()) {
-          this.characterJumping = true;
-          this.playAnimation(this.IMAGES_JUMPING);
-          if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
-            this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
-          }
-        } else if (this.isWalking) {
-          this.playAnimation(this.IMAGES_WALKING);
-        } else {
-          this.playAnimation(this.IMAGES_IDLE);
-        }
+        if (this.isAttacking) return;
+        return executeMovementAnimations()
       }, 1000 / 10),
     );
+  }
+
+  executeMovementAnimations() {
+    if (this.dead) {
+      executeDeathAnimation();
+    } else if (this.isHurt()) {
+      executeHurtAnimation();
+    } else if (this.isAboveGround()) {
+      executeJumpAnimation();
+    } else if (this.isWalking) {
+      this.playAnimation(this.IMAGES_WALKING);
+    } else {
+      this.playAnimation(this.IMAGES_IDLE);
+    }
+  }
+
+  executeDeathAnimation() {
+    if (this.currentImage < this.IMAGES_DEAD.length - 1) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else {
+      this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+    }
+  }
+
+  executeHurtAnimation() {
+    this.playAnimation(this.IMAGES_HURT);
+    this.playHurtSound();
+  }
+
+  executeJumpAnimation() {
+    this.characterJumping = true;
+    this.playAnimation(this.IMAGES_JUMPING);
+    if (this.currentImage === this.IMAGES_JUMPING.length - 1 || !this.isAboveGround()) {
+      this.loadImage(this.IMAGES_IDLE[this.IMAGES_IDLE.length - 1]);
+    }
   }
 
   playHurtSound() {
