@@ -54,11 +54,11 @@ class Enemy extends MovableObject {
     if (this instanceof Troll_1 || this instanceof Troll_2) {
       this.enemySoundLibrary = this.enemySounds;
       this.enemySoundLibrary.isDeadSound.currentTime = 0;
-      playSound(this.enemySoundLibrary.isDeadSound);
+      playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     } else {
       this.enemySoundLibrary = this.endbossSounds;
       this.enemySoundLibrary.isDeadSound.currentTime = 0;
-      playSound(this.enemySoundLibrary.isDeadSound);
+      playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     }
   }
 //  Continue here!

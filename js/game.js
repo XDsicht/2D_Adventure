@@ -11,7 +11,7 @@ function startGame() {
   hideElement(gameLobby);
   world = new World(canvas, keyboard);
   backgroundMusic.currentTime = 3;
-  playSound(backgroundMusic, gameSoundsVolume);
+  playSound(backgroundMusic, backGroundMusicVolume);
   registerGameSound(backgroundMusic);
   registerInterval(
     setInterval(() => {

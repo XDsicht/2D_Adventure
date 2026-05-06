@@ -5,7 +5,8 @@ let lobbyMusicMuted = false;
 let gameSoundsMuted = false;
 let gameSoundsVolume = 0.2;
 let lobbyMusicVolume = 0.2;
-let defaultVolume = Number(0.4);
+let backGroundMusicVolume = gameSoundsVolume * 0.5;
+let defaultVolume = Number(0.2);
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 let lobbyMuteIcon;
@@ -14,8 +15,17 @@ let musicMuteStatus;
 
 function applyAudioState(audio, audioVolume) {
   audio.volume = audioVolume;
-  audio.muted = muted || lobbyMusicMuted;
+  // audio.muted = muted || lobbyMusicMuted;
+  audio.muted = resolveMuted(audio);
   return audio;
+}
+
+function resolveMuted(audio) {
+  if (audio === lobbyMusic) {
+    return lobbyMusicMuted;
+  } else {
+    return gameSoundsMuted;
+  }
 }
 
 function getMuteStatus(audio) {
@@ -86,7 +96,7 @@ function stopAllGameSounds() {
 function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
-  allGameSounds.forEach(audio => console.log(audio.muted))
+  allGameSounds.forEach((audio) => console.log(audio.muted));
 }
 
 function setButton(id, musicMuteStatus) {
@@ -118,6 +128,7 @@ function getMuteIconState(muteState) {
 function changeVolume(value, id) {
   let number = Number(value);
   let music = getMusic(id);
+  setVolumeVariable(id, number);
   if (number <= 0.02) {
     musicMuteStatus = muteMusic(music, id);
     // console.log("lobbyMusicVolume", lobbyMusic.volume);
@@ -131,6 +142,14 @@ function changeVolume(value, id) {
   // console.log("lobbyMute:", lobbyMusicMuted);
   // console.log("gameMute:", gameSoundsMuted);
   checkMuteStatus("mute-all-btn");
+}
+
+function setVolumeVariable(id, number) {
+  if (id == "lobby-mute-btn") {
+    lobbyMusicVolume = number;
+  } else {
+    gameSoundsVolume = number;
+  }
 }
 
 function setVolume(music, number) {
@@ -259,9 +278,9 @@ function checkMuteStatus(id) {
     toggleMuteAll(id);
     // console.log("both muted?", lobbyMusicMuted && gameSoundsMuted);
   } else if (!(lobbyMusicMuted && gameSoundsMuted) && muted) {
-    let button = getElement("mute-all-btn")
+    let button = getElement("mute-all-btn");
     muted = !muted;
-    button.textContent = getMuteAllButtonState(muted)
+    button.textContent = getMuteAllButtonState(muted);
   }
 }
 //TODO: stopSound(lobbyMusic) does not work
