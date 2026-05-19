@@ -97,6 +97,7 @@ function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
   allGameSounds.forEach((audio) => console.log(audio.muted));
+  checkMuteStatus("mute-all-btn");
 }
 
 function setButton(id, musicMuteStatus) {
