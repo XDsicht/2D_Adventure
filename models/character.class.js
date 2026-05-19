@@ -111,14 +111,22 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("img/2.character/1.idle/Warrior_03__IDLE_000.png");
+    this.loadCharacterImages();
+    this.animate();
+    this.applyGravity();
+    this.registerCharacterSounds();
+  }
+
+  loadCharacterImages() {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_IDLE);
-    this.animate();
-    this.applyGravity();
+  }
+
+  registerCharacterSounds() {
     registerGameSound(this.characterSounds.isAttackingSound);
     registerGameSound(this.characterSounds.isWalkingSound);
     registerGameSound(this.characterSounds.isJumpingSound);
@@ -172,27 +180,38 @@ class Character extends MovableObject {
   getMovements() {
     if (!this.isAttacking && !this.attackDelay) {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight();
-        this.otherDirection = false;
-        this.isWalking = true;
-        this.playWalkingSound();
+        this.executeMoveRight();
       }
       if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirection = true;
-        this.isWalking = true;
-        this.playWalkingSound();
+        this.executeMoveLeft();
       }
-
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        this.characterJumping = true;
-        this.isWalking = false;
-        this.resetCurrentImage();
-        this.jump();
-        this.characterSounds.isWalkingSound.pause();
-        playSound(this.characterSounds.isJumpingSound, gameSoundsVolume);
+        this.executeJump();
       }
     }
+  }
+
+  executeMoveRight() {
+    this.moveRight();
+    this.otherDirection = false;
+    this.isWalking = true;
+    this.playWalkingSound();
+  }
+
+  executeMoveLeft() {
+    this.moveLeft();
+    this.otherDirection = true;
+    this.isWalking = true;
+    this.playWalkingSound();
+  }
+
+  executeJump() {
+    this.characterJumping = true;
+    this.isWalking = false;
+    this.resetCurrentImage();
+    this.jump();
+    this.characterSounds.isWalkingSound.pause();
+    playSound(this.characterSounds.isJumpingSound, gameSoundsVolume);
   }
 
   disableMovements(movements) {
@@ -244,18 +263,18 @@ class Character extends MovableObject {
     registerInterval(
       setInterval(() => {
         if (this.isAttacking) return;
-        return executeMovementAnimations()
+        return this.executeMovementAnimations();
       }, 1000 / 10),
     );
   }
 
   executeMovementAnimations() {
     if (this.dead) {
-      executeDeathAnimation();
+      this.executeDeathAnimation();
     } else if (this.isHurt()) {
-      executeHurtAnimation();
+      this.executeHurtAnimation();
     } else if (this.isAboveGround()) {
-      executeJumpAnimation();
+      this.executeJumpAnimation();
     } else if (this.isWalking) {
       this.playAnimation(this.IMAGES_WALKING);
     } else {
