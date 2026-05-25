@@ -67,3 +67,16 @@ function getSoundControlsTemplate() {
     </div>
   `;
 }
+
+function getVictoryTemplate() {
+  return `
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Victory!</h2>
+      <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="restartGame()">Play Again</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby('lobby')">Back to Menu</button>
+      </div>
+    </div>
+  `;
+}

@@ -77,12 +77,24 @@ function clearAllIntervals() {
 
 function checkIfGameOver() {
   let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
-  if (
-    (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) ||
-    (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1)
-  ) {
+  if (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) {
     clearAllIntervals();
     stopAllGameSounds();
-    console.log("Game Over");
   }
+  if (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1) {
+    clearAllIntervals();
+    stopAllGameSounds();
+    showVictoryScreen();
+  }
+}
+
+function showVictoryScreen() {
+  hideElement(getElement("canvas"));
+  showElement(getElement("lobby"));
+  renderHTML("victory");
+}
+
+function restartGame() {
+  initLevel1();
+  startGame();
 }

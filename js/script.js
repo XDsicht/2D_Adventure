@@ -43,6 +43,9 @@ function getTemplate(id) {
   if (id == "soundControls") {
     return getSoundControlsTemplate();
   }
+  if (id == "victory") {
+    return getVictoryTemplate();
+  }
 }
 
 function startLobbyMusic(event) {
