@@ -4,6 +4,7 @@ let keyboard = new Keyboard();
 let intervalRegistry = [];
 
 function startGame() {
+  initLevel1();
   stopSound(lobbyMusic);
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
@@ -80,6 +81,7 @@ function checkIfGameOver() {
   if (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) {
     clearAllIntervals();
     stopAllGameSounds();
+    showGameOverScreen();
   }
   if (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1) {
     clearAllIntervals();
@@ -92,6 +94,12 @@ function showVictoryScreen() {
   hideElement(getElement("canvas"));
   showElement(getElement("lobby"));
   renderHTML("victory");
+}
+
+function showGameOverScreen() {
+  hideElement(getElement("canvas"));
+  showElement(getElement("lobby"));
+  renderHTML("gameOver");
 }
 
 function restartGame() {

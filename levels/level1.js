@@ -66,5 +66,3 @@ function initLevel1() {
     ],
   );
 }
-
-initLevel1();

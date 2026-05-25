@@ -68,6 +68,26 @@ function getSoundControlsTemplate() {
   `;
 }
 
+function getGameOverTemplate() {
+  return `
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Game Over</h2>
+      <div class="endboss-head">
+        <img src="img/4.boss/8.parts/troll_0006_left-ear.png" style="position:absolute; top:116px; left:18px; z-index:1;" />
+        <img src="img/4.boss/8.parts/troll_0008_right-ear.png" style="position:absolute; top:114px; left:155px; z-index:1;" />
+        <img src="img/4.boss/8.parts/troll_0007_head.png" style="position:absolute; top:30px; left:38px; z-index:2;" />
+        <img src="img/4.boss/8.parts/troll_0005_scull.png" style="position:absolute; top:148px; left:60px; z-index:3;" />
+        <img src="img/4.boss/8.parts/troll_0004_left-brow.png" style="position:absolute; top:100px; left:74px; z-index:3;" />
+        <img src="img/4.boss/8.parts/troll_0003_right-brow.png" style="position:absolute; top:96px; left:140px; z-index:3;" />
+      </div>
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="restartGame()">Try Again</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby('lobby')">Back to Menu</button>
+      </div>
+    </div>
+  `;
+}
+
 function getVictoryTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">

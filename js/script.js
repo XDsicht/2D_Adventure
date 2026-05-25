@@ -46,6 +46,9 @@ function getTemplate(id) {
   if (id == "victory") {
     return getVictoryTemplate();
   }
+  if (id == "gameOver") {
+    return getGameOverTemplate();
+  }
 }
 
 function startLobbyMusic(event) {

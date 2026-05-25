@@ -92,6 +92,15 @@ canvas {
   transform-origin: bottom center;
 }
 
+.endboss-head {
+  position: relative;
+  width: 220px;
+  height: 280px;
+  image-rendering: pixelated;
+  animation: wobble 1.8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
 @keyframes wobble {
   0% {
     transform: rotate(-16deg);
