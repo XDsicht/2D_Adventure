@@ -50,13 +50,13 @@ class Endboss extends Enemy {
   };
 
   endbossSounds = {
-    isAttackingSound: new Audio('audio/endboss_audio/endboss_attack_sound.mp3'),
-    isWalkingSound: new Audio('audio/endboss_audio/endboss_walking_sound.mp3'),
-    isRunningSound: new Audio ('audio/endboss_audio/endboss_running_sound.mp3'), 
-    isHitSound: new Audio('audio/enemy_audio/enemy_arrow_impact_sound.mp3'),
-    isHurtSound: new Audio('audio/endboss_audio/endboss_hurt_sound.mp3'),
-    isDeadSound: new Audio('audio/endboss_audio/endboss_dead_sound.mp3')
-  }
+    isAttackingSound: new Audio("audio/endboss_audio/endboss_attack_sound.mp3"),
+    isWalkingSound: new Audio("audio/endboss_audio/endboss_walking_sound.mp3"),
+    isRunningSound: new Audio("audio/endboss_audio/endboss_running_sound.mp3"),
+    isHitSound: new Audio("audio/enemy_audio/enemy_arrow_impact_sound.mp3"),
+    isHurtSound: new Audio("audio/endboss_audio/endboss_hurt_sound.mp3"),
+    isDeadSound: new Audio("audio/endboss_audio/endboss_dead_sound.mp3"),
+  };
 
   constructor() {
     super().loadImage(this.ENDBOSS_IMAGES_WALKING[0]);

@@ -1,43 +1,45 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="icon" type="image/x-icon" href="img/5.elements/coins/Bronze_30.png" />
-    <title>Adventures of Vorga Flammenherz</title>
-    <script src="js/script.js"></script>
-    <script src="js/template.js"></script>
-    <script src="js/sounds.js"></script>
-    <script src="models/keyboard.class.js"></script>
-    <script src="js/game.js"></script>
-    <script src="models/drawable-object.class.js"></script>
-    <script src="models/movable-object.class.js"></script>
-    <script src="models/character.class.js"></script>
-    <script src="models/enemy.class.js"></script>
-    <script src="models/troll_1.class.js"></script>
-    <script src="models/troll_2.class.js"></script>
-    <script src="models/cloud.class.js"></script>
-    <script src="models/background-object.class.js"></script>
-    <script src="models/status-bar.class.js"></script>
-    <script src="models/health-bar.class.js"></script>
-    <script src="models/quiver.class.js"></script>
-    <script src="models/coin-bar.class.js"></script>
-    <script src="models/throwable-object.class.js"></script>
-    <script src="models/coin.class.js"></script>
-    <script src="models/arrow.class.js"></script>
-    <script src="models/world.class.js"></script>
-    <script src="models/level.class.js"></script>
-    <script src="models/endboss.class.js"></script>
-    <script src="levels/level1.js"></script>
-  </head>
 
-  <body class="bg-cover d-flex-center" onload="renderLobby('lobby')">
-    <div class="game-container flex-center-column">
-      <h1 class="game-title letter-spacing-2">Adventures of Vorga Flammenherz</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/x-icon" href="img/5.elements/coins/Bronze_30.png" />
+  <title>Adventures of Vorga Flammenherz</title>
+  <script src="js/script.js"></script>
+  <script src="js/template.js"></script>
+  <script src="js/sounds.js"></script>
+  <script src="models/keyboard.class.js"></script>
+  <script src="js/game.js"></script>
+  <script src="models/drawable-object.class.js"></script>
+  <script src="models/movable-object.class.js"></script>
+  <script src="models/character.class.js"></script>
+  <script src="models/enemy.class.js"></script>
+  <script src="models/troll_1.class.js"></script>
+  <script src="models/troll_2.class.js"></script>
+  <script src="models/cloud.class.js"></script>
+  <script src="models/background-object.class.js"></script>
+  <script src="models/status-bar.class.js"></script>
+  <script src="models/health-bar.class.js"></script>
+  <script src="models/quiver.class.js"></script>
+  <script src="models/coin-bar.class.js"></script>
+  <script src="models/throwable-object.class.js"></script>
+  <script src="models/coin.class.js"></script>
+  <script src="models/arrow.class.js"></script>
+  <script src="models/world.class.js"></script>
+  <script src="models/level.class.js"></script>
+  <script src="models/endboss.class.js"></script>
+  <script src="levels/level1.js"></script>
+</head>
 
-      <canvas class="d_none borders" width="720" height="480" id="canvas"></canvas>
-      <div class="lobby d-flex-center bg-cover borders" id="lobby"></div>
-    </div>
-  </body>
+<body class="bg-cover d-flex-center" onload="renderLobby('lobby')">
+  <div class="game-container flex-center-column">
+    <h1 class="game-title letter-spacing-2">Adventures of Vorga Flammenherz</h1>
+
+    <canvas class="d_none borders" width="720" height="480" id="canvas"></canvas>
+    <div class="lobby d-flex-center bg-cover borders" id="lobby"></div>
+  </div>
+</body>
+
 </html>

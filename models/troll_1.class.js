@@ -1,5 +1,4 @@
 class Troll_1 extends Enemy {
-
   IMAGES_IDLE = [
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_000.png",
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_001.png",

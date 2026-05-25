@@ -61,8 +61,8 @@ class Enemy extends MovableObject {
       playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     }
   }
-//  Continue here!
-  playEnemyBasedSounds(){
+  //  Continue here!
+  playEnemyBasedSounds() {
     this.playEnemyDeadSound();
     this.playEnemyWalkingSound();
     this.playEnemyHurtSound();
@@ -76,8 +76,8 @@ class Enemy extends MovableObject {
       this.playAnimation(imagesDead);
     } else {
       this.loadImage(imagesDead[imagesDead.length - 1]);
-      if(this.enemySoundLibrary){
-      this.enemySoundLibrary.isDeadSound.pause();
+      if (this.enemySoundLibrary) {
+        this.enemySoundLibrary.isDeadSound.pause();
       }
       registerInterval(
         setTimeout(() => {

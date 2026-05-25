@@ -284,7 +284,7 @@ class World {
 
   requestCurrentCharacterDirection() {
     if (this.character.isAttacking && !this.character.releaseArrow) {
-      return this.character.otherDirection = this.character.currentDirection;
+      return (this.character.otherDirection = this.character.currentDirection);
     }
   }
 

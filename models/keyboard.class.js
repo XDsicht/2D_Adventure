@@ -1,8 +1,8 @@
 class Keyboard {
-    LEFT = false;
-    RIGHT = false;
-    UP = false;
-    DOWN = false;
-    SPACE = false;
-    D = false; // For throwing objects
+  LEFT = false;
+  RIGHT = false;
+  UP = false;
+  DOWN = false;
+  SPACE = false;
+  D = false; // For throwing objects
 }

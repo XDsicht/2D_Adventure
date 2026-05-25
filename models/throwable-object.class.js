@@ -37,9 +37,9 @@ class ThrowableObject extends MovableObject {
   defineSpeedX() {
     if (this.isAboveGround()) {
       if (this.otherDirection) {
-        return this.x -= this.speedX;
+        return (this.x -= this.speedX);
       } else {
-        return this.x += this.speedX;
+        return (this.x += this.speedX);
       }
     }
   }
