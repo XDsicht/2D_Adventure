@@ -1,4 +1,94 @@
 class Enemy extends MovableObject {
+  ENDBOSS_IMAGES_IDLE = [
+    "img/4.boss/1.idle/Idle_000.png",
+    "img/4.boss/1.idle/Idle_001.png",
+    "img/4.boss/1.idle/Idle_002.png",
+    "img/4.boss/1.idle/Idle_003.png",
+    "img/4.boss/1.idle/Idle_004.png",
+    "img/4.boss/1.idle/Idle_005.png",
+    "img/4.boss/1.idle/Idle_006.png",
+    "img/4.boss/1.idle/Idle_007.png",
+    "img/4.boss/1.idle/Idle_008.png",
+    "img/4.boss/1.idle/Idle_009.png",
+  ];
+
+  ENDBOSS_IMAGES_WALKING = [
+    "img/4.boss/2.walk/Walk_000.png",
+    "img/4.boss/2.walk/Walk_001.png",
+    "img/4.boss/2.walk/Walk_002.png",
+    "img/4.boss/2.walk/Walk_003.png",
+    "img/4.boss/2.walk/Walk_004.png",
+    "img/4.boss/2.walk/Walk_005.png",
+    "img/4.boss/2.walk/Walk_006.png",
+    "img/4.boss/2.walk/Walk_007.png",
+    "img/4.boss/2.walk/Walk_008.png",
+    "img/4.boss/2.walk/Walk_009.png",
+  ];
+
+  ENDBOSS_IMAGES_RUN = [
+    "img/4.boss/3.run/Run_000.png",
+    "img/4.boss/3.run/Run_001.png",
+    "img/4.boss/3.run/Run_002.png",
+    "img/4.boss/3.run/Run_003.png",
+    "img/4.boss/3.run/Run_004.png",
+    "img/4.boss/3.run/Run_005.png",
+    "img/4.boss/3.run/Run_006.png",
+    "img/4.boss/3.run/Run_007.png",
+    "img/4.boss/3.run/Run_008.png",
+    "img/4.boss/3.run/Run_009.png",
+  ];
+
+  ENDBOSS_IMAGES_JUMPING = [
+    "img/4.boss/4.jump/Jump_000.png",
+    "img/4.boss/4.jump/Jump_001.png",
+    "img/4.boss/4.jump/Jump_002.png",
+    "img/4.boss/4.jump/Jump_003.png",
+    "img/4.boss/4.jump/Jump_004.png",
+    "img/4.boss/4.jump/Jump_005.png",
+    "img/4.boss/4.jump/Jump_006.png",
+    "img/4.boss/4.jump/Jump_007.png",
+    "img/4.boss/4.jump/Jump_008.png",
+    "img/4.boss/4.jump/Jump_009.png",
+  ];
+
+  ENDBOSS_IMAGES_HURT = [
+    "img/4.boss/6.hurt/Hurt_000.png",
+    "img/4.boss/6.hurt/Hurt_001.png",
+    "img/4.boss/6.hurt/Hurt_002.png",
+    "img/4.boss/6.hurt/Hurt_003.png",
+    "img/4.boss/6.hurt/Hurt_004.png",
+    "img/4.boss/6.hurt/Hurt_005.png",
+    "img/4.boss/6.hurt/Hurt_006.png",
+    "img/4.boss/6.hurt/Hurt_007.png",
+    "img/4.boss/6.hurt/Hurt_008.png",
+    "img/4.boss/6.hurt/Hurt_009.png",
+  ];
+
+  ENDBOSS_IMAGES_DEAD = [
+    "img/4.boss/7.dead/Dead_000.png",
+    "img/4.boss/7.dead/Dead_001.png",
+    "img/4.boss/7.dead/Dead_002.png",
+    "img/4.boss/7.dead/Dead_003.png",
+    "img/4.boss/7.dead/Dead_004.png",
+    "img/4.boss/7.dead/Dead_005.png",
+    "img/4.boss/7.dead/Dead_006.png",
+    "img/4.boss/7.dead/Dead_007.png",
+    "img/4.boss/7.dead/Dead_008.png",
+    "img/4.boss/7.dead/Dead_009.png",
+  ];
+
+  ENDBOSS_IMAGES_ATTACKING = [
+    "img/4.boss/5.attack/Attack_001.png",
+    "img/4.boss/5.attack/Attack_002.png",
+    "img/4.boss/5.attack/Attack_003.png",
+    "img/4.boss/5.attack/Attack_004.png",
+    "img/4.boss/5.attack/Attack_005.png",
+    "img/4.boss/5.attack/Attack_006.png",
+    "img/4.boss/5.attack/Attack_007.png",
+    "img/4.boss/5.attack/Attack_008.png",
+    "img/4.boss/5.attack/Attack_009.png",
+  ];
+  
   height = 240;
   width = 240;
   y = 226;
@@ -14,6 +104,18 @@ class Enemy extends MovableObject {
     right: 50,
     bottom: 35,
   };
+
+  stompOffset = {
+    left: 100,
+    right: 75,
+  };
+
+  getStompOffset() {
+    return {
+      left: this.otherDirection ? this.stompOffset.right : this.stompOffset.left,
+      right: this.otherDirection ? this.stompOffset.left : this.stompOffset.right,
+    };
+  }
 
   enemySounds = {
     isAttackingSound: new Audio("audio/enemy_audio/enemy_attack_sound.mp3"),
@@ -61,7 +163,7 @@ class Enemy extends MovableObject {
       playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     }
   }
-  //  Continue here!
+
   playEnemyBasedSounds() {
     this.playEnemyDeadSound();
     this.playEnemyWalkingSound();
@@ -168,94 +270,4 @@ class Enemy extends MovableObject {
       this.move();
     }
   }
-
-  ENDBOSS_IMAGES_IDLE = [
-    "img/4.boss/1.idle/Idle_000.png",
-    "img/4.boss/1.idle/Idle_001.png",
-    "img/4.boss/1.idle/Idle_002.png",
-    "img/4.boss/1.idle/Idle_003.png",
-    "img/4.boss/1.idle/Idle_004.png",
-    "img/4.boss/1.idle/Idle_005.png",
-    "img/4.boss/1.idle/Idle_006.png",
-    "img/4.boss/1.idle/Idle_007.png",
-    "img/4.boss/1.idle/Idle_008.png",
-    "img/4.boss/1.idle/Idle_009.png",
-  ];
-
-  ENDBOSS_IMAGES_WALKING = [
-    "img/4.boss/2.walk/Walk_000.png",
-    "img/4.boss/2.walk/Walk_001.png",
-    "img/4.boss/2.walk/Walk_002.png",
-    "img/4.boss/2.walk/Walk_003.png",
-    "img/4.boss/2.walk/Walk_004.png",
-    "img/4.boss/2.walk/Walk_005.png",
-    "img/4.boss/2.walk/Walk_006.png",
-    "img/4.boss/2.walk/Walk_007.png",
-    "img/4.boss/2.walk/Walk_008.png",
-    "img/4.boss/2.walk/Walk_009.png",
-  ];
-
-  ENDBOSS_IMAGES_RUN = [
-    "img/4.boss/3.run/Run_000.png",
-    "img/4.boss/3.run/Run_001.png",
-    "img/4.boss/3.run/Run_002.png",
-    "img/4.boss/3.run/Run_003.png",
-    "img/4.boss/3.run/Run_004.png",
-    "img/4.boss/3.run/Run_005.png",
-    "img/4.boss/3.run/Run_006.png",
-    "img/4.boss/3.run/Run_007.png",
-    "img/4.boss/3.run/Run_008.png",
-    "img/4.boss/3.run/Run_009.png",
-  ];
-
-  ENDBOSS_IMAGES_JUMPING = [
-    "img/4.boss/4.jump/Jump_000.png",
-    "img/4.boss/4.jump/Jump_001.png",
-    "img/4.boss/4.jump/Jump_002.png",
-    "img/4.boss/4.jump/Jump_003.png",
-    "img/4.boss/4.jump/Jump_004.png",
-    "img/4.boss/4.jump/Jump_005.png",
-    "img/4.boss/4.jump/Jump_006.png",
-    "img/4.boss/4.jump/Jump_007.png",
-    "img/4.boss/4.jump/Jump_008.png",
-    "img/4.boss/4.jump/Jump_009.png",
-  ];
-
-  ENDBOSS_IMAGES_HURT = [
-    "img/4.boss/6.hurt/Hurt_000.png",
-    "img/4.boss/6.hurt/Hurt_001.png",
-    "img/4.boss/6.hurt/Hurt_002.png",
-    "img/4.boss/6.hurt/Hurt_003.png",
-    "img/4.boss/6.hurt/Hurt_004.png",
-    "img/4.boss/6.hurt/Hurt_005.png",
-    "img/4.boss/6.hurt/Hurt_006.png",
-    "img/4.boss/6.hurt/Hurt_007.png",
-    "img/4.boss/6.hurt/Hurt_008.png",
-    "img/4.boss/6.hurt/Hurt_009.png",
-  ];
-
-  ENDBOSS_IMAGES_DEAD = [
-    "img/4.boss/7.dead/Dead_000.png",
-    "img/4.boss/7.dead/Dead_001.png",
-    "img/4.boss/7.dead/Dead_002.png",
-    "img/4.boss/7.dead/Dead_003.png",
-    "img/4.boss/7.dead/Dead_004.png",
-    "img/4.boss/7.dead/Dead_005.png",
-    "img/4.boss/7.dead/Dead_006.png",
-    "img/4.boss/7.dead/Dead_007.png",
-    "img/4.boss/7.dead/Dead_008.png",
-    "img/4.boss/7.dead/Dead_009.png",
-  ];
-
-  ENDBOSS_IMAGES_ATTACKING = [
-    "img/4.boss/5.attack/Attack_001.png",
-    "img/4.boss/5.attack/Attack_002.png",
-    "img/4.boss/5.attack/Attack_003.png",
-    "img/4.boss/5.attack/Attack_004.png",
-    "img/4.boss/5.attack/Attack_005.png",
-    "img/4.boss/5.attack/Attack_006.png",
-    "img/4.boss/5.attack/Attack_007.png",
-    "img/4.boss/5.attack/Attack_008.png",
-    "img/4.boss/5.attack/Attack_009.png",
-  ];
 }

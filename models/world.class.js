@@ -58,6 +58,7 @@ class World {
     this.checkEnemyWalkingCollisions(this.level.enemies);
     this.checkCharacterJumpingCollisions();
     this.checkCharacterWalkingCollisions();
+    this.checkEndbossCollisionWhileCharacterIsJumping();
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
     this.checkCollisionsWithCollectibles(this.level.coins, this.coinBar);
   }
@@ -93,7 +94,7 @@ class World {
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (!(enemy instanceof Endboss)) {
-        if (this.character.isCollidingVertically(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
+        if (this.character.isCollidingVertically(enemy) && this.isStompingBody(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
           this.character.bounce();
           enemy.isDead();
           enemy.resetCurrentImage();
@@ -104,9 +105,29 @@ class World {
     });
   }
 
+  isStompingBody(enemy) {
+    let characterCenterX = this.character.x + this.character.width / 2;
+    let stompOffset = enemy.getStompOffset();
+    return characterCenterX > enemy.x + stompOffset.left && characterCenterX < enemy.x + enemy.width - stompOffset.right;
+  }
+
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.checkWalkingCollisionStatus(enemy)) {
+        this.character.addPendingDamage(enemy, 20);
+        this.character.lastAttacker = enemy;
+        enemy.hasDealtDamage = true;
+      }
+      if (!this.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
+        enemy.hasDealtDamage = false;
+      }
+    });
+  }
+
+  checkEndbossCollisionWhileCharacterIsJumping() {
+    this.level.enemies.forEach((enemy) => {
+      if (!(enemy instanceof Endboss) || enemy.dead) return;
+      if (this.character.isAboveGround() && this.character.isColliding(enemy) && !this.character.isHurt() && !enemy.hasDealtDamage) {
         this.character.addPendingDamage(enemy, 20);
         this.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
