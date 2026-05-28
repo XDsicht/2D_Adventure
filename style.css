@@ -117,6 +117,7 @@ canvas {
   background: linear-gradient(180deg, #8b5e3c 0%, #5a3820 50%, #3d2410 100%);
   color: #f5e6c8;
   transition: all 0.2s ease;
+  font-family: "Uncial Antiqua", system-ui;
 }
 
 .fantasy-btn:hover {

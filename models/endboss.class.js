@@ -30,15 +30,15 @@ class Endboss extends Enemy {
 
   offset = {
     top: 160,
-    left: 40,
-    right: 20,
+    left: 80,
+    right: 60,
     bottom: 10,
   };
 
   offsetRun = {
     top: 160,
-    left: 50,
-    right: 30,
+    left: 100,
+    right: 70,
     bottom: 10,
   };
 
