@@ -47,7 +47,9 @@ function playSound(audio, audioVolume) {
   activateLoop(audio);
   getMuteStatus(audio);
   applyAudioState(audio, audioVolume);
-  audio.play();
+  audio.play().catch((error) => {
+    if (error.name !== "AbortError") console.error(error);
+  });
 }
 
 function stopSound(audio) {
@@ -96,7 +98,6 @@ function stopAllGameSounds() {
 function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
-  allGameSounds.forEach((audio) => console.log(audio.muted));
   checkMuteStatus("mute-all-btn");
 }
 

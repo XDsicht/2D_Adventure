@@ -96,9 +96,8 @@ class World {
       if (!(enemy instanceof Endboss)) {
         if (this.character.isCollidingVertically(enemy) && this.isStompingBody(enemy) && this.character.isAboveGround() && !this.character.dead && !enemy.dead) {
           this.character.bounce();
-          enemy.isDead();
-          enemy.resetCurrentImage();
-          enemy.dead = true;
+          enemy.energy = 0;
+          enemy.checkIfEnemyIsDead();
           enemy.isAttacking = false;
         }
       }

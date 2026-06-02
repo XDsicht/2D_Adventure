@@ -187,11 +187,6 @@ class Enemy extends MovableObject {
         this.enemySoundLibrary.isDeadSound.pause();
       }
       this.setEnemyDeadTimeout();
-      // registerInterval(
-      //   setTimeout(() => {
-      //     return (this.delete = true);
-      //   }, 800),
-      // );
     }
   }
 
