@@ -291,8 +291,8 @@ class Character extends MovableObject {
   }
 
   executeHurtAnimation() {
-    this.playAnimation(this.IMAGES_HURT);
     this.playHurtSound();
+    this.playAnimation(this.IMAGES_HURT);
   }
 
   executeJumpAnimation() {
@@ -354,6 +354,7 @@ class Character extends MovableObject {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime();
+      this.resetCurrentImage();
     }
   }
 

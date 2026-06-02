@@ -4,6 +4,7 @@ let keyboard = new Keyboard();
 let intervalRegistry = [];
 
 function startGame() {
+  document.removeEventListener("click", startLobbyMusic);
   initLevel1();
   stopSound(lobbyMusic);
   canvas = getElement("canvas");
@@ -11,9 +12,9 @@ function startGame() {
   showElement(canvas);
   hideElement(gameLobby);
   world = new World(canvas, keyboard);
+  registerGameSound(backgroundMusic);
   backgroundMusic.currentTime = 3;
   playSound(backgroundMusic, backGroundMusicVolume);
-  registerGameSound(backgroundMusic);
   registerInterval(
     setInterval(() => {
       checkIfGameOver();
@@ -94,12 +95,14 @@ function showVictoryScreen() {
   hideElement(getElement("canvas"));
   showElement(getElement("lobby"));
   renderHTML("victory");
+  playSound(lobbyMusic, lobbyMusicVolume);
 }
 
 function showGameOverScreen() {
   hideElement(getElement("canvas"));
   showElement(getElement("lobby"));
   renderHTML("gameOver");
+  playSound(lobbyMusic, lobbyMusicVolume);
 }
 
 function restartGame() {
