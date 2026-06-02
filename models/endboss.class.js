@@ -205,6 +205,7 @@ class Endboss extends Enemy {
   playEndbossHurtAnimation() {
     this.getHurtDimensions();
     this.updateXOffset(this.hurtWidth);
+    this.playEnemyBasedHurtSound();
     this.playAnimation(this.ENDBOSS_IMAGES_HURT);
   }
 

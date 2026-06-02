@@ -164,11 +164,16 @@ class Enemy extends MovableObject {
     }
   }
 
-  playEnemyBasedSounds() {
-    this.playEnemyDeadSound();
-    this.playEnemyWalkingSound();
-    this.playEnemyHurtSound();
-    this.playEnemyAttackingSound();
+  playEnemyBasedHurtSound() {
+    if (this.currentImage === 0) {
+      if (this instanceof Troll_1 || this instanceof Troll_2) {
+        this.enemySoundLibrary = this.enemySounds;
+      } else {
+        this.enemySoundLibrary = this.endbossSounds;
+      }
+      this.enemySoundLibrary.isHurtSound.currentTime = 0;
+      playSound(this.enemySoundLibrary.isHurtSound, gameSoundsVolume);
+    }
   }
 
   playEnemyDeadAnimation() {
@@ -181,12 +186,21 @@ class Enemy extends MovableObject {
       if (this.enemySoundLibrary) {
         this.enemySoundLibrary.isDeadSound.pause();
       }
-      registerInterval(
-        setTimeout(() => {
-          return (this.delete = true);
-        }, 800),
-      );
+      this.setEnemyDeadTimeout();
+      // registerInterval(
+      //   setTimeout(() => {
+      //     return (this.delete = true);
+      //   }, 800),
+      // );
     }
+  }
+
+  setEnemyDeadTimeout() {
+    registerInterval(
+      setTimeout(() => {
+        return (this.delete = true);
+      }, 800),
+    );
   }
 
   getImagesDead() {
@@ -253,6 +267,7 @@ class Enemy extends MovableObject {
     if (this.dead) {
       this.playEnemyDeadAnimation();
     } else if (this.isHurt()) {
+      this.playEnemyBasedHurtSound();
       this.playAnimation(this.IMAGES_HURT);
     } else if (this.world.character.isHurt() && this.isAttacking) {
       this.playAnimation(this.IMAGES_IDLE);
