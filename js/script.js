@@ -34,6 +34,9 @@ function renderHTML(id) {
 }
 
 function getTemplate(id) {
+  if (id == "loading") {
+    return getLoadingTemplate();
+  }
   if (id == "lobby") {
     return getLobbyTemplate();
   }
