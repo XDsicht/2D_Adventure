@@ -19,9 +19,12 @@ async function startGame() {
       checkIfGameOver();
     }, 100),
   );
-  await new Promise((resolve) => requestAnimationFrame(resolve));
-  showElement(canvas);
-  hideElement(gameLobby);
+  registerInterval(
+    setTimeout(() => {
+      showElement(canvas);
+      hideElement(gameLobby);
+    }, 1500)
+  );
 }
 
 window.addEventListener("keydown", async (event) => {
