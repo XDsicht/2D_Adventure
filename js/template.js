@@ -97,16 +97,6 @@ function getGameOverTemplate() {
   `;
 }
 
-function getErrorTemplate() {
-  return `
-    <div class="overlay-btn-group flex-center-column">
-      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Error</h2>
-      <p class="text-shadow-standard letter-spacing-2">Failed to load game assets. Please reload the page.</p>
-      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="location.reload()">Reload</button>
-    </div>
-  `;
-}
-
 function getVictoryTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">

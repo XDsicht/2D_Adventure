@@ -3,7 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let intervalRegistry = [];
 
-async function startGame() {
+function startGame() {
   renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
   initLevel1();

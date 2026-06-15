@@ -37,10 +37,7 @@ function getTemplate(id) {
   if (id == "loading") {
     return getLoadingTemplate();
   }
-  if (id == "error") {
-    return getErrorTemplate();
-  }
-  if (id == "lobby") {
+if (id == "lobby") {
     return getLobbyTemplate();
   }
   if (id == "controls") {
