@@ -10,20 +10,32 @@ function startGame() {
   stopSound(lobbyMusic);
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
+  initGame(canvas);
+  hideLoadingScreen(canvas, gameLobby);
+  monitorGameOver();
+}
+
+function initGame(canvas) {
   world = new World(canvas, keyboard);
   registerGameSound(backgroundMusic);
   backgroundMusic.currentTime = 3;
   playSound(backgroundMusic, backGroundMusicVolume);
-  registerInterval(
-    setInterval(() => {
-      checkIfGameOver();
-    }, 100),
-  );
+}
+
+function hideLoadingScreen(canvas, gameLobby) {
   registerInterval(
     setTimeout(() => {
       showElement(canvas);
       hideElement(gameLobby);
-    }, 1500)
+    }, 1500),
+  );
+}
+
+function monitorGameOver() {
+  registerInterval(
+    setInterval(() => {
+      checkIfGameOver();
+    }, 100),
   );
 }
 
