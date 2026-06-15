@@ -3,14 +3,13 @@ let world;
 let keyboard = new Keyboard();
 let intervalRegistry = [];
 
-function startGame() {
+async function startGame() {
+  renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
   initLevel1();
   stopSound(lobbyMusic);
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
-  showElement(canvas);
-  hideElement(gameLobby);
   world = new World(canvas, keyboard);
   registerGameSound(backgroundMusic);
   backgroundMusic.currentTime = 3;
@@ -20,6 +19,9 @@ function startGame() {
       checkIfGameOver();
     }, 100),
   );
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  showElement(canvas);
+  hideElement(gameLobby);
 }
 
 window.addEventListener("keydown", async (event) => {
