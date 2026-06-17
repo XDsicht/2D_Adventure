@@ -61,4 +61,24 @@ function startLobbyMusic(event) {
   }
 }
 
+function forceRotatePhone() {
+  let isPortraitMode = checkOrientation();
+  let isMobile = checkIfMobile();
+  // if (isMobile && isPortraitMode) {
+  //   if (world && world.gameRunning) {
+  //     endGame();
+  //   }
+  //   showMenuTab("rotateYourPhone");
+  // } else {
+  //   showMenuTab("title", titleBg);
+  // }
+}
+
+function checkIfMobile() {
+  return window.innerWidth < 720 || window.innerHeight < 480;
+}
+
+function checkOrientation() {
+  return window.innerWidth < window.innerHeight;
+}
 document.addEventListener("click", startLobbyMusic);
