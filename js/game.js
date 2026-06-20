@@ -15,7 +15,6 @@ function startGame() {
 function waitForLandscape() {
   if (!checkOrientation()) {
     window.removeEventListener("resize", waitForLandscape);
-    launchGame();
   }
 }
 

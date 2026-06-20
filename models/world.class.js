@@ -14,6 +14,7 @@ class World {
   coinBar = new CoinBar();
   arrowInventory = 0;
   initialObstacleSpawn = 600;
+  paused = false;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -37,6 +38,7 @@ class World {
   run() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         this.checkCollisions();
         this.applyDamageFromEnemies();
         this.character.resetDamageAccumulation();
@@ -45,6 +47,14 @@ class World {
         this.removeDeadEnemies();
       }, 100),
     );
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  resume() {
+    this.paused = false;
   }
 
   applyDamageFromEnemies() {
@@ -289,13 +299,15 @@ class World {
   }
 
   draw() {
-    this.updateCamera();
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.translate(this.camera_x, 0);
-    this.addStaticObjectsToGame();
-    this.addMovingObjectsToGame();
-    this.ctx.translate(-this.camera_x, 0);
-    this.addCharacterBarsToGame();
+    if (!this.paused) {
+      this.updateCamera();
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.translate(this.camera_x, 0);
+      this.addStaticObjectsToGame();
+      this.addMovingObjectsToGame();
+      this.ctx.translate(-this.camera_x, 0);
+      this.addCharacterBarsToGame();
+    }
     let self = this;
     requestAnimationFrame(function () {
       self.draw();

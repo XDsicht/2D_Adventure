@@ -17,6 +17,15 @@ function renderSoundControls(id) {
   allMuteIcon = setMuteAllButton("mute-all-btn", muted);
 }
 
+function initApp() {
+  if (forceRotatePhone()) {
+    renderHTML("rotatePhone");
+    window.addEventListener("resize", waitForLandscape);
+  } else {
+    renderLobby("lobby");
+  }
+}
+
 function renderLobby(id) {
   renderHTML(id);
   checkIfSoundArrayExists();
