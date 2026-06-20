@@ -52,6 +52,9 @@ if (id == "lobby") {
   if (id == "gameOver") {
     return getGameOverTemplate();
   }
+  if (id == "rotatePhone") {
+    return getRotatePhoneTemplate();
+  }
 }
 
 function startLobbyMusic(event) {
@@ -64,14 +67,7 @@ function startLobbyMusic(event) {
 function forceRotatePhone() {
   let isPortraitMode = checkOrientation();
   let isMobile = checkIfMobile();
-  // if (isMobile && isPortraitMode) {
-  //   if (world && world.gameRunning) {
-  //     endGame();
-  //   }
-  //   showMenuTab("rotateYourPhone");
-  // } else {
-  //   showMenuTab("title", titleBg);
-  // }
+  return isMobile && isPortraitMode
 }
 
 function checkIfMobile() {
@@ -81,4 +77,5 @@ function checkIfMobile() {
 function checkOrientation() {
   return window.innerWidth < window.innerHeight;
 }
+
 document.addEventListener("click", startLobbyMusic);

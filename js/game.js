@@ -4,6 +4,22 @@ let keyboard = new Keyboard();
 let intervalRegistry = [];
 
 function startGame() {
+  if (forceRotatePhone()) {
+    renderHTML("rotatePhone");
+    window.addEventListener("resize", waitForLandscape);
+  } else {
+    launchGame();
+  }
+}
+
+function waitForLandscape() {
+  if (!checkOrientation()) {
+    window.removeEventListener("resize", waitForLandscape);
+    launchGame();
+  }
+}
+
+function launchGame() {
   renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
   initLevel1();
