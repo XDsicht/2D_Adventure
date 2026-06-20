@@ -15,6 +15,7 @@ function startGame() {
 function waitForLandscape() {
   if (!checkOrientation()) {
     window.removeEventListener("resize", waitForLandscape);
+    startGame();
   }
 }
 
@@ -42,8 +43,34 @@ function hideLoadingScreen(canvas, gameLobby) {
     setTimeout(() => {
       showElement(canvas);
       hideElement(gameLobby);
+      window.addEventListener("resize", pauseOnPortraitMode);
     }, 1500),
   );
+}
+
+function pauseOnPortraitMode() {
+  if (forceRotatePhone()) {
+    world.pause();
+    stopAllGameSounds();
+    hideElement(canvas);
+    showElement(gameLobby);
+    renderHTML("rotatePhone");
+    window.removeEventListener("resize", pauseOnPortraitMode);
+    window.addEventListener("resize", resumeOnLandscapeMode);
+  }
+}
+
+function resumeOnLandscapeMode() {
+  if (!checkOrientation()) {
+    world.resume();
+    if (!backgroundMusic.muted) {
+      playSound(backgroundMusic, backGroundMusicVolume);
+    }
+    hideElement(gameLobby);
+    showElement(canvas);
+    window.removeEventListener("resize", resumeOnLandscapeMode);
+    window.addEventListener("resize", pauseOnPortraitMode);
+  }
 }
 
 function monitorGameOver() {
@@ -124,6 +151,8 @@ function checkIfGameOver() {
 }
 
 function showVictoryScreen() {
+  window.removeEventListener("resize", pauseOnPortraitMode);
+  window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
   showElement(getElement("lobby"));
   renderHTML("victory");
@@ -131,6 +160,8 @@ function showVictoryScreen() {
 }
 
 function showGameOverScreen() {
+  window.removeEventListener("resize", pauseOnPortraitMode);
+  window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
   showElement(getElement("lobby"));
   renderHTML("gameOver");
