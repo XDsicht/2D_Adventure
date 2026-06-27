@@ -20,7 +20,7 @@ function renderSoundControls(id) {
 function initApp() {
   if (forceRotatePhone()) {
     renderHTML("rotatePhone");
-    window.addEventListener("resize", waitForLandscape);
+    window.addEventListener("resize", resumeOnLandscapeMode);
   } else {
     renderLobby("lobby");
   }
@@ -29,6 +29,7 @@ function initApp() {
 function renderLobby(id) {
   renderHTML(id);
   checkIfSoundArrayExists();
+  window.addEventListener("resize", pauseOnPortraitMode);
 }
 
 function checkIfSoundArrayExists() {

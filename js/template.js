@@ -104,7 +104,7 @@ function getRotatePhoneTemplate() {
       <div class="rotate-phone">
         <img class="phone-red" src="img/7.responsive/rotate_phone_red.png" alt="rotate phone" />
         <img class="phone-green" src="img/7.responsive/rotate_phone_green.png" alt="rotate phone" />
-        <img class="phone-original" src="img/7.responsive/rotate_phone_black" alt="rotate phone" />
+        <img class="phone-original" src="img/7.responsive/rotate_phone_black.png" alt="rotate phone" />
       </div>
       <p class="letter-spacing-2">To play in Landscape</p>
     </div>

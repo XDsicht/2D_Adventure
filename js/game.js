@@ -20,6 +20,7 @@ function waitForLandscape() {
 }
 
 function launchGame() {
+  window.removeEventListener("resize", pauseOnPortraitMode);
   renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
   initLevel1();
@@ -50,10 +51,12 @@ function hideLoadingScreen(canvas, gameLobby) {
 
 function pauseOnPortraitMode() {
   if (forceRotatePhone()) {
-    world.pause();
-    stopAllGameSounds();
-    hideElement(canvas);
-    showElement(gameLobby);
+    if (world) {
+      world.pause();
+      stopAllGameSounds();
+      hideElement(canvas);
+      showElement(gameLobby);
+    }
     renderHTML("rotatePhone");
     window.removeEventListener("resize", pauseOnPortraitMode);
     window.addEventListener("resize", resumeOnLandscapeMode);
@@ -61,13 +64,17 @@ function pauseOnPortraitMode() {
 }
 
 function resumeOnLandscapeMode() {
-  if (!checkOrientation()) {
-    world.resume();
-    if (!backgroundMusic.muted) {
-      playSound(backgroundMusic, backGroundMusicVolume);
+  if (!forceRotatePhone()) {
+    if (world) {
+      world.resume();
+      if (!backgroundMusic.muted) {
+        playSound(backgroundMusic, backGroundMusicVolume);
+      }
+      hideElement(gameLobby);
+      showElement(canvas);
+    } else {
+      renderLobby("lobby");
     }
-    hideElement(gameLobby);
-    showElement(canvas);
     window.removeEventListener("resize", resumeOnLandscapeMode);
     window.addEventListener("resize", pauseOnPortraitMode);
   }
