@@ -95,6 +95,14 @@ function stopAllGameSounds() {
   });
 }
 
+function stopAllSoundEffects() {
+  allGameSounds.forEach((audio) => {
+    if (audio === backgroundMusic) return;
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
+
 function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);

@@ -53,7 +53,7 @@ function pauseOnPortraitMode() {
   if (forceRotatePhone()) {
     if (world) {
       world.pause();
-      stopAllGameSounds();
+      stopAllSoundEffects();
       hideElement(canvas);
       showElement(gameLobby);
     }
@@ -67,9 +67,6 @@ function resumeOnLandscapeMode() {
   if (!forceRotatePhone()) {
     if (world) {
       world.resume();
-      if (!backgroundMusic.muted) {
-        playSound(backgroundMusic, backGroundMusicVolume);
-      }
       hideElement(gameLobby);
       showElement(canvas);
     } else {
