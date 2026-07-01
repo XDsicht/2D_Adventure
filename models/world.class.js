@@ -35,6 +35,24 @@ class World {
     });
   }
 
+  pause() {
+    this.paused = true;
+    this.character.pause();
+    this.level.enemies.forEach((enemy) => enemy.pause());
+    this.level.clouds.forEach((cloud) => cloud.pause());
+    this.level.coins.forEach((coin) => coin.pause());
+    this.level.throwableObjects.forEach((arrow) => arrow.pause());
+  }
+
+  resume() {
+    this.paused = false;
+    this.character.resume();
+    this.level.enemies.forEach((enemy) => enemy.resume());
+    this.level.clouds.forEach((cloud) => cloud.resume());
+    this.level.coins.forEach((coin) => coin.resume());
+    this.level.throwableObjects.forEach((arrow) => arrow.resume());
+  }
+
   run() {
     registerInterval(
       setInterval(() => {
@@ -47,14 +65,6 @@ class World {
         this.removeDeadEnemies();
       }, 100),
     );
-  }
-
-  pause() {
-    this.paused = true;
-  }
-
-  resume() {
-    this.paused = false;
   }
 
   applyDamageFromEnemies() {
@@ -233,6 +243,7 @@ class World {
   checkArrowTrajectory() {
     let checkIfArrowIsFlying = registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         this.level.throwableObjects.forEach((arrow) => {
           if (!arrow.isAboveGround()) {
             this.level.throwableObjects.splice(0, 1);

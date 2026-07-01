@@ -157,6 +157,7 @@ class Endboss extends Enemy {
   playEndbossAnimations() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.checkIfWorldExists()) return;
         this.getStatusBasedAnimation();
       }, 100),
@@ -250,6 +251,7 @@ class Endboss extends Enemy {
   getEndbossMovementStatus() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.checkIfWorldExists()) return;
         this.checkIfEnemyIsDead();
         if (!this.isAttacking && this.activated) {

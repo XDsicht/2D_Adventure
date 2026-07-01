@@ -2,6 +2,7 @@ class DrawableObject {
   img;
   imageCache = {};
   currentImage = 0;
+  paused = false;
 
   loadImage(path) {
     this.img = new Image();
@@ -43,5 +44,13 @@ class DrawableObject {
 
   resetCurrentImage() {
     this.currentImage = 0;
+  }
+
+  pause() {
+    this.paused = true;
+  }
+
+  resume() {
+    this.paused = false;
   }
 }

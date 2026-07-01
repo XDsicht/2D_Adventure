@@ -150,6 +150,7 @@ class Character extends MovableObject {
   characterAttack() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
           this.activateDKey();
           this.resetAttackDelayTimer();
@@ -161,6 +162,7 @@ class Character extends MovableObject {
   characterActions() {
     let movements = registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         this.resetMovementStatus();
         this.getMovements();
         this.disableMovements(movements);
@@ -262,6 +264,7 @@ class Character extends MovableObject {
   characterMovementAnimationIntervals() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.isAttacking) return;
         return this.executeMovementAnimations();
       }, 1000 / 10),
@@ -313,6 +316,7 @@ class Character extends MovableObject {
   characterAttackAnimationIntervals() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.isAttacking) {
           this.playAnimation(this.IMAGES_ATTACKING);
         }

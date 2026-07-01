@@ -239,6 +239,7 @@ class Enemy extends MovableObject {
   animate() {
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.checkIfWorldExists()) return;
         this.checkIfEnemyIsDead();
         this.activateEnemy();
@@ -246,6 +247,7 @@ class Enemy extends MovableObject {
     );
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         if (this.checkIfWorldExists()) return;
         this.playStatusBasedAnimation();
       }, 100),

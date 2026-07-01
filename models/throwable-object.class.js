@@ -18,11 +18,13 @@ class ThrowableObject extends MovableObject {
     this.applyGravity();
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         this.defineSpeedX();
       }, 25),
     );
     registerInterval(
       setInterval(() => {
+        if (this.paused) return;
         this.defineAngle();
       }, 1000 / 20),
     );

@@ -83,6 +83,7 @@ function resumeOnLandscapeMode() {
 function monitorGameOver() {
   registerInterval(
     setInterval(() => {
+      if (world.paused) return;
       checkIfGameOver();
     }, 100),
   );
