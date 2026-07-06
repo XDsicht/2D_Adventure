@@ -81,7 +81,9 @@ function forceRotatePhone() {
 }
 
 function checkIfMobile() {
-  return window.innerWidth < 720 || window.innerHeight < 480;
+  let isSmallScreen = window.innerWidth < 720 || window.innerHeight < 480;
+  let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  return isSmallScreen || isTouchDevice;
 }
 
 function checkOrientation() {
