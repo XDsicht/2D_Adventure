@@ -18,6 +18,7 @@ function getLoadingTemplate() {
 function getLobbyTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
+      <h1 class="game-title inner-title letter-spacing-2">Adventures of Vorga Flammenherz</h1>
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
       <button class="fantasy-btn cursor-pointer start-btn" id="start-game-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">

@@ -47,6 +47,10 @@ body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.inner-title {
+  display: none;
+}
+
 .game-container {
   justify-content: center;
 }
@@ -318,14 +322,106 @@ canvas {
   100%     { transform: rotate(0deg); }
 }
 
-@media only screen and (max-width: 720px) {
-  canvas {
-    width: 100%;
+@media (max-width: 1024px), (pointer: coarse) {
+  .game-container {
+    width: 100vw;
+    height: 100dvh;
   }
-}
 
-@media only screen and (max-height: 480px) {
+  .lobby,
   canvas {
-    height: 100vh;
+    width: 100vw;
+    height: 100dvh;
+  }
+
+  .lobby.borders,
+  canvas.borders {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  canvas {
+    object-fit: contain;
+  }
+
+  .outer-title {
+    display: none;
+  }
+
+  .inner-title {
+    display: block;
+    font-size: 22px;
+    padding-bottom: 8px;
+  }
+
+  .character-head {
+    width: 120px;
+  }
+
+  .overlay-btn-group {
+    gap: 8px;
+  }
+
+  .overlay-btn-row {
+    gap: 8px;
+  }
+
+  .start-btn {
+    font-size: 18px;
+    letter-spacing: 2px;
+    border-width: 2px;
+    padding: 8px 24px;
+  }
+
+  .secondary-btn {
+    font-size: 14px;
+    padding: 6px 20px;
+  }
+
+  .sound-settings-title {
+    font-size: 22px;
+  }
+
+  .sound-control-row {
+    width: 90vw;
+    max-width: 280px;
+    gap: 8px;
+  }
+
+  .sound-control-row label {
+    font-size: 16px;
+  }
+
+  .controls-grid {
+    width: 220px;
+    gap: 8px;
+  }
+
+  .controls-row {
+    gap: 8px;
+  }
+
+  .key-badge {
+    min-width: 32px;
+    padding: 4px 8px;
+    font-size: 16px;
+  }
+
+  .controls-label {
+    font-size: 16px;
+  }
+
+  .arrow-keys {
+    font-size: 18px;
+    padding: 3px 8px;
+  }
+
+  .mute-btn {
+    padding: 4px;
+  }
+
+  .endboss-head {
+    zoom: 0.6;
   }
 }
