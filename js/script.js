@@ -17,6 +17,17 @@ function renderSoundControls(id) {
   allMuteIcon = setMuteAllButton("mute-all-btn", muted);
 }
 
+function renderInGameControlsBar() {
+  gameControlsBar = getElement("gameControlsBar");
+  gameControlsBar.innerHTML = getGameControlsBarTemplate();
+  gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
+}
+
+function clearInGameControlsBar() {
+  hideElement(gameControlsBar);
+  gameControlsBar.innerHTML = "";
+}
+
 function initApp() {
   if (forceRotatePhone()) {
     renderHTML("rotatePhone");

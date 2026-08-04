@@ -111,6 +111,7 @@ function toggleMute(id) {
 
 function setButton(id, musicMuteStatus) {
   let button = getElement(id);
+  if (!button) return;
   button.innerHTML = getMuteIconState(musicMuteStatus);
 }
 
@@ -282,15 +283,9 @@ function setAllToUnmute() {
 }
 
 function setCorrectMuteButtons(button, musicMuteStatus) {
-  if (musicMuteStatus) {
-    setButton("lobby-mute-btn", musicMuteStatus);
-    setButton("game-mute-btn", musicMuteStatus);
-    button.textContent = getMuteAllButtonState(musicMuteStatus);
-  } else if (!musicMuteStatus) {
-    setButton("lobby-mute-btn", musicMuteStatus);
-    setButton("game-mute-btn", musicMuteStatus);
-    button.textContent = getMuteAllButtonState(musicMuteStatus);
-  }
+  setButton("lobby-mute-btn", musicMuteStatus);
+  setButton("game-mute-btn", musicMuteStatus);
+  if (button) button.textContent = getMuteAllButtonState(musicMuteStatus);
 }
 
 function createAllSoundsArray() {
@@ -309,6 +304,7 @@ function checkMuteStatus(id) {
 
 function setMuteAllButton(id, muted) {
   let button = getElement(id);
+  if (!button) return null;
   button.textContent = getMuteAllButtonState(muted);
   return button;
 }

@@ -1,7 +1,9 @@
 let canvas;
+let gameControlsBar;
 let world;
 let keyboard = new Keyboard();
 let intervalRegistry = [];
+const GAME_KEY_CODES = [37, 38, 39, 40, 32, 68];
 
 function startGame() {
   if (forceRotatePhone()) {
@@ -27,6 +29,7 @@ function launchGame() {
   stopSound(lobbyMusic);
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
+  renderInGameControlsBar();
   initGame(canvas);
   hideLoadingScreen(canvas, gameLobby);
   monitorGameOver();
@@ -43,6 +46,7 @@ function hideLoadingScreen(canvas, gameLobby) {
   registerInterval(
     setTimeout(() => {
       showElement(canvas);
+      showElement(gameControlsBar);
       hideElement(gameLobby);
       window.addEventListener("resize", pauseOnPortraitMode);
     }, 1500),
@@ -55,6 +59,7 @@ function pauseOnPortraitMode() {
       world.pause();
       stopAllSoundEffects();
       hideElement(canvas);
+      clearInGameControlsBar();
       showElement(gameLobby);
     }
     renderHTML("rotatePhone");
@@ -69,6 +74,8 @@ function resumeOnLandscapeMode() {
       world.resume();
       hideElement(gameLobby);
       showElement(canvas);
+      renderInGameControlsBar();
+      showElement(gameControlsBar);
     } else {
       renderLobby("lobby");
     }
@@ -86,7 +93,14 @@ function monitorGameOver() {
   );
 }
 
+function isGameActive() {
+  return canvas && !canvas.classList.contains("d_none");
+}
+
 window.addEventListener("keydown", async (event) => {
+  if (isGameActive() && GAME_KEY_CODES.includes(event.keyCode)) {
+    event.preventDefault();
+  }
   if (event.keyCode == 39) {
     keyboard.RIGHT = true;
   }
@@ -108,6 +122,9 @@ window.addEventListener("keydown", async (event) => {
 });
 
 window.addEventListener("keyup", async (event) => {
+  if (isGameActive() && GAME_KEY_CODES.includes(event.keyCode)) {
+    event.preventDefault();
+  }
   if (event.keyCode == 39) {
     keyboard.RIGHT = false;
   }
@@ -159,6 +176,7 @@ function showVictoryScreen() {
   window.removeEventListener("resize", pauseOnPortraitMode);
   window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
+  clearInGameControlsBar();
   showElement(getElement("lobby"));
   renderHTML("victory");
   playSound(lobbyMusic, lobbyMusicVolume);
@@ -168,6 +186,7 @@ function showGameOverScreen() {
   window.removeEventListener("resize", pauseOnPortraitMode);
   window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
+  clearInGameControlsBar();
   showElement(getElement("lobby"));
   renderHTML("gameOver");
   playSound(lobbyMusic, lobbyMusicVolume);
