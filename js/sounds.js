@@ -38,7 +38,9 @@ function getMuteStatus(audio) {
 
 function registerGameSound(audio) {
   applyAudioState(audio, gameSoundsVolume);
-  allGameSounds.push(audio);
+  if (!allGameSounds.includes(audio)) {
+    allGameSounds.push(audio);
+  }
   return audio;
 }
 
