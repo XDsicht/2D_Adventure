@@ -81,19 +81,19 @@ function getSoundControlsTemplate() {
 function getGameControlsBarTemplate() {
   return `
     <div class="controls-row">
-      <kbd class="key-badge arrow-keys d-flex-center">&#8592;</kbd>
+      <kbd class="key-badge arrow-keys d-flex-center" id='left'>&#8592;</kbd>
       <span class="text-shadow-standard controls-label">Left</span>
     </div>
     <div class="controls-row">
-      <kbd class="key-badge arrow-keys d-flex-center">&#8594;</kbd>
+      <kbd class="key-badge arrow-keys d-flex-center" id='right'>&#8594;</kbd>
       <span class="text-shadow-standard controls-label">Right</span>
     </div>
     <div class="controls-row">
-      <kbd class="key-badge d-flex-center">Space</kbd>
+      <kbd class="key-badge d-flex-center" id='space'>Space</kbd>
       <span class="text-shadow-standard controls-label">Jump</span>
     </div>
     <div class="controls-row">
-      <kbd class="key-badge d-flex-center">D</kbd>
+      <kbd class="key-badge d-flex-center" id='shoot'>D</kbd>
       <span class="text-shadow-standard controls-label">Shoot</span>
     </div>
     <button class="fantasy-btn mute-btn cursor-pointer" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>

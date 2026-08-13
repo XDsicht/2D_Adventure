@@ -3,6 +3,7 @@ let gameControlsBar;
 let world;
 let keyboard = new Keyboard();
 let intervalRegistry = [];
+let responsiveButtons = {};
 const GAME_KEY_CODES = [37, 38, 39, 40, 32, 68];
 
 function startGame() {
@@ -141,6 +142,54 @@ window.addEventListener("keyup", async (event) => {
     keyboard.SPACE = false;
   }
   if (event.keyCode == 68) {
+    keyboard.D = false;
+  }
+});
+
+function getResponsiveButtonElements() {
+  return {
+    left: getElement("left"),
+    right: getElement("right"),
+    space: getElement("space"),
+    shoot: getElement("shoot"),
+    muteButton: getElement("game-mute-btn"),
+  };
+}
+
+window.addEventListener("touchstart", async (event) => {
+  if (isGameActive()) {
+    responsiveButtons = getResponsiveButtonElements();
+    event.preventDefault();
+  }
+  if (event.target == responsiveButtons["right"]) {
+    keyboard.RIGHT = true;
+  }
+  if (event.target == responsiveButtons["left"]) {
+    keyboard.LEFT = true;
+  }
+  if (event.target == responsiveButtons["space"]) {
+    keyboard.SPACE = true;
+  }
+  if (event.target == responsiveButtons["shoot"]) {
+    keyboard.D = true;
+  }
+});
+
+window.addEventListener("touchend", async (event) => {
+  if (isGameActive()) {
+    responsiveButtons = getResponsiveButtonElements();
+    event.preventDefault();
+  }
+  if (event.target == responsiveButtons["right"]) {
+    keyboard.RIGHT = false;
+  }
+  if (event.target == responsiveButtons["left"]) {
+    keyboard.LEFT = false;
+  }
+  if (event.target == responsiveButtons["space"]) {
+    keyboard.SPACE = false;
+  }
+  if (event.target == responsiveButtons["shoot"]) {
     keyboard.D = false;
   }
 });
