@@ -156,43 +156,54 @@ function getResponsiveButtonElements() {
   };
 }
 
-window.addEventListener("touchstart", async (event) => {
-  if (isGameActive()) {
-    responsiveButtons = getResponsiveButtonElements();
-    event.preventDefault();
-  }
-  if (event.target == responsiveButtons["right"]) {
-    keyboard.RIGHT = true;
-  }
-  if (event.target == responsiveButtons["left"]) {
-    keyboard.LEFT = true;
-  }
-  if (event.target == responsiveButtons["space"]) {
-    keyboard.SPACE = true;
-  }
-  if (event.target == responsiveButtons["shoot"]) {
-    keyboard.D = true;
-  }
-});
+window.addEventListener(
+  "touchstart",
+  async (event) => {
+    if (isGameActive()) {
+      responsiveButtons = getResponsiveButtonElements();
+      event.preventDefault();
+    }
+    if (event.target == responsiveButtons["right"]) {
+      keyboard.RIGHT = true;
+    }
+    if (event.target == responsiveButtons["left"]) {
+      keyboard.LEFT = true;
+    }
+    if (event.target == responsiveButtons["space"]) {
+      keyboard.SPACE = true;
+    }
+    if (event.target == responsiveButtons["shoot"]) {
+      keyboard.D = true;
+    }
+  },
+  { passive: false },
+);
 
-window.addEventListener("touchend", async (event) => {
-  if (isGameActive()) {
-    responsiveButtons = getResponsiveButtonElements();
-    event.preventDefault();
-  }
-  if (event.target == responsiveButtons["right"]) {
-    keyboard.RIGHT = false;
-  }
-  if (event.target == responsiveButtons["left"]) {
-    keyboard.LEFT = false;
-  }
-  if (event.target == responsiveButtons["space"]) {
-    keyboard.SPACE = false;
-  }
-  if (event.target == responsiveButtons["shoot"]) {
-    keyboard.D = false;
-  }
-});
+window.addEventListener(
+  "touchend",
+  async (event) => {
+    if (isGameActive()) {
+      responsiveButtons = getResponsiveButtonElements();
+      event.preventDefault();
+    }
+    if (event.target == responsiveButtons["right"]) {
+      keyboard.RIGHT = false;
+    }
+    if (event.target == responsiveButtons["left"]) {
+      keyboard.LEFT = false;
+    }
+    if (event.target == responsiveButtons["space"]) {
+      keyboard.SPACE = false;
+    }
+    if (event.target == responsiveButtons["shoot"]) {
+      keyboard.D = false;
+    }
+    if (event.target == responsiveButtons["muteButton"]) {
+      toggleMute("game-mute-btn");
+    }
+  },
+  { passive: false },
+);
 
 function registerInterval(id) {
   intervalRegistry.push(id);
