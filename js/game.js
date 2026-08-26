@@ -156,6 +156,10 @@ function getResponsiveButtonElements() {
   };
 }
 
+function isTouched(button, event) {
+  return !!button && button.contains(event.target);
+}
+
 window.addEventListener(
   "touchstart",
   async (event) => {
@@ -163,16 +167,16 @@ window.addEventListener(
       responsiveButtons = getResponsiveButtonElements();
       event.preventDefault();
     }
-    if (event.target == responsiveButtons["right"]) {
+    if (isTouched(responsiveButtons["right"], event)) {
       keyboard.RIGHT = true;
     }
-    if (event.target == responsiveButtons["left"]) {
+    if (isTouched(responsiveButtons["left"], event)) {
       keyboard.LEFT = true;
     }
-    if (event.target == responsiveButtons["space"]) {
+    if (isTouched(responsiveButtons["space"], event)) {
       keyboard.SPACE = true;
     }
-    if (event.target == responsiveButtons["shoot"]) {
+    if (isTouched(responsiveButtons["shoot"], event)) {
       keyboard.D = true;
     }
   },
@@ -186,19 +190,19 @@ window.addEventListener(
       responsiveButtons = getResponsiveButtonElements();
       event.preventDefault();
     }
-    if (event.target == responsiveButtons["right"]) {
+    if (isTouched(responsiveButtons["right"], event)) {
       keyboard.RIGHT = false;
     }
-    if (event.target == responsiveButtons["left"]) {
+    if (isTouched(responsiveButtons["left"], event)) {
       keyboard.LEFT = false;
     }
-    if (event.target == responsiveButtons["space"]) {
+    if (isTouched(responsiveButtons["space"], event)) {
       keyboard.SPACE = false;
     }
-    if (event.target == responsiveButtons["shoot"]) {
+    if (isTouched(responsiveButtons["shoot"], event)) {
       keyboard.D = false;
     }
-    if (event.target == responsiveButtons["muteButton"]) {
+    if (isTouched(responsiveButtons["muteButton"], event)) {
       toggleMute("game-mute-btn");
     }
   },

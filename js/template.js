@@ -80,23 +80,29 @@ function getSoundControlsTemplate() {
 
 function getGameControlsBarTemplate() {
   return `
-    <div class="controls-row">
-      <kbd class="key-badge arrow-keys d-flex-center" id='left'>&#8592;</kbd>
-      <span class="text-shadow-standard controls-label">Left</span>
+    <div class="controls-cluster cluster-move">
+      <div class="controls-row">
+        <kbd class="key-badge arrow-keys d-flex-center" id='left'>&#8592;</kbd>
+        <span class="text-shadow-standard controls-label">Left</span>
+      </div>
+      <div class="controls-row">
+        <kbd class="key-badge arrow-keys d-flex-center" id='right'>&#8594;</kbd>
+        <span class="text-shadow-standard controls-label">Right</span>
+      </div>
     </div>
-    <div class="controls-row">
-      <kbd class="key-badge arrow-keys d-flex-center" id='right'>&#8594;</kbd>
-      <span class="text-shadow-standard controls-label">Right</span>
+    <div class="controls-cluster cluster-action">
+      <div class="controls-row">
+        <kbd class="key-badge d-flex-center" id='space'>Space</kbd>
+        <span class="text-shadow-standard controls-label">Jump</span>
+      </div>
+      <div class="controls-row">
+        <kbd class="key-badge d-flex-center" id='shoot'>D</kbd>
+        <span class="text-shadow-standard controls-label">Shoot</span>
+      </div>
     </div>
-    <div class="controls-row">
-      <kbd class="key-badge d-flex-center" id='space'>Space</kbd>
-      <span class="text-shadow-standard controls-label">Jump</span>
+    <div class="controls-cluster cluster-mute">
+      <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
     </div>
-    <div class="controls-row">
-      <kbd class="key-badge d-flex-center" id='shoot'>D</kbd>
-      <span class="text-shadow-standard controls-label">Shoot</span>
-    </div>
-    <button class="fantasy-btn mute-btn cursor-pointer" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
   `;
 }
 
