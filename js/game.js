@@ -88,7 +88,7 @@ function resumeOnLandscapeMode() {
 function monitorGameOver() {
   registerInterval(
     setInterval(() => {
-      if (world.paused) return;
+      if (!world || world.paused) return;
       checkIfGameOver();
     }, 100),
   );
@@ -213,6 +213,21 @@ window.addEventListener("touchcancel", async (event) => {
     responsiveButtons = getResponsiveButtonElements();
   }
   updateTouchedKeys(event, false);
+});
+
+function releaseAllKeys() {
+  keyboard.LEFT = false;
+  keyboard.RIGHT = false;
+  keyboard.UP = false;
+  keyboard.DOWN = false;
+  keyboard.SPACE = false;
+  keyboard.D = false;
+}
+
+window.addEventListener("blur", releaseAllKeys);
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) releaseAllKeys();
 });
 
 function registerInterval(id) {
