@@ -15,6 +15,7 @@ class World {
   arrowInventory = 0;
   initialObstacleSpawn = 600;
   paused = false;
+  animationFrameId = null;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -37,6 +38,7 @@ class World {
 
   pause() {
     this.paused = true;
+    cancelAnimationFrame(this.animationFrameId);
     this.character.pause();
     this.level.enemies.forEach((enemy) => enemy.pause());
     this.level.clouds.forEach((cloud) => cloud.pause());
@@ -45,12 +47,14 @@ class World {
   }
 
   resume() {
+    if (!this.paused) return;
     this.paused = false;
     this.character.resume();
     this.level.enemies.forEach((enemy) => enemy.resume());
     this.level.clouds.forEach((cloud) => cloud.resume());
     this.level.coins.forEach((coin) => coin.resume());
     this.level.throwableObjects.forEach((arrow) => arrow.resume());
+    this.draw();
   }
 
   run() {
@@ -310,17 +314,16 @@ class World {
   }
 
   draw() {
-    if (!this.paused) {
-      this.updateCamera();
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.ctx.translate(this.camera_x, 0);
-      this.addStaticObjectsToGame();
-      this.addMovingObjectsToGame();
-      this.ctx.translate(-this.camera_x, 0);
-      this.addCharacterBarsToGame();
-    }
+    if (this.paused) return;
+    this.updateCamera();
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.translate(this.camera_x, 0);
+    this.addStaticObjectsToGame();
+    this.addMovingObjectsToGame();
+    this.ctx.translate(-this.camera_x, 0);
+    this.addCharacterBarsToGame();
     let self = this;
-    requestAnimationFrame(function () {
+    this.animationFrameId = requestAnimationFrame(function () {
       self.draw();
     });
   }

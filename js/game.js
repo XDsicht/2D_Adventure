@@ -156,8 +156,31 @@ function getResponsiveButtonElements() {
   };
 }
 
-function isTouched(button, event) {
-  return !!button && button.contains(event.target);
+function isTouched(button, target) {
+  return !!button && button.contains(target);
+}
+
+function getTouchedKey(target) {
+  if (isTouched(responsiveButtons["left"], target)) return "LEFT";
+  if (isTouched(responsiveButtons["right"], target)) return "RIGHT";
+  if (isTouched(responsiveButtons["space"], target)) return "SPACE";
+  if (isTouched(responsiveButtons["shoot"], target)) return "D";
+  return null;
+}
+
+function updateTouchedKeys(event, isPressed) {
+  for (let i = 0; i < event.changedTouches.length; i++) {
+    let key = getTouchedKey(event.changedTouches[i].target);
+    if (key) keyboard[key] = isPressed;
+  }
+}
+
+function toggleMuteOnTouch(event) {
+  for (let i = 0; i < event.changedTouches.length; i++) {
+    if (isTouched(responsiveButtons["muteButton"], event.changedTouches[i].target)) {
+      return toggleMute("game-mute-btn");
+    }
+  }
 }
 
 window.addEventListener(
@@ -167,18 +190,7 @@ window.addEventListener(
       responsiveButtons = getResponsiveButtonElements();
       event.preventDefault();
     }
-    if (isTouched(responsiveButtons["right"], event)) {
-      keyboard.RIGHT = true;
-    }
-    if (isTouched(responsiveButtons["left"], event)) {
-      keyboard.LEFT = true;
-    }
-    if (isTouched(responsiveButtons["space"], event)) {
-      keyboard.SPACE = true;
-    }
-    if (isTouched(responsiveButtons["shoot"], event)) {
-      keyboard.D = true;
-    }
+    updateTouchedKeys(event, true);
   },
   { passive: false },
 );
@@ -190,24 +202,18 @@ window.addEventListener(
       responsiveButtons = getResponsiveButtonElements();
       event.preventDefault();
     }
-    if (isTouched(responsiveButtons["right"], event)) {
-      keyboard.RIGHT = false;
-    }
-    if (isTouched(responsiveButtons["left"], event)) {
-      keyboard.LEFT = false;
-    }
-    if (isTouched(responsiveButtons["space"], event)) {
-      keyboard.SPACE = false;
-    }
-    if (isTouched(responsiveButtons["shoot"], event)) {
-      keyboard.D = false;
-    }
-    if (isTouched(responsiveButtons["muteButton"], event)) {
-      toggleMute("game-mute-btn");
-    }
+    updateTouchedKeys(event, false);
+    toggleMuteOnTouch(event);
   },
   { passive: false },
 );
+
+window.addEventListener("touchcancel", async (event) => {
+  if (isGameActive()) {
+    responsiveButtons = getResponsiveButtonElements();
+  }
+  updateTouchedKeys(event, false);
+});
 
 function registerInterval(id) {
   intervalRegistry.push(id);
@@ -222,16 +228,23 @@ function clearAllIntervals() {
   intervalRegistry.length = 0;
 }
 
+function endGame() {
+  clearAllIntervals();
+  stopAllGameSounds();
+  if (world) {
+    world.pause();
+    world = null;
+  }
+}
+
 function checkIfGameOver() {
   let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
   if (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) {
-    clearAllIntervals();
-    stopAllGameSounds();
+    endGame();
     showGameOverScreen();
   }
   if (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1) {
-    clearAllIntervals();
-    stopAllGameSounds();
+    endGame();
     showVictoryScreen();
   }
 }
