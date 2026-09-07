@@ -112,9 +112,10 @@ function toggleMute(id) {
 }
 
 function setButton(id, musicMuteStatus) {
+  let icon = getMuteIconState(musicMuteStatus);
   let button = getElement(id);
-  if (!button) return;
-  button.innerHTML = getMuteIconState(musicMuteStatus);
+  if (button) button.innerHTML = icon;
+  return icon;
 }
 
 function changeMusicMuteStatus(id) {

@@ -50,6 +50,7 @@ function hideLoadingScreen(canvas, gameLobby) {
       showElement(gameControlsBar);
       hideElement(gameLobby);
       window.addEventListener("resize", pauseOnPortraitMode);
+      pauseOnPortraitMode();
     }, 1500),
   );
 }
