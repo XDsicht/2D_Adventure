@@ -4,7 +4,10 @@ let world;
 let keyboard = new Keyboard();
 let intervalRegistry = [];
 let responsiveButtons = {};
+let pauseReasons = new Set();
 const GAME_KEY_CODES = [37, 38, 39, 40, 32, 68];
+const PAUSE_REASON_PORTRAIT = "portrait";
+const PAUSE_REASON_MANUAL = "manual";
 
 function startGame() {
   if (forceRotatePhone()) {
@@ -49,41 +52,92 @@ function hideLoadingScreen(canvas, gameLobby) {
       showElement(canvas);
       showElement(gameControlsBar);
       hideElement(gameLobby);
-      window.addEventListener("resize", pauseOnPortraitMode);
-      pauseOnPortraitMode();
+      watchPortraitMode();
     }, 1500),
   );
 }
 
+function watchPortraitMode() {
+  window.removeEventListener("resize", resumeOnLandscapeMode);
+  window.addEventListener("resize", pauseOnPortraitMode);
+  pauseOnPortraitMode();
+}
+
 function pauseOnPortraitMode() {
-  if (forceRotatePhone()) {
-    if (world) {
-      world.pause();
-      stopAllSoundEffects();
-      hideElement(canvas);
-      clearInGameControlsBar();
-      showElement(gameLobby);
-    }
-    renderHTML("rotatePhone");
-    window.removeEventListener("resize", pauseOnPortraitMode);
-    window.addEventListener("resize", resumeOnLandscapeMode);
-  }
+  if (!forceRotatePhone()) return;
+  pauseGame(PAUSE_REASON_PORTRAIT);
+  window.removeEventListener("resize", pauseOnPortraitMode);
+  window.addEventListener("resize", resumeOnLandscapeMode);
 }
 
 function resumeOnLandscapeMode() {
-  if (!forceRotatePhone()) {
-    if (world) {
-      world.resume();
-      hideElement(gameLobby);
-      showElement(canvas);
-      renderInGameControlsBar();
-      showElement(gameControlsBar);
-    } else {
-      renderLobby("lobby");
-    }
-    window.removeEventListener("resize", resumeOnLandscapeMode);
-    window.addEventListener("resize", pauseOnPortraitMode);
+  if (forceRotatePhone()) return;
+  resumeGame(PAUSE_REASON_PORTRAIT);
+  if (!world) renderLobby("lobby");
+  window.removeEventListener("resize", resumeOnLandscapeMode);
+  window.addEventListener("resize", pauseOnPortraitMode);
+}
+
+function pauseGame(reason) {
+  pauseReasons.add(reason);
+  releaseAllKeys();
+  if (world && !world.paused) {
+    world.pause();
+    stopAllSoundEffects();
+    backgroundMusic.pause();
   }
+  renderPauseState();
+}
+
+function resumeGame(reason) {
+  pauseReasons.delete(reason);
+  if (pauseReasons.size == 0 && world && world.paused) {
+    world.resume();
+    resumeBackgroundMusic();
+  }
+  renderPauseState();
+}
+
+function resumeBackgroundMusic() {
+  backgroundMusic.play().catch((error) => {
+    if (error.name !== "AbortError") console.error(error);
+  });
+}
+
+function toggleManualPause() {
+  if (pauseReasons.has(PAUSE_REASON_MANUAL)) resumeGame(PAUSE_REASON_MANUAL);
+  else pauseGame(PAUSE_REASON_MANUAL);
+}
+
+function renderPauseState() {
+  if (pauseReasons.has(PAUSE_REASON_PORTRAIT)) return showRotateScreen();
+  if (pauseReasons.size > 0) return showPauseScreen();
+  showGameScreen();
+}
+
+function showRotateScreen() {
+  hideGameScreen();
+  renderHTML("rotatePhone");
+}
+
+function showPauseScreen() {
+  hideGameScreen();
+  renderHTML("pause");
+}
+
+function showGameScreen() {
+  if (!world) return;
+  hideElement(gameLobby);
+  showElement(canvas);
+  renderInGameControlsBar();
+  showElement(gameControlsBar);
+}
+
+function hideGameScreen() {
+  if (!world) return;
+  hideElement(canvas);
+  clearInGameControlsBar();
+  showElement(gameLobby);
 }
 
 function monitorGameOver() {
@@ -154,6 +208,8 @@ function getResponsiveButtonElements() {
     space: getElement("space"),
     shoot: getElement("shoot"),
     muteButton: getElement("game-mute-btn"),
+    pauseButton: getElement("game-pause-btn"),
+    menuButton: getElement("game-menu-btn"),
   };
 }
 
@@ -166,21 +222,25 @@ function getTouchedKey(target) {
   if (isTouched(responsiveButtons["right"], target)) return "RIGHT";
   if (isTouched(responsiveButtons["space"], target)) return "SPACE";
   if (isTouched(responsiveButtons["shoot"], target)) return "D";
+  if (isTouched(responsiveButtons["muteButton"], target)) return "MUTE";
+  if (isTouched(responsiveButtons["pauseButton"], target)) return "PAUSE";
+  if (isTouched(responsiveButtons["menuButton"], target)) return "MENU";
   return null;
 }
 
 function updateTouchedKeys(event, isPressed) {
   for (let i = 0; i < event.changedTouches.length; i++) {
     let key = getTouchedKey(event.changedTouches[i].target);
-    if (key) keyboard[key] = isPressed;
+    if (key && key in keyboard) keyboard[key] = isPressed;
   }
 }
 
-function toggleMuteOnTouch(event) {
+function runTouchedAction(event) {
   for (let i = 0; i < event.changedTouches.length; i++) {
-    if (isTouched(responsiveButtons["muteButton"], event.changedTouches[i].target)) {
-      return toggleMute("game-mute-btn");
-    }
+    let key = getTouchedKey(event.changedTouches[i].target);
+    if (key == "MUTE") return toggleMute("game-mute-btn");
+    if (key == "PAUSE") return toggleManualPause();
+    if (key == "MENU") return backToMenu();
   }
 }
 
@@ -204,7 +264,7 @@ window.addEventListener(
       event.preventDefault();
     }
     updateTouchedKeys(event, false);
-    toggleMuteOnTouch(event);
+    runTouchedAction(event);
   },
   { passive: false },
 );
@@ -225,11 +285,13 @@ function releaseAllKeys() {
   keyboard.D = false;
 }
 
-window.addEventListener("blur", releaseAllKeys);
+function handleVisibilityChange() {
+  if (!document.hidden) return;
+  releaseAllKeys();
+  if (world) pauseGame(PAUSE_REASON_MANUAL);
+}
 
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) releaseAllKeys();
-});
+document.addEventListener("visibilitychange", handleVisibilityChange);
 
 function registerInterval(id) {
   intervalRegistry.push(id);
@@ -247,10 +309,18 @@ function clearAllIntervals() {
 function endGame() {
   clearAllIntervals();
   stopAllGameSounds();
+  pauseReasons.clear();
   if (world) {
     world.pause();
     world = null;
   }
+}
+
+function backToMenu() {
+  hideGameScreen();
+  endGame();
+  renderLobby("lobby");
+  playSound(lobbyMusic, lobbyMusicVolume);
 }
 
 function checkIfGameOver() {

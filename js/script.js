@@ -40,7 +40,7 @@ function initApp() {
 function renderLobby(id) {
   renderHTML(id);
   checkIfSoundArrayExists();
-  window.addEventListener("resize", pauseOnPortraitMode);
+  watchPortraitMode();
 }
 
 function checkIfSoundArrayExists() {
@@ -55,26 +55,15 @@ function renderHTML(id) {
 }
 
 function getTemplate(id) {
-  if (id == "loading") {
-    return getLoadingTemplate();
-  }
-if (id == "lobby") {
-    return getLobbyTemplate();
-  }
-  if (id == "controls") {
-    return getControlsTemplate();
-  }
-  if (id == "soundControls") {
-    return getSoundControlsTemplate();
-  }
-  if (id == "victory") {
-    return getVictoryTemplate();
-  }
-  if (id == "gameOver") {
-    return getGameOverTemplate();
-  }
-  if (id == "rotatePhone") {
-    return getRotatePhoneTemplate();
+  switch (id) {
+    case "loading": return getLoadingTemplate();
+    case "lobby": return getLobbyTemplate();
+    case "controls": return getControlsTemplate();
+    case "soundControls": return getSoundControlsTemplate();
+    case "victory": return getVictoryTemplate();
+    case "gameOver": return getGameOverTemplate();
+    case "rotatePhone": return getRotatePhoneTemplate();
+    case "pause": return getPauseTemplate();
   }
 }
 

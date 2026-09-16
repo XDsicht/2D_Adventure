@@ -6,6 +6,14 @@ const SVG_SPEAKER_OFF = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24
   <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
 </svg>`;
 
+const SVG_PAUSE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+</svg>`;
+
+const SVG_HOME = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+  <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+</svg>`;
+
 function getLoadingTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -101,6 +109,8 @@ function getGameControlsBarTemplate() {
       </div>
     </div>
     <div class="controls-cluster cluster-mute">
+      <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-pause-btn" onclick="toggleManualPause()">${SVG_PAUSE}</button>
+      <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-menu-btn" onclick="backToMenu()">${SVG_HOME}</button>
       <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
     </div>
   `;
@@ -121,6 +131,19 @@ function getGameOverTemplate() {
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="restartGame()">Try Again</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderLobby('lobby')">Back to Menu</button>
+      </div>
+    </div>
+  `;
+}
+
+function getPauseTemplate() {
+  return `
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">Paused</h2>
+      <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="resumeGame(PAUSE_REASON_MANUAL)">Resume</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="backToMenu()">Back to Menu</button>
       </div>
     </div>
   `;
