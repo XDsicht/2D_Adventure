@@ -3,7 +3,6 @@ let level1;
 function initLevel1() {
   level1 = new Level(
     [new Troll_1(), new Troll_1(), new Troll_1(), new Troll_2(), new Troll_2(), new Troll_2(), new Endboss()],
-    [new Cloud(), new Cloud(), new Cloud()],
     [
       new BackgroundObject("img/5.elements/background/1.png", -720),
       new BackgroundObject("img/5.elements/background/2.png", -720),

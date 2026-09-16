@@ -41,7 +41,6 @@ class World {
     cancelAnimationFrame(this.animationFrameId);
     this.character.pause();
     this.level.enemies.forEach((enemy) => enemy.pause());
-    this.level.clouds.forEach((cloud) => cloud.pause());
     this.level.coins.forEach((coin) => coin.pause());
     this.level.throwableObjects.forEach((arrow) => arrow.pause());
   }
@@ -51,7 +50,6 @@ class World {
     this.paused = false;
     this.character.resume();
     this.level.enemies.forEach((enemy) => enemy.resume());
-    this.level.clouds.forEach((cloud) => cloud.resume());
     this.level.coins.forEach((coin) => coin.resume());
     this.level.throwableObjects.forEach((arrow) => arrow.resume());
     this.draw();
@@ -342,7 +340,6 @@ class World {
 
   addStaticObjectsToGame() {
     this.addObjectsToMap(this.level.backgroundObjects);
-    this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.throwableObjects);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.arrows);
