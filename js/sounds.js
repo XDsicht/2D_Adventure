@@ -75,19 +75,23 @@ function activateLoop(audio) {
 }
 
 function activateLobbyMusicListener() {
-  lobbyMusic.addEventListener("timeupdate", () => {
-    if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
-      lobbyMusic.currentTime = 0;
-    }
-  });
+  lobbyMusic.addEventListener("timeupdate", loopLobbyMusic);
+}
+
+function loopLobbyMusic() {
+  if (lobbyMusic.duration && lobbyMusic.currentTime >= lobbyMusic.duration - 3) {
+    lobbyMusic.currentTime = 0;
+  }
 }
 
 function activateBackgroundMusicListener() {
-  backgroundMusic.addEventListener("timeupdate", () => {
-    if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
-      backgroundMusic.currentTime = 3;
-    }
-  });
+  backgroundMusic.addEventListener("timeupdate", loopBackgroundMusic);
+}
+
+function loopBackgroundMusic() {
+  if (backgroundMusic.duration && backgroundMusic.currentTime >= backgroundMusic.duration - 1) {
+    backgroundMusic.currentTime = 3;
+  }
 }
 
 function stopAllGameSounds() {

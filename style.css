@@ -489,6 +489,12 @@ canvas {
     padding: 6px 12px;
   }
 
+  .game-controls-bar .mute-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px;
+  }
+
   .game-controls-bar .key-badge:active,
   .game-controls-bar .mute-btn:active {
     transform: scale(0.92);

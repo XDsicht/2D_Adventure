@@ -157,17 +157,14 @@ window.addEventListener("keydown", async (event) => {
   if (isGameActive() && GAME_KEY_CODES.includes(event.keyCode)) {
     event.preventDefault();
   }
+  if (event.keyCode == 27 && world) {
+    toggleManualPause();
+  }
   if (event.keyCode == 39) {
     keyboard.RIGHT = true;
   }
   if (event.keyCode == 37) {
     keyboard.LEFT = true;
-  }
-  if (event.keyCode == 38) {
-    keyboard.UP = true;
-  }
-  if (event.keyCode == 40) {
-    keyboard.DOWN = true;
   }
   if (event.keyCode == 32) {
     keyboard.SPACE = true;
@@ -186,12 +183,6 @@ window.addEventListener("keyup", async (event) => {
   }
   if (event.keyCode == 37) {
     keyboard.LEFT = false;
-  }
-  if (event.keyCode == 38) {
-    keyboard.UP = false;
-  }
-  if (event.keyCode == 40) {
-    keyboard.DOWN = false;
   }
   if (event.keyCode == 32) {
     keyboard.SPACE = false;
@@ -279,8 +270,6 @@ window.addEventListener("touchcancel", async (event) => {
 function releaseAllKeys() {
   keyboard.LEFT = false;
   keyboard.RIGHT = false;
-  keyboard.UP = false;
-  keyboard.DOWN = false;
   keyboard.SPACE = false;
   keyboard.D = false;
 }
@@ -336,26 +325,23 @@ function checkIfGameOver() {
 }
 
 function showVictoryScreen() {
-  window.removeEventListener("resize", pauseOnPortraitMode);
-  window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
   clearInGameControlsBar();
   showElement(getElement("lobby"));
   renderHTML("victory");
   playSound(lobbyMusic, lobbyMusicVolume);
+  watchPortraitMode();
 }
 
 function showGameOverScreen() {
-  window.removeEventListener("resize", pauseOnPortraitMode);
-  window.removeEventListener("resize", resumeOnLandscapeMode);
   hideElement(getElement("canvas"));
   clearInGameControlsBar();
   showElement(getElement("lobby"));
   renderHTML("gameOver");
   playSound(lobbyMusic, lobbyMusicVolume);
+  watchPortraitMode();
 }
 
 function restartGame() {
-  initLevel1();
   startGame();
 }
