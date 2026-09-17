@@ -26,7 +26,6 @@ function waitForLandscape() {
 }
 
 function launchGame() {
-  window.removeEventListener("resize", pauseOnPortraitMode);
   renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
   initLevel1();
@@ -35,7 +34,7 @@ function launchGame() {
   gameLobby = getElement("lobby");
   renderInGameControlsBar();
   initGame(canvas);
-  hideLoadingScreen(canvas, gameLobby);
+  hideLoadingScreen();
   monitorGameOver();
 }
 
@@ -46,36 +45,28 @@ function initGame(canvas) {
   playSound(backgroundMusic, backGroundMusicVolume);
 }
 
-function hideLoadingScreen(canvas, gameLobby) {
+function hideLoadingScreen() {
   registerInterval(
     setTimeout(() => {
-      showElement(canvas);
-      showElement(gameControlsBar);
-      hideElement(gameLobby);
-      watchPortraitMode();
+      handleOrientationChange();
+      renderPauseState();
     }, 1500),
   );
 }
 
-function watchPortraitMode() {
-  window.removeEventListener("resize", resumeOnLandscapeMode);
-  window.addEventListener("resize", pauseOnPortraitMode);
-  pauseOnPortraitMode();
+function handleOrientationChange() {
+  let locked = forceRotatePhone();
+  if (locked == pauseReasons.has(PAUSE_REASON_PORTRAIT)) return;
+  if (locked) pauseGame(PAUSE_REASON_PORTRAIT);
+  else resumeGame(PAUSE_REASON_PORTRAIT);
 }
 
-function pauseOnPortraitMode() {
-  if (!forceRotatePhone()) return;
-  pauseGame(PAUSE_REASON_PORTRAIT);
-  window.removeEventListener("resize", pauseOnPortraitMode);
-  window.addEventListener("resize", resumeOnLandscapeMode);
-}
+window.addEventListener("resize", handleOrientationChange);
+window.addEventListener("orientationchange", handleOrientationChange);
+responsiveMedia.addEventListener("change", handleOrientationChange);
 
-function resumeOnLandscapeMode() {
-  if (forceRotatePhone()) return;
-  resumeGame(PAUSE_REASON_PORTRAIT);
-  if (!world) renderLobby("lobby");
-  window.removeEventListener("resize", resumeOnLandscapeMode);
-  window.addEventListener("resize", pauseOnPortraitMode);
+if (screen.orientation) {
+  screen.orientation.addEventListener("change", handleOrientationChange);
 }
 
 function pauseGame(reason) {
@@ -126,7 +117,7 @@ function showPauseScreen() {
 }
 
 function showGameScreen() {
-  if (!world) return;
+  if (!world) return renderHTML("lobby");
   hideElement(gameLobby);
   showElement(canvas);
   renderInGameControlsBar();
@@ -330,7 +321,7 @@ function showVictoryScreen() {
   showElement(getElement("lobby"));
   renderHTML("victory");
   playSound(lobbyMusic, lobbyMusicVolume);
-  watchPortraitMode();
+  handleOrientationChange();
 }
 
 function showGameOverScreen() {
@@ -339,7 +330,7 @@ function showGameOverScreen() {
   showElement(getElement("lobby"));
   renderHTML("gameOver");
   playSound(lobbyMusic, lobbyMusicVolume);
-  watchPortraitMode();
+  handleOrientationChange();
 }
 
 function restartGame() {

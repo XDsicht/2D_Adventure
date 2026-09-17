@@ -1,3 +1,6 @@
+const RESPONSIVE_QUERY = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
+const responsiveMedia = window.matchMedia(RESPONSIVE_QUERY);
+
 function showElement(element) {
   element.classList.remove("d_none");
 }
@@ -29,18 +32,13 @@ function clearInGameControlsBar() {
 }
 
 function initApp() {
-  if (forceRotatePhone()) {
-    renderHTML("rotatePhone");
-    window.addEventListener("resize", resumeOnLandscapeMode);
-  } else {
-    renderLobby("lobby");
-  }
+  renderLobby("lobby");
+  handleOrientationChange();
 }
 
 function renderLobby(id) {
   renderHTML(id);
   checkIfSoundArrayExists();
-  watchPortraitMode();
 }
 
 function checkIfSoundArrayExists() {
@@ -81,12 +79,13 @@ function forceRotatePhone() {
 }
 
 function checkIfMobile() {
-  let isSmallScreen = window.innerWidth < 720 || window.innerHeight < 480;
-  let isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  return isSmallScreen || isTouchDevice;
+  return responsiveMedia.matches;
 }
 
 function checkOrientation() {
+  if (screen.orientation && screen.orientation.type) {
+    return screen.orientation.type.startsWith("portrait");
+  }
   return window.innerWidth < window.innerHeight;
 }
 
