@@ -41,8 +41,11 @@ function launchGame() {
 function initGame(canvas) {
   world = new World(canvas, keyboard);
   registerGameSound(backgroundMusic);
+  createAllSoundsArray();
+  applyAudioStates(allSounds);
   backgroundMusic.currentTime = 3;
-  playSound(backgroundMusic, backGroundMusicVolume);
+  let volume = resolveVolume(backgroundMusic);
+  playSound(backgroundMusic, volume);
 }
 
 function hideLoadingScreen() {
@@ -289,6 +292,7 @@ function clearAllIntervals() {
 function endGame() {
   clearAllIntervals();
   stopAllGameSounds();
+  clearGameSounds();
   pauseReasons.clear();
   if (world) {
     world.pause();

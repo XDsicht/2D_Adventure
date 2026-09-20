@@ -32,19 +32,14 @@ function clearInGameControlsBar() {
 }
 
 function initApp() {
+  loadSoundSettings();
   renderLobby("lobby");
   handleOrientationChange();
 }
 
 function renderLobby(id) {
   renderHTML(id);
-  checkIfSoundArrayExists();
-}
-
-function checkIfSoundArrayExists() {
-  if (allSounds.length == 0) {
-    createAllSoundsArray();
-  }
+  createAllSoundsArray();
 }
 
 function renderHTML(id) {

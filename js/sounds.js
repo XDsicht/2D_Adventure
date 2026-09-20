@@ -5,7 +5,6 @@ let lobbyMusicMuted = false;
 let gameSoundsMuted = false;
 let gameSoundsVolume = 0.5;
 let lobbyMusicVolume = 0.2;
-let backGroundMusicVolume = gameSoundsVolume * 0.1;
 let defaultVolume = Number(0.2);
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
@@ -13,6 +12,7 @@ let lobbyMuteIcon;
 let gameMuteIcon;
 let allMuteIcon;
 let musicMuteStatus;
+const SOUND_SETTINGS_KEY = "vorgaSoundSettings";
 
 function applyAudioState(audio, audioVolume) {
   audio.volume = audioVolume;
@@ -25,6 +25,16 @@ function resolveMuted(audio) {
     return lobbyMusicMuted;
   } else {
     return gameSoundsMuted;
+  }
+}
+
+function resolveVolume(audio) {
+  if (audio === lobbyMusic) {
+    return lobbyMusicVolume;
+  } else if (audio === backgroundMusic) {
+    return gameSoundsVolume * 0.1;
+  } else {
+    return gameSoundsVolume;
   }
 }
 
@@ -101,6 +111,11 @@ function stopAllGameSounds() {
   });
 }
 
+function clearGameSounds() {
+  allGameSounds.length = 0;
+  createAllSoundsArray();
+}
+
 function stopAllSoundEffects() {
   allGameSounds.forEach((audio) => {
     if (audio === backgroundMusic) return;
@@ -113,6 +128,7 @@ function toggleMute(id) {
   musicMuteStatus = changeMusicMuteStatus(id);
   setButton(id, musicMuteStatus);
   checkMuteStatus("mute-all-btn");
+  saveSoundSettings();
 }
 
 function setButton(id, musicMuteStatus) {
@@ -149,12 +165,13 @@ function changeVolume(value, id) {
   setVolumeVariable(id, number);
   if (number <= 0.02) {
     muteSound(music, id);
-    setVolume(music, number);
+    applyAudioStates(music);
   } else {
     unmuteSound(music, id);
-    setVolume(music, number);
+    applyAudioStates(music);
   }
   checkMuteStatus("mute-all-btn");
+  saveSoundSettings();
 }
 
 function muteSound(music, id) {
@@ -175,11 +192,14 @@ function setVolumeVariable(id, number) {
   }
 }
 
-function setVolume(music, number) {
+function applyAudioStates(music) {
   if (!Array.isArray(music)) {
     music = [music];
   }
-  music.forEach((audio) => (audio.volume = number));
+  music.forEach((audio) => {
+    let volume = resolveVolume(audio);
+    applyAudioState(audio, volume);
+  });
 }
 
 function unmuteMusic(music, id) {
@@ -229,6 +249,7 @@ function toggleMuteAll(id) {
   } else {
     unmuteAllSounds(button);
   }
+  saveSoundSettings();
 }
 
 function muteAllSounds(id, button) {
@@ -247,8 +268,8 @@ function unmuteAllSounds(button) {
 function setMinVolume(allSounds) {
   allSounds.forEach((audio) => {
     if (audio.volume <= 0.2) {
-      setVolume(audio, defaultVolume);
       setVolumeSlider(audio);
+      applyAudioStates(audio);
     }
   });
 }
@@ -296,8 +317,7 @@ function setCorrectMuteButtons(button, musicMuteStatus) {
 }
 
 function createAllSoundsArray() {
-  allGameSounds.forEach((sound) => allSounds.push(sound));
-  allSounds.push(lobbyMusic);
+  allSounds = allGameSounds.concat(lobbyMusic);
 }
 
 function checkMuteStatus(id) {
@@ -314,4 +334,33 @@ function setMuteAllButton(id, muted) {
   if (!button) return null;
   button.textContent = getMuteAllButtonState(muted);
   return button;
+}
+
+function saveSoundSettings() {
+  let settings = {
+    muted: muted,
+    lobbyMusicMuted: lobbyMusicMuted,
+    gameSoundsMuted: gameSoundsMuted,
+    lobbyMusicVolume: lobbyMusicVolume,
+    gameSoundsVolume: gameSoundsVolume,
+  };
+  sessionStorage.setItem(SOUND_SETTINGS_KEY, JSON.stringify(settings));
+}
+
+function loadSoundSettings() {
+  let stored = sessionStorage.getItem(SOUND_SETTINGS_KEY);
+  if (!stored) return;
+  try {
+    applySoundSettings(JSON.parse(stored));
+  } catch (error) {
+    sessionStorage.removeItem(SOUND_SETTINGS_KEY);
+  }
+}
+
+function applySoundSettings(settings) {
+  muted = settings.muted;
+  lobbyMusicMuted = settings.lobbyMusicMuted;
+  gameSoundsMuted = settings.gameSoundsMuted;
+  lobbyMusicVolume = settings.lobbyMusicVolume;
+  gameSoundsVolume = settings.gameSoundsVolume;
 }
