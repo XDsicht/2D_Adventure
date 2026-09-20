@@ -1,0 +1,173 @@
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  .game-container {
+    width: 100dvw;
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .lobby {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .lobby.borders,
+  canvas.borders {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  canvas {
+    width: min(100%, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 1.5));
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .outer-title {
+    display: none;
+  }
+
+  .inner-title {
+    display: block;
+    font-size: clamp(22px, 4.8vmin, 34px);
+    padding-bottom: 8px;
+  }
+
+  .character-head {
+    width: clamp(120px, 28vmin, 220px);
+  }
+
+  .overlay-btn-group {
+    gap: 8px;
+  }
+
+  .overlay-btn-row {
+    gap: 8px;
+  }
+
+  .start-btn {
+    font-size: clamp(18px, 4vmin, 28px);
+    letter-spacing: 2px;
+    border-width: 2px;
+    padding: 8px 24px;
+  }
+
+  .secondary-btn {
+    font-size: clamp(14px, 2.6vmin, 18px);
+    padding: 6px 20px;
+  }
+
+  .sound-settings-title {
+    font-size: clamp(22px, 4.5vmin, 32px);
+  }
+
+  .sound-control-row {
+    width: 90vw;
+    max-width: 280px;
+    gap: 8px;
+  }
+
+  .sound-control-row label {
+    font-size: 16px;
+  }
+
+  .controls-grid {
+    width: 220px;
+    gap: 8px;
+  }
+
+  .controls-row {
+    gap: 8px;
+  }
+
+  .key-badge {
+    min-width: 32px;
+    padding: 4px 8px;
+    font-size: 16px;
+  }
+
+  .controls-label {
+    font-size: clamp(16px, 3vmin, 22px);
+  }
+
+  .arrow-keys {
+    font-size: 18px;
+    padding: 3px 8px;
+  }
+
+  .mute-btn {
+    padding: 4px;
+  }
+
+  .endboss-head {
+    --head-scale: 0.6;
+  }
+
+  .game-controls-bar {
+    position: absolute;
+    inset: 0;
+    margin-top: 0;
+    padding: 0;
+    background: none;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .controls-cluster {
+    position: absolute;
+    pointer-events: auto;
+    gap: 16px;
+  }
+
+  .cluster-move {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .cluster-action {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .cluster-mute {
+    top: 16px;
+    right: 16px;
+  }
+
+  .badge-desktop {
+    display: none;
+  }
+
+  .badge-touch {
+    display: flex;
+    align-items: center;
+  }
+
+  .game-controls-bar .key-badge {
+    min-width: 52px;
+    min-height: 44px;
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+
+  .game-controls-bar .mute-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px;
+  }
+
+  .game-controls-bar .key-badge:active,
+  .game-controls-bar .mute-btn:active {
+    transform: scale(0.92);
+    border-color: #e0b870;
+  }
+}

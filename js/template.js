@@ -14,6 +14,23 @@ const SVG_HOME = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fi
   <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
 </svg>`;
 
+const SVG_SHOOT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+  <path d="M5 3a13 13 0 0 1 0 18"/>
+  <path d="M5 3v18"/>
+  <path d="M5 12h15"/>
+  <path d="M16 8l4 4-4 4"/>
+</svg>`;
+
+const SVG_SPACEBAR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+  <path d="M3 9v6h18V9"/>
+</svg>`;
+
+const SVG_TARGET = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+  <circle cx="12" cy="12" r="9"/>
+  <circle cx="12" cy="12" r="5"/>
+  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+</svg>`;
+
 const SVG_FULLSCREEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
   <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
 </svg>`;
@@ -97,24 +114,18 @@ function getSoundControlsTemplate() {
 function getGameControlsBarTemplate() {
   return `
     <div class="controls-cluster cluster-move">
-      <div class="controls-row">
-        <kbd class="key-badge arrow-keys d-flex-center" id='left'>&#8592;</kbd>
-        <span class="text-shadow-standard controls-label">Left</span>
-      </div>
-      <div class="controls-row">
-        <kbd class="key-badge arrow-keys d-flex-center" id='right'>&#8594;</kbd>
-        <span class="text-shadow-standard controls-label">Right</span>
-      </div>
+      <kbd class="key-badge arrow-keys d-flex-center" id='left'>&#8592;</kbd>
+      <kbd class="key-badge arrow-keys d-flex-center" id='right'>&#8594;</kbd>
     </div>
     <div class="controls-cluster cluster-action">
-      <div class="controls-row">
-        <kbd class="key-badge d-flex-center" id='space'>Space</kbd>
-        <span class="text-shadow-standard controls-label">Jump</span>
-      </div>
-      <div class="controls-row">
-        <kbd class="key-badge d-flex-center" id='shoot'>D</kbd>
-        <span class="text-shadow-standard controls-label">Shoot</span>
-      </div>
+      <kbd class="key-badge d-flex-center" id='space'>
+        <span class="badge-desktop">${SVG_SPACEBAR}</span>
+        <span class="badge-touch">Jump</span>
+      </kbd>
+      <kbd class="key-badge d-flex-center" id='shoot'>
+        <span class="badge-desktop"><span class="badge-key">D</span>${SVG_TARGET}</span>
+        <span class="badge-touch">${SVG_SHOOT}</span>
+      </kbd>
     </div>
     <div class="controls-cluster cluster-mute">
       <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-pause-btn" onclick="toggleManualPause()">${SVG_PAUSE}</button>
