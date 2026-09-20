@@ -15,18 +15,11 @@
 
   .lobby,
   canvas {
-    height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px);
   }
 
   .lobby {
     overflow-y: auto;
-  }
-
-  .lobby.borders,
-  canvas.borders {
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
   }
 
   .outer-title {

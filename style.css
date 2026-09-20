@@ -67,9 +67,9 @@ body {
 .lobby,
 canvas {
   aspect-ratio: 854 / 480;
-  height: min(calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)), 480px);
+  height: min(calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px), 480px);
   width: auto;
-  max-width: calc(100dvw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  max-width: calc(100dvw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 16px);
 }
 
 .d-flex-center {
