@@ -76,7 +76,7 @@ function getControlsTemplate() {
           <span class="text-shadow-standard controls-label">Move Right</span>
         </div>
         <div class="controls-row">
-          <kbd class="key-badge d-flex-center">Space</kbd>
+          <kbd class="key-badge d-flex-center">${SVG_SPACEBAR}</kbd>
           <span class="text-shadow-standard controls-label">Jump</span>
         </div>
         <div class="controls-row">

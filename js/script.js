@@ -1,4 +1,4 @@
-const RESPONSIVE_QUERY = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
+const RESPONSIVE_QUERY = "(hover: none) and (pointer: coarse)";
 const responsiveMedia = window.matchMedia(RESPONSIVE_QUERY);
 
 function showElement(element) {
