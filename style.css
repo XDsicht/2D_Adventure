@@ -123,13 +123,13 @@ canvas {
 
 @keyframes wobble {
   0% {
-    transform: rotate(-16deg);
+    transform: rotate(-16deg) scale(var(--head-scale, 1));
   }
   50% {
-    transform: rotate(16deg);
+    transform: rotate(16deg) scale(var(--head-scale, 1));
   }
   100% {
-    transform: rotate(-16deg);
+    transform: rotate(-16deg) scale(var(--head-scale, 1));
   }
 }
 
@@ -395,12 +395,12 @@ canvas {
 
   .inner-title {
     display: block;
-    font-size: 22px;
+    font-size: clamp(22px, 4.8vmin, 34px);
     padding-bottom: 8px;
   }
 
   .character-head {
-    width: 120px;
+    width: clamp(120px, 28vmin, 220px);
   }
 
   .overlay-btn-group {
@@ -412,19 +412,19 @@ canvas {
   }
 
   .start-btn {
-    font-size: 18px;
+    font-size: clamp(18px, 4vmin, 28px);
     letter-spacing: 2px;
     border-width: 2px;
     padding: 8px 24px;
   }
 
   .secondary-btn {
-    font-size: 14px;
+    font-size: clamp(14px, 2.6vmin, 18px);
     padding: 6px 20px;
   }
 
   .sound-settings-title {
-    font-size: 22px;
+    font-size: clamp(22px, 4.5vmin, 32px);
   }
 
   .sound-control-row {
@@ -453,7 +453,7 @@ canvas {
   }
 
   .controls-label {
-    font-size: 16px;
+    font-size: clamp(16px, 3vmin, 22px);
   }
 
   .arrow-keys {
@@ -466,7 +466,7 @@ canvas {
   }
 
   .endboss-head {
-    zoom: 0.6;
+    --head-scale: 0.6;
   }
 
   .game-controls-bar {

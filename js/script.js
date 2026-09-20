@@ -24,6 +24,14 @@ function renderInGameControlsBar() {
   gameControlsBar = getElement("gameControlsBar");
   gameControlsBar.innerHTML = getGameControlsBarTemplate();
   gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
+  hideUnsupportedFullscreenButton();
+}
+
+function hideUnsupportedFullscreenButton() {
+  if (supportsFullscreen()) return;
+  let button = getElement("game-fullscreen-btn");
+  if (!button) return;
+  hideElement(button);
 }
 
 function clearInGameControlsBar() {

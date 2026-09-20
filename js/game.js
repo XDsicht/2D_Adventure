@@ -98,6 +98,27 @@ function resumeBackgroundMusic() {
   });
 }
 
+function supportsFullscreen() {
+  return document.fullscreenEnabled;
+}
+
+function getFullscreenIcon() {
+  return document.fullscreenElement ? SVG_EXIT_FULLSCREEN : SVG_FULLSCREEN;
+}
+
+function toggleFullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen();
+}
+
+function setFullscreenIcon() {
+  let button = getElement("game-fullscreen-btn");
+  if (!button) return;
+  button.innerHTML = getFullscreenIcon();
+}
+
+document.addEventListener("fullscreenchange", setFullscreenIcon);
+
 function toggleManualPause() {
   if (pauseReasons.has(PAUSE_REASON_MANUAL)) resumeGame(PAUSE_REASON_MANUAL);
   else pauseGame(PAUSE_REASON_MANUAL);
@@ -195,6 +216,7 @@ function getResponsiveButtonElements() {
     muteButton: getElement("game-mute-btn"),
     pauseButton: getElement("game-pause-btn"),
     menuButton: getElement("game-menu-btn"),
+    fullscreenButton: getElement("game-fullscreen-btn"),
   };
 }
 
@@ -210,6 +232,7 @@ function getTouchedKey(target) {
   if (isTouched(responsiveButtons["muteButton"], target)) return "MUTE";
   if (isTouched(responsiveButtons["pauseButton"], target)) return "PAUSE";
   if (isTouched(responsiveButtons["menuButton"], target)) return "MENU";
+  if (isTouched(responsiveButtons["fullscreenButton"], target)) return "FULLSCREEN";
   return null;
 }
 
@@ -226,6 +249,7 @@ function runTouchedAction(event) {
     if (key == "MUTE") return toggleMute("game-mute-btn");
     if (key == "PAUSE") return toggleManualPause();
     if (key == "MENU") return backToMenu();
+    if (key == "FULLSCREEN") return toggleFullscreen();
   }
 }
 
