@@ -62,6 +62,7 @@ body {
 
 .lobby {
   background-image: url("img/5.elements/background/background.png");
+  margin-bottom: 56px;
 }
 
 .lobby,
