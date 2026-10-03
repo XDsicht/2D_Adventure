@@ -63,6 +63,7 @@ body {
 .lobby {
   background-image: url("img/5.elements/background/background.png");
   margin-bottom: 56px;
+  overflow-y: auto;
 }
 
 .lobby,
@@ -341,6 +342,11 @@ canvas {
   color: #f5e6c8;
   font-size: 22px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.enlarge-window-icon svg {
+  width: 72px;
+  height: 72px;
 }
 
 .rotate-phone {

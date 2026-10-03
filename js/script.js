@@ -1,5 +1,7 @@
 const RESPONSIVE_QUERY = "(hover: none) and (pointer: coarse)";
 const responsiveMedia = window.matchMedia(RESPONSIVE_QUERY);
+const MIN_SIZE_QUERY = "(min-width: 880px) and (min-height: 620px)";
+const minSizeMedia = window.matchMedia(MIN_SIZE_QUERY);
 
 function showElement(element) {
   element.classList.remove("d_none");
@@ -24,12 +26,12 @@ function renderInGameControlsBar() {
   gameControlsBar = getElement("gameControlsBar");
   gameControlsBar.innerHTML = getGameControlsBarTemplate();
   gameMuteIcon = setButton("game-mute-btn", gameSoundsMuted);
-  hideUnsupportedFullscreenButton();
+  hideUnsupportedFullscreenButton("game-fullscreen-btn");
 }
 
-function hideUnsupportedFullscreenButton() {
+function hideUnsupportedFullscreenButton(id) {
   if (supportsFullscreen()) return;
-  let button = getElement("game-fullscreen-btn");
+  let button = getElement(id);
   if (!button) return;
   hideElement(button);
 }
@@ -64,6 +66,7 @@ function getTemplate(id) {
     case "victory": return getVictoryTemplate();
     case "gameOver": return getGameOverTemplate();
     case "rotatePhone": return getRotatePhoneTemplate();
+    case "enlargeWindow": return getEnlargeWindowTemplate();
     case "pause": return getPauseTemplate();
   }
 }
@@ -90,6 +93,10 @@ function checkOrientation() {
     return screen.orientation.type.startsWith("portrait");
   }
   return window.innerWidth < window.innerHeight;
+}
+
+function isWindowTooSmall() {
+  return !checkIfMobile() && !minSizeMedia.matches;
 }
 
 document.addEventListener("click", startLobbyMusic);

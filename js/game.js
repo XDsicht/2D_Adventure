@@ -5,9 +5,11 @@ let keyboard = new Keyboard();
 let intervalRegistry = [];
 let responsiveButtons = {};
 let pauseReasons = new Set();
+let windowPromptDismissed = false;
 const GAME_KEY_CODES = [37, 38, 39, 40, 32, 68];
 const PAUSE_REASON_PORTRAIT = "portrait";
 const PAUSE_REASON_MANUAL = "manual";
+const PAUSE_REASON_WINDOW = "window";
 
 function startGame() {
   if (forceRotatePhone()) {
@@ -58,10 +60,18 @@ function hideLoadingScreen() {
 }
 
 function handleOrientationChange() {
-  let locked = forceRotatePhone();
-  if (locked == pauseReasons.has(PAUSE_REASON_PORTRAIT)) return;
-  if (locked) pauseGame(PAUSE_REASON_PORTRAIT);
-  else resumeGame(PAUSE_REASON_PORTRAIT);
+  syncPauseReason(PAUSE_REASON_PORTRAIT, forceRotatePhone());
+  syncPauseReason(PAUSE_REASON_WINDOW, shouldPromptEnlarge());
+}
+
+function syncPauseReason(reason, active) {
+  if (active == pauseReasons.has(reason)) return;
+  if (active) pauseGame(reason);
+  else resumeGame(reason);
+}
+
+function shouldPromptEnlarge() {
+  return isWindowTooSmall() && !windowPromptDismissed;
 }
 
 window.addEventListener("resize", handleOrientationChange);
@@ -124,8 +134,14 @@ function toggleManualPause() {
   else pauseGame(PAUSE_REASON_MANUAL);
 }
 
+function dismissWindowPrompt() {
+  windowPromptDismissed = true;
+  resumeGame(PAUSE_REASON_WINDOW);
+}
+
 function renderPauseState() {
   if (pauseReasons.has(PAUSE_REASON_PORTRAIT)) return showRotateScreen();
+  if (pauseReasons.has(PAUSE_REASON_WINDOW)) return showEnlargeWindowScreen();
   if (pauseReasons.size > 0) return showPauseScreen();
   showGameScreen();
 }
@@ -133,6 +149,12 @@ function renderPauseState() {
 function showRotateScreen() {
   hideGameScreen();
   renderHTML("rotatePhone");
+}
+
+function showEnlargeWindowScreen() {
+  hideGameScreen();
+  renderHTML("enlargeWindow");
+  hideUnsupportedFullscreenButton("enlarge-fullscreen-btn");
 }
 
 function showPauseScreen() {

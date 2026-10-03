@@ -183,6 +183,20 @@ function getRotatePhoneTemplate() {
   `;
 }
 
+function getEnlargeWindowTemplate() {
+  return `
+    <div class="rotate-phone-screen">
+      <p class="letter-spacing-2">Your window is too small</p>
+      <div class="enlarge-window-icon">${SVG_FULLSCREEN}</div>
+      <p class="letter-spacing-2">Please enlarge it to play</p>
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" id="enlarge-fullscreen-btn" onclick="toggleFullscreen()">Fullscreen</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="dismissWindowPrompt()">Continue Anyway</button>
+      </div>
+    </div>
+  `;
+}
+
 function getVictoryTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
