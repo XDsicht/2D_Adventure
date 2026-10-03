@@ -246,7 +246,7 @@ function updateTouchedKeys(event, isPressed) {
 function runTouchedAction(event) {
   for (let i = 0; i < event.changedTouches.length; i++) {
     let key = getTouchedKey(event.changedTouches[i].target);
-    if (key == "MUTE") return toggleMute("game-mute-btn");
+    if (key == "MUTE") return toggleMuteAll("mute-all-btn");
     if (key == "PAUSE") return toggleManualPause();
     if (key == "MENU") return backToMenu();
     if (key == "FULLSCREEN") return toggleFullscreen();

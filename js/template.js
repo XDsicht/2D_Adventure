@@ -130,7 +130,7 @@ function getGameControlsBarTemplate() {
     <div class="controls-cluster cluster-mute">
       <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-pause-btn" onclick="toggleManualPause()">${SVG_PAUSE}</button>
       <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-menu-btn" onclick="backToMenu()">${SVG_HOME}</button>
-      <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-mute-btn" onclick="toggleMute('game-mute-btn')">${gameMuteIcon}</button>
+      <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-mute-btn" onclick="toggleMuteAll('mute-all-btn')">${gameMuteIcon}</button>
       <button class="fantasy-btn mute-btn cursor-pointer d-flex-center" id="game-fullscreen-btn" onclick="toggleFullscreen()">${getFullscreenIcon()}</button>
     </div>
   `;
