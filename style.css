@@ -1,6 +1,6 @@
 @font-face {
-  font-family: "Uncial Antiqua", system-ui;
-  src: url("fonts/UncialAntiqua-Regular.ttf") format("truetype");
+  font-family: "Uncial Antiqua";
+  src: url("fonts/Uncial_Antiqua/UncialAntiqua-Regular.ttf") format("truetype");
 }
 
 body {
