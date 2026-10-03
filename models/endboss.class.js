@@ -86,7 +86,7 @@ class Endboss extends Enemy {
 
   isInCharacterFrame() {
     if (!this.world || !this.world.character) return false;
-    const characterViewEnd = this.world.character.x + 450;
+    const characterViewEnd = this.world.character.x + this.world.canvas.width - this.world.cameraOffset - this.walkWidth / 2;
     return characterViewEnd >= this.x;
   }
 
