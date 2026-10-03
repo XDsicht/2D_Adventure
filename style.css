@@ -63,6 +63,7 @@ body {
 .lobby {
   background-image: url("img/5.elements/background/background.png");
   margin-bottom: 56px;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -212,6 +213,7 @@ canvas {
   justify-content: space-between;
   gap: 16px;
   width: 320px;
+  max-width: 100%;
 }
 
 .sound-control-row label {
@@ -222,6 +224,7 @@ canvas {
 
 .sound-control-row input[type="range"] {
   flex: 1;
+  min-width: 0;
   accent-color: #c49a5a;
   height: 6px;
 }
@@ -347,6 +350,7 @@ canvas {
 .enlarge-window-icon svg {
   width: 72px;
   height: 72px;
+  color: #5a3820;
 }
 
 .rotate-phone {
