@@ -6,10 +6,10 @@ let intervalRegistry = [];
 let responsiveButtons = {};
 let pauseReasons = new Set();
 let windowPromptDismissed = false;
-const GAME_KEY_CODES = [37, 38, 39, 40, 32, 68];
-const PAUSE_REASON_PORTRAIT = "portrait";
-const PAUSE_REASON_MANUAL = "manual";
-const PAUSE_REASON_WINDOW = "window";
+const gameKeyCodes = [37, 38, 39, 40, 32, 68];
+const pauseReasonPortrait = "portrait";
+const pauseReasonManual = "manual";
+const pauseReasonWindow = "window";
 
 function startGame() {
   if (forceRotatePhone()) {
@@ -60,8 +60,8 @@ function hideLoadingScreen() {
 }
 
 function handleOrientationChange() {
-  syncPauseReason(PAUSE_REASON_PORTRAIT, forceRotatePhone());
-  syncPauseReason(PAUSE_REASON_WINDOW, shouldPromptEnlarge());
+  syncPauseReason(pauseReasonPortrait, forceRotatePhone());
+  syncPauseReason(pauseReasonWindow, shouldPromptEnlarge());
 }
 
 function syncPauseReason(reason, active) {
@@ -130,18 +130,18 @@ function setFullscreenIcon() {
 document.addEventListener("fullscreenchange", setFullscreenIcon);
 
 function toggleManualPause() {
-  if (pauseReasons.has(PAUSE_REASON_MANUAL)) resumeGame(PAUSE_REASON_MANUAL);
-  else pauseGame(PAUSE_REASON_MANUAL);
+  if (pauseReasons.has(pauseReasonManual)) resumeGame(pauseReasonManual);
+  else pauseGame(pauseReasonManual);
 }
 
 function dismissWindowPrompt() {
   windowPromptDismissed = true;
-  resumeGame(PAUSE_REASON_WINDOW);
+  resumeGame(pauseReasonWindow);
 }
 
 function renderPauseState() {
-  if (pauseReasons.has(PAUSE_REASON_PORTRAIT)) return showRotateScreen();
-  if (pauseReasons.has(PAUSE_REASON_WINDOW)) return showEnlargeWindowScreen();
+  if (pauseReasons.has(pauseReasonPortrait)) return showRotateScreen();
+  if (pauseReasons.has(pauseReasonWindow)) return showEnlargeWindowScreen();
   if (pauseReasons.size > 0) return showPauseScreen();
   showGameScreen();
 }
@@ -163,7 +163,7 @@ function showPauseScreen() {
 }
 
 function showGameScreen() {
-  if (!world) return renderHTML("lobby");
+  if (!world) return restoreCurrentScreen();
   hideElement(gameLobby);
   showElement(canvas);
   renderInGameControlsBar();
@@ -191,7 +191,7 @@ function isGameActive() {
 }
 
 window.addEventListener("keydown", async (event) => {
-  if (isGameActive() && GAME_KEY_CODES.includes(event.keyCode)) {
+  if (isGameActive() && gameKeyCodes.includes(event.keyCode)) {
     event.preventDefault();
   }
   if (event.keyCode == 27 && world) {
@@ -212,7 +212,7 @@ window.addEventListener("keydown", async (event) => {
 });
 
 window.addEventListener("keyup", async (event) => {
-  if (isGameActive() && GAME_KEY_CODES.includes(event.keyCode)) {
+  if (isGameActive() && gameKeyCodes.includes(event.keyCode)) {
     event.preventDefault();
   }
   if (event.keyCode == 39) {
@@ -317,7 +317,7 @@ function releaseAllKeys() {
 function handleVisibilityChange() {
   if (!document.hidden) return;
   releaseAllKeys();
-  if (world) pauseGame(PAUSE_REASON_MANUAL);
+  if (world) pauseGame(pauseReasonManual);
 }
 
 document.addEventListener("visibilitychange", handleVisibilityChange);

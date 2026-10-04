@@ -12,7 +12,7 @@ let lobbyMuteIcon;
 let gameMuteIcon;
 let allMuteIcon;
 let musicMuteStatus;
-const SOUND_SETTINGS_KEY = "vorgaSoundSettings";
+const soundSettingsKey = "vorgaSoundSettings";
 
 function applyAudioState(audio, audioVolume) {
   audio.volume = audioVolume;
@@ -340,16 +340,16 @@ function saveSoundSettings() {
     lobbyMusicVolume: lobbyMusicVolume,
     gameSoundsVolume: gameSoundsVolume,
   };
-  sessionStorage.setItem(SOUND_SETTINGS_KEY, JSON.stringify(settings));
+  sessionStorage.setItem(soundSettingsKey, JSON.stringify(settings));
 }
 
 function loadSoundSettings() {
-  let stored = sessionStorage.getItem(SOUND_SETTINGS_KEY);
+  let stored = sessionStorage.getItem(soundSettingsKey);
   if (!stored) return;
   try {
     applySoundSettings(JSON.parse(stored));
   } catch (error) {
-    sessionStorage.removeItem(SOUND_SETTINGS_KEY);
+    sessionStorage.removeItem(soundSettingsKey);
   }
 }
 

@@ -1,7 +1,9 @@
-const RESPONSIVE_QUERY = "(hover: none) and (pointer: coarse)";
-const responsiveMedia = window.matchMedia(RESPONSIVE_QUERY);
-const MIN_SIZE_QUERY = "(min-width: 880px) and (min-height: 620px)";
-const minSizeMedia = window.matchMedia(MIN_SIZE_QUERY);
+const responsiveQuery = "(hover: none) and (pointer: coarse)";
+const responsiveMedia = window.matchMedia(responsiveQuery);
+const minSizeQuery = "(min-width: 880px) and (min-height: 620px)";
+const minSizeMedia = window.matchMedia(minSizeQuery);
+const transientScreens = ["loading", "rotatePhone", "enlargeWindow", "pause"];
+let currentScreen = "lobby";
 
 function showElement(element) {
   element.classList.remove("d_none");
@@ -53,8 +55,19 @@ function renderLobby(id) {
 }
 
 function renderHTML(id) {
+  if (!transientScreens.includes(id)) {
+    currentScreen = id;
+  }
   let element = getElement("lobby");
   element.innerHTML = getTemplate(id);
+}
+
+function restoreCurrentScreen() {
+  if (currentScreen == "soundControls") {
+    renderSoundControls(currentScreen);
+  } else {
+    renderHTML(currentScreen);
+  }
 }
 
 function getTemplate(id) {
@@ -67,6 +80,7 @@ function getTemplate(id) {
     case "gameOver": return getGameOverTemplate();
     case "rotatePhone": return getRotatePhoneTemplate();
     case "enlargeWindow": return getEnlargeWindowTemplate();
+    case "imprint": return getImprintTemplate();
     case "pause": return getPauseTemplate();
   }
 }
