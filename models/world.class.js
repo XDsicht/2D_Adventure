@@ -57,7 +57,7 @@ class World {
 
   run() {
     this.runMainLoop();
-    this.runArrowLoop();
+    this.runFastCollisionLoop();
   }
 
   runMainLoop() {
@@ -73,11 +73,12 @@ class World {
     );
   }
 
-  runArrowLoop() {
+  runFastCollisionLoop() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
         this.checkCollisionOfArrows();
+        this.checkCharacterJumpingCollisions();
       }, 25),
     );
   }
@@ -91,7 +92,6 @@ class World {
 
   checkCollisions() {
     this.checkEnemyWalkingCollisions(this.level.enemies);
-    this.checkCharacterJumpingCollisions();
     this.checkCharacterWalkingCollisions();
     this.checkEndbossCollisionWhileCharacterIsJumping();
     this.checkCollisionsWithCollectibles(this.level.arrows, this.quiver);
