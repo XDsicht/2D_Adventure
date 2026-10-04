@@ -151,12 +151,21 @@ class Character extends MovableObject {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
-        if (this.world.keyboard.D && this.shotAllowed() && !this.isAttacking && this.world.quiver.percentage > 0 && !this.dead) {
+        if (this.canStartAttack()) {
           this.activateDKey();
           this.resetAttackDelayTimer();
         }
       }, 100),
     );
+  }
+
+  canStartAttack() {
+    if (this.dead) return false;
+    if (this.isAttacking) return false;
+    if (this.releaseArrow) return false;
+    if (!this.world.keyboard.D) return false;
+    if (!this.shotAllowed()) return false;
+    return this.world.quiver.percentage > 0;
   }
 
   characterActions() {
@@ -248,17 +257,21 @@ class Character extends MovableObject {
   }
 
   resetAttackDelayTimer() {
-    setTimeout(() => {
-      this.attackDelay = false;
-    }, 400);
+    registerInterval(
+      setTimeout(() => {
+        this.attackDelay = false;
+      }, 400),
+    );
   }
 
   resetAttackVariables() {
-    setTimeout(() => {
-      this.isAttacking = false;
-      this.world.keyboard.D = false;
-      this.releaseArrow = true;
-    }, 300);
+    registerInterval(
+      setTimeout(() => {
+        this.isAttacking = false;
+        this.world.keyboard.D = false;
+        this.releaseArrow = true;
+      }, 300),
+    );
   }
 
   characterMovementAnimationIntervals() {
