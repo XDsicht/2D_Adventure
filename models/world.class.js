@@ -56,16 +56,29 @@ class World {
   }
 
   run() {
+    this.runMainLoop();
+    this.runArrowLoop();
+  }
+
+  runMainLoop() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
         this.checkCollisions();
         this.applyDamageFromEnemies();
         this.character.resetDamageAccumulation();
-        this.checkCollisionOfArrows();
         this.checkShootArrow();
         this.removeDeadEnemies();
       }, 100),
+    );
+  }
+
+  runArrowLoop() {
+    registerInterval(
+      setInterval(() => {
+        if (this.paused) return;
+        this.checkCollisionOfArrows();
+      }, 25),
     );
   }
 
@@ -186,34 +199,41 @@ class World {
   }
 
   checkCollisionOfArrows() {
-    this.level.throwableObjects.forEach((arrow) => {
-      this.level.enemies.forEach((enemy) => {
-        if (!enemy.inFrame()) return;
-        if (!this.quiverNotEmpty()) return;
-        if (this.checkArrowCollision(enemy, arrow)) return;
-      });
+    this.level.throwableObjects.slice().forEach((arrow) => {
+      let enemy = this.findHitEnemy(arrow);
+      if (enemy) {
+        this.hitEnemyWithArrow(enemy, arrow);
+      }
     });
   }
 
-  checkArrowCollision(enemy, arrow) {
-    if (arrow.isColliding(enemy) && !enemy.dead) {
-      if (!this.checkEndbossActive(enemy)) return true;
-      playSound(enemy.enemySounds.isHitSound, gameSoundsVolume);
-      enemy.hit();
-      this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
-      return true;
+  findHitEnemy(arrow) {
+    let hits = this.level.enemies.filter((enemy) => this.canArrowHit(enemy, arrow));
+    if (arrow.otherDirection) {
+      hits.sort((a, b) => b.x - a.x);
+    } else {
+      hits.sort((a, b) => a.x - b.x);
     }
+    return hits[0];
+  }
+
+  canArrowHit(enemy, arrow) {
+    if (enemy.dead) return false;
+    if (!enemy.inFrame()) return false;
+    if (!this.checkEndbossActive(enemy)) return false;
+    return arrow.isColliding(enemy);
+  }
+
+  hitEnemyWithArrow(enemy, arrow) {
+    playSound(enemy.enemySounds.isHitSound, gameSoundsVolume);
+    enemy.hit();
+    this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
   }
 
   checkEndbossActive(enemy) {
     if (enemy instanceof Endboss) {
       if (!enemy.activated) return false;
     }
-    return true;
-  }
-
-  quiverNotEmpty() {
-    if (this.level.throwableObjects.length == 0) return false;
     return true;
   }
 
