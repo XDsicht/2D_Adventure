@@ -37,8 +37,7 @@ class MovableObject extends DrawableObject {
       setInterval(() => {
         if (this.paused) return;
         if (this.isAboveGround() || this.speedY > 0) {
-          this.y -= this.speedY;
-          this.speedY -= this.acceleration;
+          this.executeFall();
         }
         if (!this.isAboveGround() && this.speedY < 0) {
           this.y = this.groundY;
@@ -46,6 +45,11 @@ class MovableObject extends DrawableObject {
         }
       }, 1000 / 20),
     );
+  }
+
+  executeFall() {
+     this.y -= this.speedY;
+     this.speedY -= this.acceleration;
   }
 
   isAboveGround() {

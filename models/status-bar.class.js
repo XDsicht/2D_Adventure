@@ -23,7 +23,13 @@ class StatusBar extends DrawableObject {
       return 4;
     } else if (this.percentage >= 60) {
       return 3;
-    } else if (this.percentage >= 40) {
+    } else {
+      return this.resolveLowImageIndex();
+    }
+  }
+
+  resolveLowImageIndex() {
+    if (this.percentage >= 40) {
       return 2;
     } else if (this.percentage >= 20) {
       return 1;

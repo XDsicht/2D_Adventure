@@ -16,12 +16,20 @@ class ThrowableObject extends MovableObject {
   shoot() {
     this.speedY = 6;
     this.applyGravity();
+    this.startSpeedXInterval();
+    this.startDefineAngleInterval();
+  }
+
+  startSpeedXInterval() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
         this.defineSpeedX();
       }, 25),
     );
+  }
+
+  startDefineAngleInterval() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;

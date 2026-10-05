@@ -237,6 +237,11 @@ class Enemy extends MovableObject {
   }
 
   animate() {
+    this.startEnemy();
+    this.startStatusBasedAnimation();
+  }
+
+  startEnemy() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
@@ -245,6 +250,9 @@ class Enemy extends MovableObject {
         this.activateEnemy();
       }, 1000 / 60),
     );
+  }
+
+  startStatusBasedAnimation() {
     registerInterval(
       setInterval(() => {
         if (this.paused) return;
@@ -264,8 +272,7 @@ class Enemy extends MovableObject {
     if (this.dead) {
       this.playEnemyDeadAnimation();
     } else if (this.isHurt()) {
-      this.playEnemyBasedHurtSound();
-      this.playAnimation(this.IMAGES_HURT);
+      this.executeHurtAnimation();
     } else if (this.world.character.isHurt() && this.isAttacking) {
       this.playAnimation(this.IMAGES_IDLE);
     } else if (this.isAttacking && !this.world.character.isHurt()) {
@@ -274,6 +281,11 @@ class Enemy extends MovableObject {
     } else {
       this.playAnimation(this.IMAGES_WALKING);
     }
+  }
+
+  executeHurtAnimation() {
+    this.playEnemyBasedHurtSound();
+    this.playAnimation(this.IMAGES_HURT);
   }
 
   activateEnemy() {

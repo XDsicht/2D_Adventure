@@ -171,7 +171,13 @@ class Endboss extends Enemy {
       this.playEndbossHurtAnimation();
     } else if (this.isAttacking) {
       this.getEndbossAttackState();
-    } else if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
+    } else {
+      this.playEndbossMovementAnimation();
+    }
+  }
+
+  playEndbossMovementAnimation() {
+    if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
       this.playEndbossRunAnimation();
     } else if (this.isWalking && !this.isRunning) {
       this.playEndbossWalkAnimation();
