@@ -7,7 +7,6 @@ class Character extends MovableObject {
 
   releaseArrow = false;
   shootingTime = 0;
-  checkAlreadyRunning = false;
   characterJumping = false;
   currentDirection;
   attackDelay = false;

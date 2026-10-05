@@ -53,10 +53,4 @@ class ThrowableObject extends MovableObject {
       }
     }
   }
-
-  checkQuiverPercentage() {
-    if (this.quiver.percentage === 0) {
-      return true;
-    }
-  }
 }

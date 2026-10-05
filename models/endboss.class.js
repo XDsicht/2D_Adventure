@@ -10,9 +10,6 @@ class Endboss extends Enemy {
   runWidth = 365;
   runHeight = 550;
   runY = -110;
-  jumpWidth = 490;
-  jumpHeight = 540;
-  jumpY = -55;
   attackWidth = 455;
   attackHeight = 640;
   attackY = -158;
@@ -24,7 +21,6 @@ class Endboss extends Enemy {
   deadY = 152;
   otherDirection = true;
   activated = false;
-  isAngry = false;
   baseX = 0;
   xOffset = 0;
 

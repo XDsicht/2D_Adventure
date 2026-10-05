@@ -14,7 +14,6 @@ class MovableObject extends DrawableObject {
   lastAttacker;
   world;
   groundY = 250;
-  // initialObstacleSpawn = 600;
   spawningLocation;
 
   offset = {
@@ -26,10 +25,6 @@ class MovableObject extends DrawableObject {
 
   checkIfWorldExists() {
     return !this.world || this.world.character.dead || !this.world.character;
-  }
-
-  getGroundY() {
-    return this.groundY;
   }
 
   applyGravity() {
@@ -89,10 +84,6 @@ class MovableObject extends DrawableObject {
     );
   }
 
-  isPassing(mo) {
-    return this.x + this.width < mo.x || this.x > mo.x + mo.width;
-  }
-
   hit() {
     this.energy -= 5;
     if (this.energy < 0) {
@@ -111,10 +102,6 @@ class MovableObject extends DrawableObject {
     let timePassed = new Date().getTime() - this.lastHit; // difference in ms
     timePassed = timePassed / 1000; // difference in seconds
     return timePassed < 0.8;
-  }
-
-  isIdle() {
-    return !this.moveRight() && !this.moveLeft();
   }
 
   playAnimation(images) {
