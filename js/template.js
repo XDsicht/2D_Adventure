@@ -57,7 +57,7 @@ function getLobbyTemplate() {
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('controls')">Show Controls</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls('soundControls')">Sounds</button>
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('imprint')">Imprint</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderImprint('imprint')">Imprint</button>
       </div>
     </div>
   `;
@@ -201,9 +201,12 @@ function getEnlargeWindowTemplate() {
 function getImprintTemplate() {
   return `
     <div class="imprint-screen">
-      <h2 class="letter-spacing-2">Imprint &amp; Privacy Policy</h2>
-      ${getImprintSection()}
-      ${getPrivacySection()}
+      <h2 class="letter-spacing-2">About the Game, Imprint &amp; Privacy</h2>
+      <div class="imprint-body">
+        <div id="gameDescription"></div>
+        <div id="imprintInfo"></div>
+        <div id="privacyInfo"></div>
+      </div>
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
       </div>
@@ -211,7 +214,25 @@ function getImprintTemplate() {
   `;
 }
 
-function getImprintSection() {
+function getGameDescriptionTemplate() {
+  return `
+    <h3>About the Game</h3>
+    <p>Adventures of Vorga Flammenherz is a 2D side-scrolling action game built with plain JavaScript and the HTML5 Canvas, without a game engine or framework.</p>
+    <p>You play Vorga, an archer fighting along a desert trail overrun by trolls. Collect arrows to refill your quiver, gather coins as you cross the dunes, and defeat the troll chieftain guarding the end of the path.</p>
+    <h3>Gameplay</h3>
+    <p>Six trolls patrol the trail and a chieftain waits at the end. Two arrows bring down a troll, the chieftain takes four. You can also defeat a troll by landing on it, but only from directly above and only while falling. Contact with a troll costs 20 of your 100 health points, the chieftain costs 40. Nineteen arrows and five coins are scattered across the level.</p>
+    <h3>Controls</h3>
+    <p>
+      Move: &#8592; &#8594;<br />
+      Jump: Space<br />
+      Shoot an arrow: D<br />
+      Pause: Esc
+    </p>
+    <p>On phones and tablets the game switches to on-screen buttons and is played in landscape orientation.</p>
+  `;
+}
+
+function getImprintInfoTemplate() {
   return `
     <h3>Information pursuant to Section 5 DDG</h3>
     <p>Tobias Fröhler<br />Johann-von-Weerth-Str. 22<br />79100 Freiburg im Breisgau<br />Germany</p>
@@ -232,7 +253,7 @@ function getImprintSection() {
   `;
 }
 
-function getPrivacySection() {
+function getPrivacyInfoTemplate() {
   return `
     <h3>Data Protection at a Glance</h3>
     <p>Personal data is any data by which you can be personally identified. This website contains no contact forms, no registration, no newsletter, no analytics tools, no advertising networks and no social media plug-ins. No personal data is collected, processed or passed on to third parties by the operator of this website.</p>

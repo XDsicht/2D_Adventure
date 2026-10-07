@@ -24,6 +24,13 @@ function renderSoundControls(id) {
   allMuteIcon = setMuteAllButton("mute-all-btn", muted);
 }
 
+function renderImprint(id) {
+  renderHTML(id);
+  getElement("gameDescription").innerHTML = getGameDescriptionTemplate();
+  getElement("imprintInfo").innerHTML = getImprintInfoTemplate();
+  getElement("privacyInfo").innerHTML = getPrivacyInfoTemplate();
+}
+
 function renderInGameControlsBar() {
   gameControlsBar = getElement("gameControlsBar");
   gameControlsBar.innerHTML = getGameControlsBarTemplate();
@@ -65,6 +72,8 @@ function renderHTML(id) {
 function restoreCurrentScreen() {
   if (currentScreen == "soundControls") {
     renderSoundControls(currentScreen);
+  } else if (currentScreen == "imprint") {
+    renderImprint(currentScreen);
   } else {
     renderHTML(currentScreen);
   }

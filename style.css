@@ -406,10 +406,12 @@ canvas {
 
 .imprint-screen {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 640px;
   max-height: 100%;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 16px 24px;
   text-align: left;
   font-size: 13px;
@@ -421,9 +423,18 @@ canvas {
 }
 
 .imprint-screen h2 {
+  flex-shrink: 0;
   margin: 0 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #c49a5a;
   font-size: 22px;
   text-align: center;
+}
+
+.imprint-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .imprint-screen h3 {
@@ -437,8 +448,11 @@ canvas {
 }
 
 .imprint-screen .overlay-btn-row {
+  flex-shrink: 0;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #c49a5a;
 }
 
 *::-webkit-scrollbar {
