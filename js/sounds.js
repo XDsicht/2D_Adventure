@@ -32,7 +32,7 @@ function resolveVolume(audio) {
   if (audio === lobbyMusic) {
     return lobbyMusicVolume;
   } else if (audio === backgroundMusic) {
-    return gameSoundsVolume * 0.1;
+    return gameSoundsVolume * 0.12;
   } else {
     return gameSoundsVolume;
   }
