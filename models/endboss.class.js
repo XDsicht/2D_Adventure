@@ -1,4 +1,12 @@
 class Endboss extends Enemy {
+  ENDBOSS_IMAGES_IDLE = endbossImages.idle;
+  ENDBOSS_IMAGES_WALKING = endbossImages.walking;
+  ENDBOSS_IMAGES_RUN = endbossImages.run;
+  ENDBOSS_IMAGES_JUMPING = endbossImages.jumping;
+  ENDBOSS_IMAGES_HURT = endbossImages.hurt;
+  ENDBOSS_IMAGES_DEAD = endbossImages.dead;
+  ENDBOSS_IMAGES_ATTACKING = endbossImages.attacking;
+
   height = 360;
   width = 340;
   y = 102;

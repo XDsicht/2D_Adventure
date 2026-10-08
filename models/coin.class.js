@@ -2,18 +2,7 @@ class Coin extends MovableObject {
   width = 30;
   height = 30;
 
-  IMAGES = [
-    "img/5.elements/coins/Bronze_21.png",
-    "img/5.elements/coins/Bronze_22.png",
-    "img/5.elements/coins/Bronze_23.png",
-    "img/5.elements/coins/Bronze_24.png",
-    "img/5.elements/coins/Bronze_25.png",
-    "img/5.elements/coins/Bronze_26.png",
-    "img/5.elements/coins/Bronze_27.png",
-    "img/5.elements/coins/Bronze_28.png",
-    "img/5.elements/coins/Bronze_29.png",
-    "img/5.elements/coins/Bronze_30.png",
-  ];
+  IMAGES = coinImages;
 
   constructor() {
     super().loadImage("img/5.elements/coins/Bronze_30.png");
