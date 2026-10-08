@@ -274,6 +274,7 @@ class Endboss extends Enemy {
   checkEndbossToCharacterRelation() {
     if (this.isInCharacterFrame() && !this.activated) {
       this.activated = true;
+      startEndbossMusic();
     }
   }
 

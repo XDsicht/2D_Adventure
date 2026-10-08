@@ -43,8 +43,10 @@ function launchGame() {
 function initGame(canvas) {
   world = new World(canvas, keyboard);
   registerGameSound(backgroundMusic);
+  registerGameSound(endbossMusic);
   createAllSoundsArray();
   applyAudioStates(allSounds);
+  currentMusic = backgroundMusic;
   backgroundMusic.currentTime = 3;
   let volume = resolveVolume(backgroundMusic);
   playSound(backgroundMusic, volume);
@@ -88,7 +90,7 @@ function pauseGame(reason) {
   if (world && !world.paused) {
     world.pause();
     stopAllSoundEffects();
-    backgroundMusic.pause();
+    currentMusic.pause();
   }
   renderPauseState();
 }
@@ -97,13 +99,13 @@ function resumeGame(reason) {
   pauseReasons.delete(reason);
   if (pauseReasons.size == 0 && world && world.paused) {
     world.resume();
-    resumeBackgroundMusic();
+    resumeMusic();
   }
   renderPauseState();
 }
 
-function resumeBackgroundMusic() {
-  backgroundMusic.play().catch((error) => {
+function resumeMusic() {
+  currentMusic.play().catch((error) => {
     if (error.name !== "AbortError") console.error(error);
   });
 }

@@ -7,7 +7,9 @@ let gameSoundsVolume = 0.5;
 let lobbyMusicVolume = 0.2;
 let defaultVolume = Number(0.2);
 let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
+let endbossMusic = new Audio("audio/game_audio/endboss_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
+let currentMusic = backgroundMusic;
 let lobbyMuteIcon;
 let gameMuteIcon;
 let allMuteIcon;
@@ -33,6 +35,8 @@ function resolveVolume(audio) {
     return lobbyMusicVolume;
   } else if (audio === backgroundMusic) {
     return gameSoundsVolume * 0.12;
+  } else if (audio === endbossMusic) {
+    return gameSoundsVolume * 0.144;
   } else {
     return gameSoundsVolume;
   }
@@ -79,7 +83,7 @@ function activateListener(audio) {
 }
 
 function activateLoop(audio) {
-  if (audio === lobbyMusic || audio === backgroundMusic) {
+  if (audio === lobbyMusic || audio === backgroundMusic || audio === endbossMusic) {
     audio.loop = true;
   }
 }
@@ -104,6 +108,12 @@ function loopBackgroundMusic() {
   }
 }
 
+function startEndbossMusic() {
+  stopSound(backgroundMusic);
+  currentMusic = endbossMusic;
+  playSound(endbossMusic, resolveVolume(endbossMusic));
+}
+
 function stopAllGameSounds() {
   allGameSounds.forEach((audio) => {
     audio.pause();
@@ -118,7 +128,7 @@ function clearGameSounds() {
 
 function stopAllSoundEffects() {
   allGameSounds.forEach((audio) => {
-    if (audio === backgroundMusic) return;
+    if (audio === backgroundMusic || audio === endbossMusic) return;
     audio.pause();
     audio.currentTime = 0;
   });
