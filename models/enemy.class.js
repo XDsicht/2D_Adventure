@@ -183,6 +183,7 @@ class Enemy extends MovableObject {
       this.playAnimation(imagesDead);
     } else {
       this.loadImage(imagesDead[imagesDead.length - 1]);
+      this.deathAnimationDone = true;
       if (this.enemySoundLibrary) {
         this.enemySoundLibrary.isDeadSound.pause();
       }

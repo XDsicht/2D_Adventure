@@ -28,83 +28,12 @@ class Character extends MovableObject {
     isDeadSound: new Audio("audio/character_audio/character_dead_sound.mp3"),
   };
 
-  IMAGES_IDLE = [
-    "img/2.character/1.idle/Warrior_03__IDLE_000.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_001.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_002.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_003.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_004.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_005.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_006.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_007.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_008.png",
-    "img/2.character/1.idle/Warrior_03__IDLE_009.png",
-  ];
-
-  IMAGES_WALKING = [
-    "img/2.character/2.walk/Warrior_03__WALK_000.png",
-    "img/2.character/2.walk/Warrior_03__WALK_001.png",
-    "img/2.character/2.walk/Warrior_03__WALK_002.png",
-    "img/2.character/2.walk/Warrior_03__WALK_003.png",
-    "img/2.character/2.walk/Warrior_03__WALK_004.png",
-    "img/2.character/2.walk/Warrior_03__WALK_005.png",
-    "img/2.character/2.walk/Warrior_03__WALK_006.png",
-    "img/2.character/2.walk/Warrior_03__WALK_007.png",
-    "img/2.character/2.walk/Warrior_03__WALK_008.png",
-    "img/2.character/2.walk/Warrior_03__WALK_009.png",
-  ];
-
-  IMAGES_JUMPING = [
-    "img/2.character/4.jump/Warrior_03__JUMP_000.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_001.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_002.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_003.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_004.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_005.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_006.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_007.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_008.png",
-    "img/2.character/4.jump/Warrior_03__JUMP_009.png",
-  ];
-
-  IMAGES_HURT = [
-    "img/2.character/6.hurt/Warrior_03__HURT_000.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_001.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_002.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_003.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_004.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_005.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_006.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_007.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_008.png",
-    "img/2.character/6.hurt/Warrior_03__HURT_009.png",
-  ];
-
-  IMAGES_DEAD = [
-    "img/2.character/7.dead/Warrior_03__DIE_000.png",
-    "img/2.character/7.dead/Warrior_03__DIE_001.png",
-    "img/2.character/7.dead/Warrior_03__DIE_002.png",
-    "img/2.character/7.dead/Warrior_03__DIE_003.png",
-    "img/2.character/7.dead/Warrior_03__DIE_004.png",
-    "img/2.character/7.dead/Warrior_03__DIE_005.png",
-    "img/2.character/7.dead/Warrior_03__DIE_006.png",
-    "img/2.character/7.dead/Warrior_03__DIE_007.png",
-    "img/2.character/7.dead/Warrior_03__DIE_008.png",
-    "img/2.character/7.dead/Warrior_03__DIE_009.png",
-  ];
-
-  IMAGES_ATTACKING = [
-    "img/2.character/5.attack/Warrior_03__ATTACK_000.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_001.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_002.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_003.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_004.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_005.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_006.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_007.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_008.png",
-    "img/2.character/5.attack/Warrior_03__ATTACK_009.png",
-  ];
+  IMAGES_IDLE = characterImages.idle;
+  IMAGES_WALKING = characterImages.walking;
+  IMAGES_JUMPING = characterImages.jumping;
+  IMAGES_HURT = characterImages.hurt;
+  IMAGES_DEAD = characterImages.dead;
+  IMAGES_ATTACKING = characterImages.attacking;
 
   world;
 
@@ -302,6 +231,7 @@ class Character extends MovableObject {
       this.playAnimation(this.IMAGES_DEAD);
     } else {
       this.loadImage(this.IMAGES_DEAD[this.IMAGES_DEAD.length - 1]);
+      this.deathAnimationDone = true;
     }
   }
 

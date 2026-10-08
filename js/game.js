@@ -357,11 +357,11 @@ function backToMenu() {
 
 function checkIfGameOver() {
   let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
-  if (world.character.dead && world.character.currentImage == world.character.IMAGES_DEAD.length - 1) {
+  if (world.character.dead && world.character.deathAnimationDone) {
     endGame();
     showGameOverScreen();
   }
-  if (endboss.dead && endboss.currentImage == endboss.ENDBOSS_IMAGES_DEAD.length - 1) {
+  if (endboss.dead && endboss.deathAnimationDone) {
     endGame();
     showVictoryScreen();
   }
