@@ -1,3 +1,24 @@
+/**
+ * Every screen and overlay in the game, as functions returning HTML strings.
+ *
+ * Nothing here touches the DOM. getTemplate() in script.js maps a screen id to
+ * one of these, and renderHTML() drops the result into the #lobby container
+ * with innerHTML. Anything that needs wiring up afterwards, such as reading
+ * current mute state onto a button, is done by the matching render* function
+ * rather than in the template itself.
+ *
+ * Inline onclick handlers call global functions by name, so renaming one of
+ * those functions or constants breaks the button silently at click time rather
+ * than at parse time.
+ */
+
+/**
+ * Inline SVG icons, each 22x22 and drawn with fill or stroke set to
+ * currentColor so the surrounding CSS color property controls them.
+ *
+ * They are interpolated straight into templates rather than loaded as files,
+ * which keeps them restyleable and avoids nine extra network requests.
+ */
 const SVG_SPEAKER_ON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
   <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
 </svg>`;
@@ -39,6 +60,7 @@ const SVG_EXIT_FULLSCREEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 
   <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
 </svg>`;
 
+/** Placeholder shown for 1.5 seconds while a new game spins up. */
 function getLoadingTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -48,6 +70,13 @@ function getLoadingTemplate() {
   `;
 }
 
+/**
+ * The main menu: title, character portrait, Start Game, and a row leading to
+ * the controls legend, the sound settings and the imprint.
+ *
+ * The inner title is hidden on desktop by CSS, which shows the outer one above
+ * the canvas instead.
+ */
 function getLobbyTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -63,6 +92,7 @@ function getLobbyTemplate() {
   `;
 }
 
+/** Keyboard legend listing the four controls, reachable from the lobby. */
 function getControlsTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -90,6 +120,14 @@ function getControlsTemplate() {
   `;
 }
 
+/**
+ * Volume sliders and mute buttons for lobby music and game sounds.
+ *
+ * The two speaker icons interpolate the lobbyMuteIcon and gameMuteIcon globals,
+ * which can be stale, and the Mute All button is hard-coded to its unmuted
+ * label. renderSoundControls() corrects all three immediately after rendering,
+ * so this template must never be rendered through renderHTML() alone.
+ */
 function getSoundControlsTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -112,6 +150,19 @@ function getSoundControlsTemplate() {
   `;
 }
 
+/**
+ * The in-game overlay: movement keys, action keys and the pause, menu, mute
+ * and fullscreen buttons.
+ *
+ * The element ids here are the contract with the touch layer. getTouchedKey()
+ * matches a touch against left, right, space, shoot, game-pause-btn,
+ * game-menu-btn, game-mute-btn and game-fullscreen-btn, so renaming any of
+ * them silently disables that control on phones.
+ *
+ * Each action badge carries both a desktop and a touch variant, and CSS shows
+ * one and hides the other: a spacebar glyph and a D key on desktop, the words
+ * Jump and a bow icon on touch.
+ */
 function getGameControlsBarTemplate() {
   return `
     <div class="controls-cluster cluster-move">
@@ -137,6 +188,12 @@ function getGameControlsBarTemplate() {
   `;
 }
 
+/**
+ * The defeat screen, with Try Again and Back to Menu.
+ *
+ * The endboss head is assembled from six separately positioned part images
+ * rather than one picture, so the wobble animation can be applied to the group.
+ */
 function getGameOverTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -157,6 +214,12 @@ function getGameOverTemplate() {
   `;
 }
 
+/**
+ * The pause overlay, reached by the pause button or the Escape key.
+ *
+ * Resume calls resumeGame(pauseReasonManual) by name, so that global constant
+ * must keep its spelling or the button stops working at click time.
+ */
 function getPauseTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
@@ -170,6 +233,12 @@ function getPauseTemplate() {
   `;
 }
 
+/**
+ * Shown on touch devices held in portrait, where the game cannot be played.
+ *
+ * Three copies of the same phone image are stacked and animated on different
+ * colour filters, which produces the turning effect without a sprite sheet.
+ */
 function getRotatePhoneTemplate() {
   return `
     <div class="rotate-phone-screen">
@@ -184,6 +253,13 @@ function getRotatePhoneTemplate() {
   `;
 }
 
+/**
+ * Shown on desktop when the window is too small for the layout to fit.
+ *
+ * Only reachable on pointer devices, since isWindowTooSmall() excludes touch.
+ * Offers fullscreen and a dismissal for anyone whose screen
+ * simply cannot be made larger.
+ */
 function getEnlargeWindowTemplate() {
   return `
     <div class="rotate-phone-screen">
@@ -198,6 +274,14 @@ function getEnlargeWindowTemplate() {
   `;
 }
 
+/**
+ * Shell for the legal page: a fixed heading, a scrollable body and a pinned
+ * Back button.
+ *
+ * The three body containers are left empty on purpose. renderImprint() fills
+ * them afterwards, so rendering this through renderHTML() alone produces a
+ * heading above three blank boxes.
+ */
 function getImprintTemplate() {
   return `
     <div class="imprint-screen">
@@ -214,6 +298,7 @@ function getImprintTemplate() {
   `;
 }
 
+/** Fills #gameDescription: what the game is, how it plays and the controls. */
 function getGameDescriptionTemplate() {
   return `
     <h3>About the Game</h3>
@@ -232,6 +317,7 @@ function getGameDescriptionTemplate() {
   `;
 }
 
+/** Fills #imprintInfo: provider details, liability, copyright and credits. */
 function getImprintInfoTemplate() {
   return `
     <h3>Information pursuant to Section 5 DDG</h3>
@@ -253,6 +339,7 @@ function getImprintInfoTemplate() {
   `;
 }
 
+/** Fills #privacyInfo: data handling, hosting, GDPR rights and local storage. */
 function getPrivacyInfoTemplate() {
   return `
     <h3>Data Protection at a Glance</h3>
@@ -276,6 +363,7 @@ function getPrivacyInfoTemplate() {
   `;
 }
 
+/** The win screen, with Play Again and Back to Menu. */
 function getVictoryTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">

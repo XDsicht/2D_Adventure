@@ -1,5 +1,20 @@
+/** The level currently in play; replaced wholesale each time a game starts. */
 let level1;
 
+/**
+ * Builds level 1 from scratch and assigns it to the level1 global.
+ *
+ * Called by launchGame() before the World is constructed, and again on every
+ * restart. Because every object here is created fresh, nothing needs resetting
+ * between games: dead trolls, spent arrows and collected coins all disappear
+ * with the previous level.
+ *
+ * The level contains seven enemies (three of each troll type plus the endboss),
+ * five coins and nineteen collectible arrows. The backdrop is five parallax
+ * layers repeated at seven positions from -720 to 3600, which covers the whole
+ * walkable stretch up to level_end_x. The empty array is throwableObjects,
+ * which fills at runtime as the character shoots.
+ */
 function initLevel1() {
   level1 = new Level(
     [new Troll_1(), new Troll_1(), new Troll_1(), new Troll_2(), new Troll_2(), new Troll_2(), new Endboss()],
