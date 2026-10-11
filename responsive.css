@@ -143,10 +143,10 @@
   }
 
   .game-controls-bar .key-badge {
-    min-width: 60px;
-    min-height: 60px;
-    font-size: 24px;
-    padding: 8px 14px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 12px;
+    padding: 4px 7px;
   }
 
   .game-controls-bar .mute-btn {
