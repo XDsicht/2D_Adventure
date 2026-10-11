@@ -1,4 +1,14 @@
 /**
+ * Canvas y the boss's feet stand on.
+ *
+ * Every state is positioned against this one line instead of carrying its own
+ * hand-tuned y, so a state whose frames sit differently in their canvas cannot
+ * end up hovering or sunk. Taken from the walk cycle, which is the pose the
+ * boss is seen in most.
+ */
+const ENDBOSS_GROUND_Y = 432;
+
+/**
  * The troll chieftain guarding the end of the level.
  *
  * Unlike the trolls, each of its animation states uses a differently sized
@@ -6,6 +16,9 @@
  * Changing width alone would make it lurch sideways, so baseX records where it
  * really stands and updateXOffset() shifts x to keep the visible body anchored
  * while the frame grows and shrinks around it.
+ *
+ * The frames also differ in how much empty space they leave below the feet, so
+ * each state's y is computed by getStateY() rather than written down.
  *
  * It stays inert until the character comes close enough for it to enter frame,
  * at which point activated flips, the music changes and the camera starts
@@ -22,7 +35,6 @@ class Endboss extends Enemy {
 
   height = 360;
   width = 340;
-  y = 102;
 
   /** Walking pace; sprint() raises it to 3.0 once it closes in. */
   speed = 0.9;
@@ -33,20 +45,31 @@ class Endboss extends Enemy {
   /** Per-state sprite dimensions; the frames differ in size, so each state sets its own. */
   walkWidth = 340;
   walkHeight = 360;
-  walkY = 102;
   runWidth = 365;
   runHeight = 550;
-  runY = -110;
   attackWidth = 455;
   attackHeight = 640;
-  attackY = -158;
   hurtWidth = 360;
   hurtHeight = 380;
-  hurtY = 52;
   deadWidth = 360;
   deadHeight = 380;
-  deadY = 152;
   otherDirection = true;
+
+  /**
+   * Fraction of each state's frame height at which the feet sit, measured from
+   * the sprites themselves.
+   *
+   * The idle frames nearly fill their canvas while the death frames use only
+   * three quarters of it, which is why these cannot share one value.
+   */
+  footFraction = {
+    idle: 0.9848,
+    walk: 0.9163,
+    run: 0.9793,
+    attack: 0.9222,
+    hurt: 0.9645,
+    dead: 0.7484,
+  };
 
   /** False until the character gets close enough; gates movement and the music swap. */
   activated = false;
@@ -92,6 +115,10 @@ class Endboss extends Enemy {
    * Preloads all seven animations, parks the boss at x 2500 and starts its
    * loops. The loops run from the start, but movement stays gated behind
    * activated until the character approaches.
+   *
+   * deadY is computed here rather than declared as a field because the shared
+   * death animation in Enemy reads it on every tick, and it has to be the
+   * boss's own figure rather than the troll value it would otherwise inherit.
    */
   constructor() {
     super().loadImage(this.ENDBOSS_IMAGES_WALKING[0]);
@@ -104,6 +131,8 @@ class Endboss extends Enemy {
     this.loadImages(this.ENDBOSS_IMAGES_DEAD);
     this.x = 2500;
     this.baseX = this.x;
+    this.y = this.getStateY("idle", this.walkHeight);
+    this.deadY = this.getStateY("dead", this.deadHeight);
     this.animateEndboss();
     registerGameSound(this.endbossSounds.isAttackingSound);
     registerGameSound(this.endbossSounds.isWalkingSound);
@@ -332,9 +361,9 @@ class Endboss extends Enemy {
     this.playAnimation(this.ENDBOSS_IMAGES_WALKING);
   }
 
-  /** Returns to the base walk size and advances the idle cycle. */
+  /** Takes the idle box and advances the idle cycle. */
   playEndbossIdleAnimation() {
-    this.getWalkDimensions();
+    this.getIdleDimensions();
     this.resetXOffset();
     this.playAnimation(this.ENDBOSS_IMAGES_IDLE);
   }
@@ -397,6 +426,18 @@ class Endboss extends Enemy {
     }
   }
 
+  /**
+   * Works out where a state's frames have to be drawn for its feet to land on
+   * the ground line.
+   *
+   * @param {string} state - Key into footFraction.
+   * @param {number} height - Drawn height of that state's frames.
+   * @returns {number} The y to draw them at.
+   */
+  getStateY(state, height) {
+    return ENDBOSS_GROUND_Y - height * this.footFraction[state];
+  }
+
   /** Switches the sprite box to the death frame size. */
   getDeadDimensions() {
     this.y = this.deadY;
@@ -406,28 +447,39 @@ class Endboss extends Enemy {
 
   /** Switches the sprite box to the hurt frame size. */
   getHurtDimensions() {
-    this.y = this.hurtY;
+    this.y = this.getStateY("hurt", this.hurtHeight);
     this.width = this.hurtWidth;
     this.height = this.hurtHeight;
   }
 
   /** Switches the sprite box to the attack frame size, the largest of them. */
   getAttackDimensions() {
-    this.y = this.attackY;
+    this.y = this.getStateY("attack", this.attackHeight);
     this.width = this.attackWidth;
     this.height = this.attackHeight;
   }
 
   /** Switches the sprite box to the sprint frame size, the tallest of them. */
   getRunDimensions() {
-    this.y = this.runY;
+    this.y = this.getStateY("run", this.runHeight);
     this.width = this.runWidth;
     this.height = this.runHeight;
   }
 
   /** Switches the sprite box back to the base walk size. */
   getWalkDimensions() {
-    this.y = this.walkY;
+    this.y = this.getStateY("walk", this.walkHeight);
+    this.width = this.walkWidth;
+    this.height = this.walkHeight;
+  }
+
+  /**
+   * Switches to the idle box, which shares the walk frames' size but not their
+   * position: the idle sprites stand lower in their canvas, so reusing the walk
+   * y sank the boss 24px into the ground.
+   */
+  getIdleDimensions() {
+    this.y = this.getStateY("idle", this.walkHeight);
     this.width = this.walkWidth;
     this.height = this.walkHeight;
   }

@@ -50,6 +50,15 @@ class Character extends MovableObject {
     bottom: 20,
   };
 
+  /**
+   * Foot inset for the jump frames, which tuck the legs up.
+   *
+   * Measured from the frames: their soles sit between 15 and 39px above the
+   * sprite's bottom edge, and 34 is the figure for the frames on screen at the
+   * moment a falling Vorga meets an enemy's head.
+   */
+  jumpFootInset = 34;
+
   characterSounds = {
     isAttackingSound: new Audio("audio/character_audio/character_arrow_shooting_sound.mp3"),
     isWalkingSound: new Audio("audio/character_audio/character_walking_sound.mp3"),
@@ -423,13 +432,32 @@ class Character extends MovableObject {
    */
   isCollidingVertically(mo) {
     const offset = this.getDirectionalOffset(mo);
+    const footInset = this.getFootInset();
     return (
       this.x + offset.thisLeft < mo.x + mo.width - offset.moRight &&
-      this.y + this.height - this.offset.bottom < mo.y + mo.height - mo.offset.bottom &&
-      this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+      this.y + this.height - footInset < mo.y + mo.height - mo.offset.bottom &&
+      this.y + this.height - footInset > mo.y + mo.offset.top &&
       this.x + this.width - offset.thisRight > mo.x + offset.moLeft &&
       this.speedY < 0
     );
+  }
+
+  /**
+   * Distance from the sprite's bottom edge up to the soles.
+   *
+   * The standing inset of 20 is wrong mid-jump, where the legs are drawn tucked
+   * up: it put the collision box as much as 19px below the visible feet, so an
+   * enemy died while Vorga was still clearly above it. Only the stomp test uses
+   * this; the horizontal collision box is unaffected.
+   *
+   * @returns {number} The inset for the pose being drawn.
+   */
+  getFootInset() {
+    if (this.characterJumping) {
+      return this.jumpFootInset;
+    } else {
+      return this.offset.bottom;
+    }
   }
 
   /**
