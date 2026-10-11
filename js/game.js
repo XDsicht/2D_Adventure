@@ -75,22 +75,38 @@ function waitForLandscape() {
 }
 
 /**
- * Builds the level and the world, swaps the lobby for the canvas and starts the
- * game-over watcher.
+ * Shows the loading screen, waits for the sprites, then builds the game.
  *
  * The click listener for the lobby music is removed here, otherwise the first
  * in-game click would start the lobby track again underneath the game.
  */
-function launchGame() {
+async function launchGame() {
   renderHTML("loading");
   document.removeEventListener("click", startLobbyMusic);
-  initLevel1();
   stopSound(lobbyMusic);
+  await waitForAssets();
+  startWorld();
+}
+
+/**
+ * Builds the level and the world and starts the game-over watcher.
+ *
+ * Runs only once every image is in the browser's cache, so the objects built
+ * here have their frames available on the first draw.
+ *
+ * The orientation is re-read at the end rather than simply revealing the canvas,
+ * and the world is frozen if anything is still blocking play, which together
+ * cover the player turning the device while the sprites were downloading.
+ */
+function startWorld() {
+  initLevel1();
   canvas = getElement("canvas");
   gameLobby = getElement("lobby");
   renderInGameControlsBar();
   initGame(canvas);
-  hideLoadingScreen();
+  handleOrientationChange();
+  freezeWorld();
+  renderPauseState();
   monitorGameOver();
 }
 
@@ -113,21 +129,6 @@ function initGame(canvas) {
   backgroundMusic.currentTime = 3;
   let volume = resolveVolume(backgroundMusic);
   playSound(backgroundMusic, volume);
-}
-
-/**
- * Leaves the loading screen after 1.5 seconds.
- *
- * It re-reads the orientation rather than simply revealing the canvas, which
- * covers the case where the player rotates the device while loading.
- */
-function hideLoadingScreen() {
-  registerInterval(
-    setTimeout(() => {
-      handleOrientationChange();
-      renderPauseState();
-    }, 1500),
-  );
 }
 
 /**
@@ -185,20 +186,38 @@ if (screen.orientation) {
  * Adds a pause reason and, if the game is still running, freezes it.
  *
  * Keys are released first so a held direction does not resume as movement.
- * Pausing the music goes through currentMusic, so the endboss theme pauses
- * during its fight instead of the overworld track.
  *
  * @param {string} reason - The reason being added.
  */
 function pauseGame(reason) {
   pauseReasons.add(reason);
   releaseAllKeys();
+  freezeWorld();
+  renderPauseState();
+}
+
+/**
+ * Freezes the world whenever something is blocking play.
+ *
+ * Split out of pauseGame() because a reason can be raised before the world
+ * exists: rotate the device while the sprites are still downloading and the
+ * reason is recorded with nothing to act on, leaving startWorld() to build a
+ * world that would otherwise run unpaused behind the rotate screen.
+ *
+ * Reading the reasons here rather than at the call sites keeps both honest:
+ * pauseGame() has already added its own, and startWorld() only wants this to
+ * happen if something is genuinely pending.
+ *
+ * Pausing the music goes through currentMusic, so the endboss theme pauses
+ * during its fight instead of the overworld track.
+ */
+function freezeWorld() {
+  if (pauseReasons.size == 0) return;
   if (world && !world.paused) {
     world.pause();
     stopAllSoundEffects();
     currentMusic.pause();
   }
-  renderPauseState();
 }
 
 /**

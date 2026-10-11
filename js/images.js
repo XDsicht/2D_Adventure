@@ -8,6 +8,9 @@
  * Each animation key maps to an array of ten frames, except the endboss attack
  * which has nine. The classes assign these to their IMAGES_* fields, and the
  * constructors hand them to loadImages() to preload before play begins.
+ *
+ * sceneImages at the end covers what belongs to no animation, so that this file
+ * is the one place the preloader has to look to find every image.
  */
 
 /** Vorga's six animation states. */
@@ -123,18 +126,6 @@ const endbossImages = {
     "img/4.boss/3.run/Run_007.png",
     "img/4.boss/3.run/Run_008.png",
     "img/4.boss/3.run/Run_009.png",
-  ],
-  jumping: [
-    "img/4.boss/4.jump/Jump_000.png",
-    "img/4.boss/4.jump/Jump_001.png",
-    "img/4.boss/4.jump/Jump_002.png",
-    "img/4.boss/4.jump/Jump_003.png",
-    "img/4.boss/4.jump/Jump_004.png",
-    "img/4.boss/4.jump/Jump_005.png",
-    "img/4.boss/4.jump/Jump_006.png",
-    "img/4.boss/4.jump/Jump_007.png",
-    "img/4.boss/4.jump/Jump_008.png",
-    "img/4.boss/4.jump/Jump_009.png",
   ],
   hurt: [
     "img/4.boss/6.hurt/Hurt_000.png",
@@ -343,4 +334,21 @@ const coinBarImages = [
   "img/6.bars/3.coins/coins_60.png",
   "img/6.bars/3.coins/coins_80.png",
   "img/6.bars/3.coins/coins_100.png",
+];
+
+/**
+ * Single images the game draws that belong to no animation.
+ *
+ * The five parallax layers, which level1 repeats at seven positions, and the
+ * arrow used both for the pickups lying in the level and for the ones in
+ * flight. Listed here so the preloader finds every path in one file; the
+ * classes still name their own.
+ */
+const sceneImages = [
+  "img/5.elements/background/1.png",
+  "img/5.elements/background/2.png",
+  "img/5.elements/background/3.png",
+  "img/5.elements/background/4.png",
+  "img/5.elements/background/5.png",
+  "img/5.elements/throwables/arrows/arrow.png",
 ];

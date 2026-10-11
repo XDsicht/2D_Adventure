@@ -28,7 +28,6 @@ class Endboss extends Enemy {
   ENDBOSS_IMAGES_IDLE = endbossImages.idle;
   ENDBOSS_IMAGES_WALKING = endbossImages.walking;
   ENDBOSS_IMAGES_RUN = endbossImages.run;
-  ENDBOSS_IMAGES_JUMPING = endbossImages.jumping;
   ENDBOSS_IMAGES_HURT = endbossImages.hurt;
   ENDBOSS_IMAGES_DEAD = endbossImages.dead;
   ENDBOSS_IMAGES_ATTACKING = endbossImages.attacking;
@@ -112,9 +111,13 @@ class Endboss extends Enemy {
   };
 
   /**
-   * Preloads all seven animations, parks the boss at x 2500 and starts its
+   * Preloads its six animations, parks the boss at x 2500 and starts its
    * loops. The loops run from the start, but movement stays gated behind
    * activated until the character approaches.
+   *
+   * The boss has a seventh set of frames on disk, a jump it never performs.
+   * Those are deliberately not loaded: they are 5.5MB of the download for
+   * frames no player can see.
    *
    * deadY is computed here rather than declared as a field because the shared
    * death animation in Enemy reads it on every tick, and it has to be the
@@ -125,7 +128,6 @@ class Endboss extends Enemy {
     this.loadImages(this.ENDBOSS_IMAGES_IDLE);
     this.loadImages(this.ENDBOSS_IMAGES_WALKING);
     this.loadImages(this.ENDBOSS_IMAGES_RUN);
-    this.loadImages(this.ENDBOSS_IMAGES_JUMPING);
     this.loadImages(this.ENDBOSS_IMAGES_ATTACKING);
     this.loadImages(this.ENDBOSS_IMAGES_HURT);
     this.loadImages(this.ENDBOSS_IMAGES_DEAD);

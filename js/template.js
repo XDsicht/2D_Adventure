@@ -60,12 +60,21 @@ const SVG_EXIT_FULLSCREEN = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 
   <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
 </svg>`;
 
-/** Placeholder shown for 1.5 seconds while a new game spins up. */
+/**
+ * Shown while the sprites download, with a bar that reports real progress.
+ *
+ * updateLoadingProgress() fills the two ids; both are optional to it, so this
+ * screen can be absent while the lobby preloads in the background.
+ */
 function getLoadingTemplate() {
   return `
     <div class="overlay-btn-group flex-center-column">
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
       <p class="text-shadow-standard letter-spacing-2">Loading…</p>
+      <div class="loading-bar">
+        <div class="loading-bar-fill" id="loadingBarFill"></div>
+      </div>
+      <p class="text-shadow-standard letter-spacing-2" id="loadingPercent">0%</p>
     </div>
   `;
 }

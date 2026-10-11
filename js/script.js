@@ -139,11 +139,16 @@ function clearInGameControlsBar() {
  * Restores sound settings from the previous page view before rendering, so the
  * lobby draws with the right mute icons, then seeds the pause state so a device
  * already held in portrait shows the rotate screen immediately.
+ *
+ * The sprites start downloading last and are deliberately not awaited: the menu
+ * has to stay usable while they arrive, and by the time Start is pressed the
+ * download is usually finished.
  */
 function initApp() {
   loadSoundSettings();
   renderLobby("lobby");
   handleOrientationChange();
+  startPreloading();
 }
 
 /**
