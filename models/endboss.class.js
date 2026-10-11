@@ -417,14 +417,17 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Wakes the boss the first time it comes into frame and swaps the music.
+   * Wakes the boss the first time it comes into frame, swaps the music and
+   * brings in its health bar.
    *
-   * The activated guard means this fires exactly once per game.
+   * The activated guard means this fires exactly once per game, which is what
+   * lets the bar treat it as the cue to slide in.
    */
   checkEndbossToCharacterRelation() {
     if (this.isInCharacterFrame() && !this.activated) {
       this.activated = true;
       startEndbossMusic();
+      this.world.endbossHealthBar.show();
     }
   }
 

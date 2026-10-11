@@ -57,6 +57,7 @@ class World {
   healthBar = new HealthBar();
   quiver = new Quiver();
   coinBar = new CoinBar();
+  endbossHealthBar = new EndbossHealthBar();
 
   /** Arrows available to shoot, capped at five. The quiver bar shows the same supply. */
   arrowInventory = 0;
@@ -95,9 +96,13 @@ class World {
    *
    * They need it to reach each other and the level; the endboss is skipped when
    * placing because its position is fixed by design.
+   *
+   * The boss's health bar is measured up here too, since this is the first
+   * point at which the canvas it has to fit inside is known.
    */
   setWorld() {
     this.character.world = this;
+    this.endbossHealthBar.setBounds(this.canvas.width);
     this.level.enemies.forEach((enemy) => {
       enemy.world = this;
       if (enemy instanceof Troll_1 || enemy instanceof Troll_2) {
@@ -417,7 +422,24 @@ class World {
   hitEnemyWithArrow(enemy, arrow) {
     playSound(enemy.enemySounds.isHitSound, gameSoundsVolume);
     enemy.hit();
+    this.updateEndbossHealthBar(enemy);
     this.level.throwableObjects.splice(this.level.throwableObjects.indexOf(arrow), 1);
+  }
+
+  /**
+   * Syncs the boss's bar after a hit, ignoring hits on trolls.
+   *
+   * The percentage is read back off the boss's own energy rather than counted
+   * down separately, so the bar cannot drift out of step with the health it is
+   * reporting. Its 20 energy scales to 100, which makes an arrow's 5 damage a
+   * quarter of the bar.
+   *
+   * @param {MovableObject} enemy - The enemy that was just hit.
+   */
+  updateEndbossHealthBar(enemy) {
+    if (enemy instanceof Endboss) {
+      this.endbossHealthBar.setPercentage(enemy.energy * 5);
+    }
   }
 
   /**
@@ -620,6 +642,19 @@ class World {
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);
     this.addToMap(this.coinBar);
+    this.addEndbossHealthBarToGame();
+  }
+
+  /**
+   * Advances the slide and draws the boss's bar, once the fight has started.
+   *
+   * The early return also covers the world's very first frame, which is drawn
+   * before setWorld() has given the bar its bounds.
+   */
+  addEndbossHealthBarToGame() {
+    if (!this.endbossHealthBar.visible) return;
+    this.endbossHealthBar.slideStep();
+    this.addToMap(this.endbossHealthBar);
   }
 
   /** Draws the scenery and collectibles, behind everything that moves. */

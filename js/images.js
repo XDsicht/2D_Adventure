@@ -336,6 +336,16 @@ const coinBarImages = [
   "img/6.bars/3.coins/coins_100.png",
 ];
 
+/** Six endboss health bar frames, from empty at index 0 to full at index 5. */
+const endbossHealthBarImages = [
+  "img/6.bars/4.endboss_health/troll_health_0.png",
+  "img/6.bars/4.endboss_health/troll_health_20.png",
+  "img/6.bars/4.endboss_health/troll_health_40.png",
+  "img/6.bars/4.endboss_health/troll_health_60.png",
+  "img/6.bars/4.endboss_health/troll_health_80.png",
+  "img/6.bars/4.endboss_health/troll_health_100.png",
+];
+
 /**
  * Single images the game draws that belong to no animation.
  *
