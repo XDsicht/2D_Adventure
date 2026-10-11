@@ -458,6 +458,34 @@ function updateTouchedKeys(event, isPressed) {
 }
 
 /**
+ * Lights up the controls a touch landed on.
+ *
+ * Needed because the touch handlers call preventDefault(), and mobile browsers
+ * withhold :active once a touch's default action is prevented. Walking up from
+ * the touch target catches the icon inside a button as well as the button.
+ *
+ * @param {TouchEvent} event - The touchstart event.
+ */
+function markPressedButtons(event) {
+  for (let i = 0; i < event.changedTouches.length; i++) {
+    let button = event.changedTouches[i].target.closest(".key-badge, .mute-btn");
+    if (button) button.classList.add("pressed");
+  }
+}
+
+/**
+ * Unlights every control.
+ *
+ * Clears all of them rather than the ones the event names, because a finger
+ * that slides off a button ends its touch somewhere else and would otherwise
+ * leave the button lit.
+ */
+function clearPressedButtons() {
+  let buttons = document.querySelectorAll(".pressed");
+  buttons.forEach((button) => button.classList.remove("pressed"));
+}
+
+/**
  * Runs the one-shot action for a released touch.
  *
  * These four are triggered on release rather than held like the movement keys,
@@ -491,6 +519,7 @@ window.addEventListener(
       event.preventDefault();
     }
     updateTouchedKeys(event, true);
+    markPressedButtons(event);
   },
   { passive: false },
 );
@@ -503,6 +532,7 @@ window.addEventListener(
       event.preventDefault();
     }
     updateTouchedKeys(event, false);
+    clearPressedButtons();
     runTouchedAction(event);
   },
   { passive: false },
@@ -513,6 +543,7 @@ window.addEventListener("touchcancel", async (event) => {
     responsiveButtons = getResponsiveButtonElements();
   }
   updateTouchedKeys(event, false);
+  clearPressedButtons();
 });
 
 /** Clears every key, so nothing stays held across a pause or a screen change. */

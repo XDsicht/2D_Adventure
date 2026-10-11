@@ -115,22 +115,22 @@
   .controls-cluster {
     position: absolute;
     pointer-events: auto;
-    gap: 12px;
+    gap: 20px;
   }
 
   .cluster-move {
-    bottom: 12px;
-    left: 12px;
+    bottom: 16px;
+    left: 16px;
   }
 
   .cluster-action {
-    bottom: 12px;
-    right: 12px;
+    bottom: 16px;
+    right: 16px;
   }
 
   .cluster-mute {
-    top: 12px;
-    right: 12px;
+    top: 16px;
+    right: 16px;
   }
 
   .badge-desktop {
@@ -143,16 +143,16 @@
   }
 
   .game-controls-bar .key-badge {
-    min-width: 20px;
-    min-height: 28px;
-    font-size: 18px;
-    padding: 6px 10px;
+    min-width: 60px;
+    min-height: 60px;
+    font-size: 24px;
+    padding: 8px 14px;
   }
 
   .game-controls-bar .mute-btn {
-    min-width: 28px;
-    min-height: 28px;
-    padding: 6px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 10px;
   }
 
   .game-controls-bar .key-badge,
@@ -161,8 +161,16 @@
   }
 
   .game-controls-bar .key-badge:active,
-  .game-controls-bar .mute-btn:active {
+  .game-controls-bar .mute-btn:active,
+  .game-controls-bar .key-badge.pressed,
+  .game-controls-bar .mute-btn.pressed {
     transform: scale(0.92);
     border-color: #e0b870;
+    box-shadow: 0 0 14px #e0b870;
+    opacity: 1;
+  }
+
+  .hide-on-touch {
+    display: none;
   }
 }

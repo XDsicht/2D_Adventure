@@ -75,7 +75,8 @@ function getLoadingTemplate() {
  * the controls legend, the sound settings and the imprint.
  *
  * The inner title is hidden on desktop by CSS, which shows the outer one above
- * the canvas instead.
+ * the canvas instead. Show Controls is hidden on touch devices, where the keys
+ * it explains do not exist.
  */
 function getLobbyTemplate() {
   return `
@@ -84,7 +85,7 @@ function getLobbyTemplate() {
       <img class="character-head" src="img/2.character/8.parts/3_head.png" alt="Vorga" />
       <button class="fantasy-btn cursor-pointer start-btn" id="start-game-btn" onclick="startGame()">Start Game</button>
       <div class="overlay-btn-row">
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('controls')">Show Controls</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2 hide-on-touch" onclick="renderHTML('controls')">Show Controls</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls('soundControls')">Sounds</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderImprint('imprint')">Imprint</button>
       </div>
