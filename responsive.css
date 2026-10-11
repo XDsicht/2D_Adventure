@@ -150,9 +150,14 @@
   }
 
   .game-controls-bar .mute-btn {
-    min-width: 48px;
-    min-height: 48px;
-    padding: 10px;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 5px;
+  }
+
+  .game-controls-bar .mute-btn svg {
+    width: 14px;
+    height: 14px;
   }
 
   .game-controls-bar .key-badge,

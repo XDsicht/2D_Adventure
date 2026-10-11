@@ -11,13 +11,9 @@
  * which is why resolveImageIndex() is overridden here.
  */
 class EndbossHealthBar extends StatusBar {
-  /**
-   * Sits a row lower than the character's bar.
-   *
-   * On touch the four buttons in the top right corner reach down to canvas y
-   * 89, so a bar at the top would have them sitting on top of it.
-   */
-  y = 105;
+  
+  /**Level with the quiver on the left.*/
+  y = 55;
 
   IMAGES = endbossHealthBarImages;
 

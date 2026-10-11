@@ -46,16 +46,13 @@ class Enemy extends MovableObject {
   };
 
   /**
-   * Adds this enemy's five sounds to the shared list for muting and volume.
+   * Adds this enemy's three sounds to the shared list for muting and volume.
    *
-   * Shared by both troll types, which carry the same set. The impact sound is
-   * included although the trolls never trigger it themselves: World plays it
-   * when an arrow lands, and a sound outside the list escapes muting, pausing
-   * and the clear-down at the end of a run.
+   * The impact sound is included although the trolls never trigger it
+   * themselves: World plays it when an arrow lands, and a sound outside the
+   * list escapes muting, pausing and the clear-down at the end of a run.
    */
   registerEnemySounds() {
-    registerGameSound(this.enemySounds.isAttackingSound);
-    registerGameSound(this.enemySounds.isWalkingSound);
     registerGameSound(this.enemySounds.isHurtSound);
     registerGameSound(this.enemySounds.isDeadSound);
     registerGameSound(this.enemySounds.isHitSound);
@@ -73,14 +70,8 @@ class Enemy extends MovableObject {
     };
   }
 
-  /** Troll sound set; the endboss defines its own and uses that instead. */
-  enemySounds = {
-    isAttackingSound: new Audio("audio/enemy_audio/enemy_attack_sound.mp3"),
-    isWalkingSound: new Audio("audio/enemy_audio/enemy_walking_sound.mp3"),
-    isHitSound: new Audio("audio/enemy_audio/enemy_arrow_impact_sound.mp3"),
-    isHurtSound: new Audio("audio/enemy_audio/enemy_hurt_sound.mp3"),
-    isDeadSound: new Audio("audio/enemy_audio/enemy_dead_sound.mp3"),
-  };
+  /** Troll sound set, shared between all enemies; the endboss cries with its own. */
+  enemySounds = trollSounds;
 
   /**
    * Picks a start position 0 to 500px past wherever the previous enemy was

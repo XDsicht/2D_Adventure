@@ -31,6 +31,22 @@ let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let endbossMusic = new Audio("audio/game_audio/endboss_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 
+/** The troll sound set, shared by every enemy rather than built per instance. */
+const trollSounds = {
+  isHurtSound: new Audio("audio/enemy_audio/enemy_hurt_sound.mp3"),
+  isDeadSound: new Audio("audio/enemy_audio/enemy_dead_sound.mp3"),
+  isHitSound: new Audio("audio/enemy_audio/enemy_arrow_impact_sound.mp3"),
+};
+
+/** The endboss's own set. Its hit sound comes from trollSounds like every other enemy's. */
+const bossSounds = {
+  isAttackingSound: new Audio("audio/endboss_audio/endboss_attack_sound.mp3"),
+  isWalkingSound: new Audio("audio/endboss_audio/endboss_walking_sound.mp3"),
+  isRunningSound: new Audio("audio/endboss_audio/endboss_running_sound.mp3"),
+  isHurtSound: new Audio("audio/endboss_audio/endboss_hurt_sound.mp3"),
+  isDeadSound: new Audio("audio/endboss_audio/endboss_dead_sound.mp3"),
+};
+
 /**
  * Whichever music track is playing right now.
  *

@@ -100,15 +100,8 @@ class Endboss extends Enemy {
     bottom: 10,
   };
 
-  /** Its own sound set, used in place of the inherited troll sounds. */
-  endbossSounds = {
-    isAttackingSound: new Audio("audio/endboss_audio/endboss_attack_sound.mp3"),
-    isWalkingSound: new Audio("audio/endboss_audio/endboss_walking_sound.mp3"),
-    isRunningSound: new Audio("audio/endboss_audio/endboss_running_sound.mp3"),
-    isHitSound: new Audio("audio/enemy_audio/enemy_arrow_impact_sound.mp3"),
-    isHurtSound: new Audio("audio/endboss_audio/endboss_hurt_sound.mp3"),
-    isDeadSound: new Audio("audio/endboss_audio/endboss_dead_sound.mp3"),
-  };
+  /** Its own cries, used in place of the inherited troll ones. */
+  endbossSounds = bossSounds;
 
   /**
    * Preloads its six animations, parks the boss at x 2500 and starts its
@@ -145,15 +138,17 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Adds the boss's six sounds to the shared list for muting and volume.
+   * Adds the boss's own set to the shared list for muting and volume.
    *
-   * Replaces the inherited troll version, since the boss carries its own set.
+   * Its impact sound is the inherited one, registered by registerEnemySounds().
+   * The attack, walking and running sounds have no trigger yet, but they are
+   * registered all the same so that wiring one up is a single play call.
    */
   registerEndbossSounds() {
+    this.registerEnemySounds();
     registerGameSound(this.endbossSounds.isAttackingSound);
     registerGameSound(this.endbossSounds.isWalkingSound);
     registerGameSound(this.endbossSounds.isRunningSound);
-    registerGameSound(this.endbossSounds.isHitSound);
     registerGameSound(this.endbossSounds.isHurtSound);
     registerGameSound(this.endbossSounds.isDeadSound);
   }
