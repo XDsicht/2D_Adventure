@@ -36,6 +36,9 @@ let pauseReasons = new Set();
 /** Set once the player dismisses the enlarge-window prompt, so it does not return. */
 let windowPromptDismissed = false;
 
+/** True once the victory screen is scheduled, so the ten-a-second poll cannot queue it twice. */
+let victoryPending = false;
+
 /** Keys whose default browser action is suppressed in-game, so arrows and space do not scroll the page. */
 const gameKeyCodes = [37, 38, 39, 40, 32, 68];
 
@@ -613,6 +616,7 @@ function endGame() {
   stopAllGameSounds();
   clearGameSounds();
   pauseReasons.clear();
+  victoryPending = false;
   if (world) {
     world.pause();
     world = null;
@@ -632,18 +636,53 @@ function backToMenu() {
  *
  * Both conditions wait for deathAnimationDone rather than the death flag, so
  * the end screen appears after the final frame instead of cutting the animation
- * short.
+ * short. Defeat is immediate, while victory is held back for the boss's roar.
  */
 function checkIfGameOver() {
-  let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
   if (world.character.dead && world.character.deathAnimationDone) {
     endGame();
     showGameOverScreen();
   }
-  if (endboss.dead && endboss.deathAnimationDone) {
-    endGame();
-    showVictoryScreen();
+  if (checkEndbossDefeated()) {
+    scheduleVictory();
   }
+}
+
+/**
+ * Reports whether the boss has finished dying.
+ *
+ * An empty lookup counts as defeated: the corpse is spliced out of the level
+ * 800ms after its animation ends, which now falls inside the window victory
+ * waits through. Without the guard this would read dead off undefined.
+ *
+ * @returns {boolean} True once the boss is gone or has played its last frame.
+ */
+function checkEndbossDefeated() {
+  let endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
+  if (!endboss) return true;
+  return endboss.dead && endboss.deathAnimationDone;
+}
+
+/**
+ * Lets the boss's death roar finish before the victory screen appears.
+ *
+ * The roar runs just over three seconds against an animation of barely one, and
+ * endGame() silences every game sound, so ending the run on the last frame cut
+ * it off two thirds of the way through. The wait also gives the kill a beat of
+ * its own.
+ *
+ * Registered like any other timer, so leaving for the menu during those seconds
+ * cancels it instead of letting the victory screen arrive over the lobby.
+ */
+function scheduleVictory() {
+  if (victoryPending) return;
+  victoryPending = true;
+  registerInterval(
+    setTimeout(() => {
+      endGame();
+      showVictoryScreen();
+    }, 2200),
+  );
 }
 
 /** Shows the victory screen and brings the lobby music back. */

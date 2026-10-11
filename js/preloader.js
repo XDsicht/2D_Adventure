@@ -18,6 +18,9 @@ let preloadDone = 0;
 /** The download in progress, kept so a second caller joins it instead of starting another. */
 let preloadPromise = null;
 
+/** Every loaded image, keyed by path, handed out to the objects that draw them. */
+let preloadedImages = {};
+
 /**
  * Gathers every image path the game draws.
  *
@@ -99,12 +102,38 @@ function preloadImage(path) {
   return new Promise((resolve) => {
     let img = new Image();
     img.onload = img.onerror = () => {
+      preloadedImages[path] = img;
       preloadDone++;
       updateLoadingProgress();
       resolve(img);
     };
     img.src = path;
   });
+}
+
+/**
+ * Hands back the already decoded image for a path.
+ *
+ * This is what makes the loading gate mean anything. A fresh Image is
+ * asynchronous even when the bytes are already cached, so objects that built
+ * their own had nothing to draw for the first frames, and drawImage paints
+ * nothing at all in that state without raising an error. Reusing these also
+ * decodes each frame once rather than once per troll.
+ *
+ * Nothing writes to the images, so sharing one object between every troll that
+ * draws it is safe.
+ *
+ * @param {string} path - Image path.
+ * @returns {HTMLImageElement} The preloaded image, or a fresh one if the preloader missed it.
+ */
+function getPreloadedImage(path) {
+  if (preloadedImages[path]) {
+    return preloadedImages[path];
+  } else {
+    let img = new Image();
+    img.src = path;
+    return img;
+  }
 }
 
 /**

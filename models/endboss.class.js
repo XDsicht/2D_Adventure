@@ -125,17 +125,31 @@ class Endboss extends Enemy {
    */
   constructor() {
     super().loadImage(this.ENDBOSS_IMAGES_WALKING[0]);
+    this.loadEndbossImages();
+    this.x = 2500;
+    this.baseX = this.x;
+    this.y = this.getStateY("idle", this.walkHeight);
+    this.deadY = this.getStateY("dead", this.deadHeight);
+    this.animateEndboss();
+    this.registerEndbossSounds();
+  }
+
+  /** Preloads the six animations the boss actually plays. */
+  loadEndbossImages() {
     this.loadImages(this.ENDBOSS_IMAGES_IDLE);
     this.loadImages(this.ENDBOSS_IMAGES_WALKING);
     this.loadImages(this.ENDBOSS_IMAGES_RUN);
     this.loadImages(this.ENDBOSS_IMAGES_ATTACKING);
     this.loadImages(this.ENDBOSS_IMAGES_HURT);
     this.loadImages(this.ENDBOSS_IMAGES_DEAD);
-    this.x = 2500;
-    this.baseX = this.x;
-    this.y = this.getStateY("idle", this.walkHeight);
-    this.deadY = this.getStateY("dead", this.deadHeight);
-    this.animateEndboss();
+  }
+
+  /**
+   * Adds the boss's six sounds to the shared list for muting and volume.
+   *
+   * Replaces the inherited troll version, since the boss carries its own set.
+   */
+  registerEndbossSounds() {
     registerGameSound(this.endbossSounds.isAttackingSound);
     registerGameSound(this.endbossSounds.isWalkingSound);
     registerGameSound(this.endbossSounds.isRunningSound);

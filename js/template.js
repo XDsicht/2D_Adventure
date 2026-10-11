@@ -46,6 +46,12 @@ const SVG_SPACEBAR = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24
   <path d="M3 9v6h18V9"/>
 </svg>`;
 
+const SVG_JUMP = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+  <path d="M12 16V4"/>
+  <path d="M7 9l5-5 5 5"/>
+  <path d="M4 20h16"/>
+</svg>`;
+
 const SVG_TARGET = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
   <circle cx="12" cy="12" r="9"/>
   <circle cx="12" cy="12" r="5"/>
@@ -170,8 +176,9 @@ function getSoundControlsTemplate() {
  * them silently disables that control on phones.
  *
  * Each action badge carries both a desktop and a touch variant, and CSS shows
- * one and hides the other: a spacebar glyph and a D key on desktop, the words
- * Jump and a bow icon on touch.
+ * one and hides the other: a spacebar glyph and a D key on desktop, a leaping
+ * arrow and a bow on touch, where both are 22px icons so the two action badges
+ * come out the same size.
  */
 function getGameControlsBarTemplate() {
   return `
@@ -182,7 +189,7 @@ function getGameControlsBarTemplate() {
     <div class="controls-cluster cluster-action">
       <kbd class="key-badge d-flex-center" id='space'>
         <span class="badge-desktop">${SVG_SPACEBAR}</span>
-        <span class="badge-touch">Jump</span>
+        <span class="badge-touch">${SVG_JUMP}</span>
       </kbd>
       <kbd class="key-badge d-flex-center" id='shoot'>
         <span class="badge-desktop"><span class="badge-key">D</span>${SVG_TARGET}</span>

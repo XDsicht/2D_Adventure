@@ -28,9 +28,6 @@ class Troll_2 extends Enemy {
     this.moveLeft();
     this.speed = 0.15 + Math.random() * 0.25;
     this.animate();
-    registerGameSound(this.enemySounds.isAttackingSound);
-    registerGameSound(this.enemySounds.isWalkingSound);
-    registerGameSound(this.enemySounds.isHurtSound);
-    registerGameSound(this.enemySounds.isDeadSound);
+    this.registerEnemySounds();
   }
 }

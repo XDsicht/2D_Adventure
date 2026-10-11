@@ -16,13 +16,15 @@ class DrawableObject {
   paused = false;
 
   /**
-   * Loads a single image and makes it the currently visible one.
+   * Makes the image at this path the currently visible one.
+   *
+   * Taken from the preloader rather than requested here, so it is ready to draw
+   * immediately instead of arriving a few frames later.
    *
    * @param {string} path - Path to the image file, relative to index.html.
    */
   loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
+    this.img = getPreloadedImage(path);
   }
 
   /**
@@ -35,17 +37,18 @@ class DrawableObject {
   }
 
   /**
-   * Preloads an array of images into the cache so animations never wait on a
-   * network request mid-frame.
+   * Fills this object's cache with the frames of one animation, so playing it
+   * never waits on a request mid-frame.
    *
-   * @param {string[]} arr - Paths of the images to preload.
+   * The images come from the preloader, which has already decoded them. Every
+   * troll of the same type therefore shares one copy of each frame instead of
+   * holding its own.
+   *
+   * @param {string[]} arr - Paths of the images to cache.
    */
   loadImages(arr) {
     arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      img.style = "transform: scale(-1)";
-      this.imageCache[path] = img;
+      this.imageCache[path] = getPreloadedImage(path);
     });
   }
 

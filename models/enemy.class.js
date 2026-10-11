@@ -46,6 +46,22 @@ class Enemy extends MovableObject {
   };
 
   /**
+   * Adds this enemy's five sounds to the shared list for muting and volume.
+   *
+   * Shared by both troll types, which carry the same set. The impact sound is
+   * included although the trolls never trigger it themselves: World plays it
+   * when an arrow lands, and a sound outside the list escapes muting, pausing
+   * and the clear-down at the end of a run.
+   */
+  registerEnemySounds() {
+    registerGameSound(this.enemySounds.isAttackingSound);
+    registerGameSound(this.enemySounds.isWalkingSound);
+    registerGameSound(this.enemySounds.isHurtSound);
+    registerGameSound(this.enemySounds.isDeadSound);
+    registerGameSound(this.enemySounds.isHitSound);
+  }
+
+  /**
    * Mirrors the stomp band when the enemy faces left.
    *
    * @returns {{left: number, right: number}} The band, resolved for the current facing.
@@ -159,6 +175,9 @@ class Enemy extends MovableObject {
    *
    * Setting deathAnimationDone here is what lets World decide the endboss
    * fight is over only after the last frame has actually been drawn.
+   *
+   * The death cry is deliberately left running. It used to be paused on this
+   * last frame, which cut the boss's three second roar off after one.
    */
   playEnemyDeadAnimation() {
     this.y = this.deadY;
@@ -168,9 +187,6 @@ class Enemy extends MovableObject {
     } else {
       this.loadImage(imagesDead[imagesDead.length - 1]);
       this.deathAnimationDone = true;
-      if (this.enemySoundLibrary) {
-        this.enemySoundLibrary.isDeadSound.pause();
-      }
       this.setEnemyDeadTimeout();
     }
   }
