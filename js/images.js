@@ -1,19 +1,12 @@
 /**
  * Every sprite path the game loads, grouped by the object that uses it.
  *
- * Split out of the model classes so those files stay readable. 
- * The paths are resolved against index.html, not against this file, 
- * so moving this script elsewhere would not require changing them.
- *
- * Each animation key maps to an array of ten frames, except the endboss attack
- * which has nine. The classes assign these to their IMAGES_* fields, and the
- * constructors hand them to loadImages() to preload before play begins.
- *
- * sceneImages at the end covers what belongs to no animation, so that this file
- * is the one place the preloader has to look to find every image.
+ * sceneImages at the end covers what belongs to no animation, so that this file is the one place the preloader has to look to find every image.
  */
 
-/** Vorga's six animation states. */
+/** 
+ * Vorga's six animation states. 
+ */
 const characterImages = {
   idle: [
     "img/2.character/1.idle/Warrior_03__IDLE_000.png",
@@ -89,7 +82,9 @@ const characterImages = {
   ],
 };
 
-/** The troll chieftain's seven animation states. */
+/** 
+ * The troll chieftain's seven animation states. 
+ */
 const endbossImages = {
   idle: [
     "img/4.boss/1.idle/Idle_000.png",
@@ -164,7 +159,9 @@ const endbossImages = {
   ],
 };
 
-/** First troll type: five animation states. */
+/** 
+ * First troll type: five animation states. 
+ */
 const troll1Images = {
   idle: [
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_000.png",
@@ -228,7 +225,9 @@ const troll1Images = {
   ],
 };
 
-/** Second troll type: five animation states, same set as troll1Images. */
+/** 
+ * Second troll type: five animation states, same set as troll1Images. 
+ */
 const troll2Images = {
   idle: [
     "img/3.enemies/2.enemy/1.idle/Troll_01_1_IDLE_000.png",
@@ -292,7 +291,9 @@ const troll2Images = {
   ],
 };
 
-/** Ten frames of the coin spin, played in order by Coin.animate(). */
+/** 
+ * Ten frames of the coin spin, played in order by Coin.animate(). 
+ */
 const coinImages = [
   "img/5.elements/coins/Bronze_21.png",
   "img/5.elements/coins/Bronze_22.png",
@@ -306,7 +307,9 @@ const coinImages = [
   "img/5.elements/coins/Bronze_30.png",
 ];
 
-/** Six health bar frames, from empty at index 0 to full at index 5. */
+/** 
+ * Six health bar frames, from empty at index 0 to full at index 5. 
+ */
 const healthBarImages = [
   "img/6.bars/1.health/0_ copia_3.png",
   "img/6.bars/1.health/20_ copia_4.png",
@@ -316,7 +319,9 @@ const healthBarImages = [
   "img/6.bars/1.health/100_ copia_2.png",
 ];
 
-/** Six quiver bar frames, from empty at index 0 to full at index 5. */
+/** 
+ * Six quiver bar frames, from empty at index 0 to full at index 5. 
+ */
 const quiverImages = [
   "img/6.bars/2.quiver/quiver_0.png",
   "img/6.bars/2.quiver/quiver_20.png",
@@ -326,7 +331,9 @@ const quiverImages = [
   "img/6.bars/2.quiver/quiver_100.png",
 ];
 
-/** Six coin bar frames, from empty at index 0 to full at index 5. */
+/** 
+ * Six coin bar frames, from empty at index 0 to full at index 5. 
+ */
 const coinBarImages = [
   "img/6.bars/3.coins/coins_0.png",
   "img/6.bars/3.coins/coins_20.png",
@@ -336,7 +343,9 @@ const coinBarImages = [
   "img/6.bars/3.coins/coins_100.png",
 ];
 
-/** Six endboss health bar frames, from empty at index 0 to full at index 5. */
+/** 
+ * Six endboss health bar frames, from empty at index 0 to full at index 5. 
+ */
 const endbossHealthBarImages = [
   "img/6.bars/4.endboss_health/troll_health_0.png",
   "img/6.bars/4.endboss_health/troll_health_20.png",
@@ -347,12 +356,7 @@ const endbossHealthBarImages = [
 ];
 
 /**
- * Single images the game draws that belong to no animation.
- *
- * The five parallax layers, which level1 repeats at seven positions, and the
- * arrow used both for the pickups lying in the level and for the ones in
- * flight. Listed here so the preloader finds every path in one file; the
- * classes still name their own.
+ * Single images the game draws that belong to no animation and serve as background.
  */
 const sceneImages = [
   "img/5.elements/background/1.png",
