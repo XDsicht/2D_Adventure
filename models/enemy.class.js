@@ -1,15 +1,5 @@
 /**
- * Shared behaviour for every hostile in the game: both troll types and the
- * endboss.
- *
- * Enemies walk toward the character, turn to face it, attack when it is in
- * reach and play a death animation before removing themselves. Subclasses
- * supply only their sprite arrays and, for the endboss, a larger set of
- * per-state dimensions.
- *
- * Two sound sets exist because the endboss has its own recordings. Rather than
- * branching at every call site, the methods below point enemySoundLibrary at
- * whichever set applies and then use that.
+ * Shared behaviour for every hostile in the game: both troll types and the endboss.
  */
 class Enemy extends MovableObject {
   height = 240;
@@ -18,16 +8,24 @@ class Enemy extends MovableObject {
   otherDirection = true;
   energy = 10;
 
-  /** Set 800ms after the death animation ends; World then splices it out. */
+  /** 
+   * Set 800ms after the death animation ends; World then splices it out. 
+   */
   delete = false;
 
-  /** Vertical position while dead, slightly lower than the walking height. */
+  /** 
+   * Vertical position while dead, slightly lower than the walking height. 
+   */
   deadY = 228;
 
-  /** Points at either enemySounds or endbossSounds, chosen per instance at runtime. */
+  /** 
+   * Points at either enemySounds or endbossSounds, chosen per instance at runtime. 
+   */
   enemySoundLibrary;
 
-  /** Collision box inset, leaving roughly 100px of the 240px sprite. */
+  /** 
+   * Collision box inset, leaving roughly 100px of the 240px sprite. 
+   */
   offset = {
     top: 85,
     left: 90,
@@ -36,9 +34,8 @@ class Enemy extends MovableObject {
   };
 
   /**
-   * Horizontal band the character's centre must land within to stomp this
-   * enemy. Narrower than the collision box on purpose, so a glancing hit from
-   * the side does not count as landing on top.
+   * Horizontal band the character's centre must land within to stomp this enemy. 
+   * Narrower than the collision box on purpose, so a glancing hit from the side does not count as landing on top.
    */
   stompOffset = {
     left: 100,
@@ -47,10 +44,6 @@ class Enemy extends MovableObject {
 
   /**
    * Adds this enemy's three sounds to the shared list for muting and volume.
-   *
-   * The impact sound is included although the trolls never trigger it
-   * themselves: World plays it when an arrow lands, and a sound outside the
-   * list escapes muting, pausing and the clear-down at the end of a run.
    */
   registerEnemySounds() {
     registerGameSound(this.enemySounds.isHurtSound);
@@ -61,7 +54,7 @@ class Enemy extends MovableObject {
   /**
    * Mirrors the stomp band when the enemy faces left.
    *
-   * @returns {{left: number, right: number}} The band, resolved for the current facing.
+   * @returns {{left: number, right: number}} - The band, resolved for the current facing.
    */
   getStompOffset() {
     return {
@@ -70,17 +63,15 @@ class Enemy extends MovableObject {
     };
   }
 
-  /** Troll sound set, shared between all enemies; the endboss cries with its own. */
+  /** 
+   * Troll sound set, shared between all enemies; the endboss cries with its own. 
+   */
   enemySounds = trollSounds;
 
   /**
-   * Picks a start position 0 to 500px past wherever the previous enemy was
-   * placed, then stores it back on the world as the next starting point.
+   * Picks a start position 0 to 500px past wherever the previous enemy was placed, then stores it back on the world as the next starting point.
    *
-   * Chaining the positions this way keeps the enemies spread along the level
-   * instead of clustering, which independent random values would allow.
-   *
-   * @returns {number} The position chosen, also written to world.initialObstacleSpawn.
+   * @returns {number} - The position chosen, also written to world.initialObstacleSpawn.
    */
   calculateSpawningLocation() {
     this.spawningLocation = this.world.initialObstacleSpawn + Math.random() * 500;
@@ -90,7 +81,7 @@ class Enemy extends MovableObject {
   /**
    * Reports whether the character has got past this enemy.
    *
-   * @returns {boolean} True when the character is behind the way the enemy faces.
+   * @returns {boolean} - True when the character is behind the way the enemy faces.
    */
   isCharacterBehind() {
     if (!this.world || !this.world.character) return false;
@@ -104,12 +95,7 @@ class Enemy extends MovableObject {
   /**
    * Reports whether the enemy should hold still this tick.
    *
-   * True while it is reeling from a hit, and also while the character is
-   * recovering from a hit this enemy landed, so a troll does not walk through
-   * its victim mid-animation. The airborne check lets a jumping character
-   * escape rather than being followed.
-   *
-   * @returns {boolean} True when movement should be suppressed.
+   * @returns {boolean} - True when movement should be suppressed.
    */
   shouldStopMoving() {
     if (!this.world || !this.world.character) return false;
@@ -119,10 +105,7 @@ class Enemy extends MovableObject {
   /**
    * Flips the enemy to dead the first time its health reaches zero.
    *
-   * Resets the frame counter so the death animation starts at frame 0 rather
-   * than continuing from whatever was playing.
-   *
-   * @returns {boolean|undefined} True on the transition, undefined otherwise.
+   * @returns {boolean|undefined} - True on the transition, undefined otherwise.
    */
   checkIfEnemyIsDead() {
     if (this.isDead() && !this.dead) {
@@ -132,22 +115,20 @@ class Enemy extends MovableObject {
     }
   }
 
-  /** Selects the right sound set for this enemy type and plays its death cry. */
+  /** 
+   * Selects the right sound set for this enemy type and plays its death cry. 
+   */
   playEnemyBasedDeadSound() {
     if (this instanceof Troll_1 || this instanceof Troll_2) {
       this.enemySoundLibrary = this.enemySounds;
-      this.enemySoundLibrary.isDeadSound.currentTime = 0;
-      playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     } else {
       this.enemySoundLibrary = this.endbossSounds;
-      this.enemySoundLibrary.isDeadSound.currentTime = 0;
-      playSound(this.enemySoundLibrary.isDeadSound, gameSoundsVolume);
     }
+    this.playOwnSound(this.enemySoundLibrary.isDeadSound);
   }
 
   /**
-   * Plays the hurt cry, but only on the first frame of the hurt animation so
-   * it does not retrigger ten times a second while the animation runs.
+   * Plays the hurt cry, but only on the first frame of the hurt animation so it does not retrigger ten times a second while the animation runs.
    */
   playEnemyBasedHurtSound() {
     if (this.currentImage === 0) {
@@ -156,19 +137,12 @@ class Enemy extends MovableObject {
       } else {
         this.enemySoundLibrary = this.endbossSounds;
       }
-      this.enemySoundLibrary.isHurtSound.currentTime = 0;
-      playSound(this.enemySoundLibrary.isHurtSound, gameSoundsVolume);
+      this.playOwnSound(this.enemySoundLibrary.isHurtSound);
     }
   }
 
   /**
    * Plays the death animation once, then holds its final frame.
-   *
-   * Setting deathAnimationDone here is what lets World decide the endboss
-   * fight is over only after the last frame has actually been drawn.
-   *
-   * The death cry is deliberately left running. It used to be paused on this
-   * last frame, which cut the boss's three second roar off after one.
    */
   playEnemyDeadAnimation() {
     this.y = this.deadY;
@@ -182,7 +156,9 @@ class Enemy extends MovableObject {
     }
   }
 
-  /** Marks the corpse for removal 800ms later, leaving it briefly on screen. */
+  /** 
+   * Marks the corpse for removal 800ms later, leaving it briefly on screen. 
+   */
   setEnemyDeadTimeout() {
     registerInterval(
       setTimeout(() => {
@@ -194,11 +170,11 @@ class Enemy extends MovableObject {
   /**
    * Returns the death frames for this enemy type.
    *
-   * @returns {string[]} The endboss array for the boss, the troll array otherwise.
+   * @returns {string[]} - The endboss array for the boss, the troll array otherwise.
    */
   getImagesDead() {
     if (this instanceof Endboss) {
-      return this.ENDBOSS_IMAGES_DEAD;
+      return endbossImages.dead;
     } else {
       return this.IMAGES_DEAD;
     }
@@ -206,9 +182,6 @@ class Enemy extends MovableObject {
 
   /**
    * Runs one attack animation through to its end, then releases the attack.
-   *
-   * Only the trolls reach this: the endboss overrides the animation dispatch
-   * and uses its own attack handling.
    */
   playAttackAnimation() {
     if (this.currentImage >= this.IMAGES_ATTACKING.length - 1) {
@@ -222,9 +195,6 @@ class Enemy extends MovableObject {
 
   /**
    * Lands 20 points of damage partway through the attack animation.
-   *
-   * Waiting for frame 7 lines the damage up with the swing connecting, and
-   * the hasDealtDamage latch keeps one swing from hitting repeatedly.
    */
   enemyDealsDamage() {
     if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringObstacle(this)) {
@@ -237,9 +207,7 @@ class Enemy extends MovableObject {
   /**
    * Reports whether any part of the enemy is currently on screen.
    *
-   * Used to skip arrow collision tests against enemies the player cannot see.
-   *
-   * @returns {boolean} True when the enemy overlaps the visible viewport.
+   * @returns {boolean} - True when the enemy overlaps the visible viewport.
    */
   inFrame() {
     const enemyOffsets = this.getEnemyDirectionalOffset();
@@ -249,7 +217,7 @@ class Enemy extends MovableObject {
   /**
    * Mirrors the horizontal collision insets for the current facing.
    *
-   * @returns {{leftOffset: number, rightOffset: number}} Insets resolved for the current facing.
+   * @returns {{leftOffset: number, rightOffset: number}} - Insets resolved for the current facing.
    */
   getEnemyDirectionalOffset() {
     return {
@@ -258,13 +226,17 @@ class Enemy extends MovableObject {
     };
   }
 
-  /** Starts both enemy loops: movement at 60fps and animation at 10fps. */
+  /** 
+   * Starts both enemy loops: movement at 60fps and animation at 10fps. 
+   */
   animate() {
     this.startEnemy();
     this.startStatusBasedAnimation();
   }
 
-  /** Movement loop: checks for death and walks the enemy sixty times a second. */
+  /** 
+   * Movement loop: checks for death and walks the enemy sixty times a second. 
+   */
   startEnemy() {
     registerInterval(
       setInterval(() => {
@@ -276,7 +248,9 @@ class Enemy extends MovableObject {
     );
   }
 
-  /** Animation loop: picks and advances the right sprite ten times a second. */
+  /** 
+   * Animation loop: picks and advances the right sprite ten times a second. 
+   */
   startStatusBasedAnimation() {
     registerInterval(
       setInterval(() => {
@@ -287,7 +261,9 @@ class Enemy extends MovableObject {
     );
   }
 
-  /** Turns the enemy around when the character slips past it. */
+  /** 
+   * Turns the enemy around when the character slips past it. 
+   */
   getEnemyDirection() {
     if (this.isCharacterBehind()) {
       this.otherDirection = !this.otherDirection;
@@ -296,10 +272,6 @@ class Enemy extends MovableObject {
 
   /**
    * Chooses which animation to show, in priority order.
-   *
-   * Death beats being hurt, which beats attacking, which beats walking. The
-   * idle branch is the odd one: while the character is reeling the enemy
-   * pauses mid-attack rather than swinging at someone already staggered.
    */
   playStatusBasedAnimation() {
     if (this.dead) {
@@ -316,13 +288,17 @@ class Enemy extends MovableObject {
     }
   }
 
-  /** Plays the hurt cry and the matching frames. */
+  /** 
+   * Plays the hurt cry and the matching frames. 
+   */
   executeHurtAnimation() {
     this.playEnemyBasedHurtSound();
     this.playAnimation(this.IMAGES_HURT);
   }
 
-  /** Turns and walks the enemy, unless it is dead, attacking or reeling. */
+  /** 
+   * Turns and walks the enemy, unless it is dead, attacking or reeling. 
+   */
   activateEnemy() {
     if (!this.dead && !this.isAttacking && !this.shouldStopMoving()) {
       this.getEnemyDirection();

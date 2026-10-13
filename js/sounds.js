@@ -29,6 +29,17 @@ let backgroundMusic = new Audio("audio/game_audio/ingame_music.mp3");
 let endbossMusic = new Audio("audio/game_audio/endboss_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 
+/**
+ * Vorga's own set.
+ */
+const playerSounds = {
+  isAttackingSound: new Audio("audio/character_audio/character_arrow_shooting_sound.mp3"),
+  isWalkingSound: new Audio("audio/character_audio/character_walking_sound.mp3"),
+  isJumpingSound: new Audio("audio/character_audio/character_jumping_sound.mp3"),
+  isHurtSound: new Audio("audio/character_audio/character_hurt_sound.mp3"),
+  isDeadSound: new Audio("audio/character_audio/character_dead_sound.mp3"),
+};
+
 /** 
  * The troll sound set, shared by every enemy rather than built per instance. 
  */

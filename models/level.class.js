@@ -5,13 +5,17 @@ class Level {
   enemies;
   backgroundObjects;
 
-  /** Arrows currently in flight; starts empty and is filled by checkShootArrow(). */
+  /**
+   *  Arrows currently in flight; starts empty and is filled by checkShootArrow(). 
+   */
   throwableObjects;
 
   coins;
   arrows;
 
-  /** World position of the right-hand wall the character cannot walk past. */
+  /** 
+   * World position of the right-hand wall the character cannot walk past. 
+   */
   level_end_x = 3400;
 
   /**

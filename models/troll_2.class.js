@@ -1,10 +1,5 @@
 /**
  * The second of the two troll types patrolling the desert trail.
- *
- * Identical to Troll_1 in every respect except its sprite art, inheriting all
- * movement, attack and damage behaviour from Enemy. Level 1 spawns three of
- * each, and World.setWorld() assigns their start positions afterwards through
- * calculateSpawningLocation().
  */
 class Troll_2 extends Enemy {
   IMAGES_IDLE = troll2Images.idle;
@@ -14,8 +9,7 @@ class Troll_2 extends Enemy {
   IMAGES_ATTACKING = troll2Images.attacking;
 
   /**
-   * Preloads every animation, gives the troll a random walking speed between
-   * 0.15 and 0.40 so the group does not move in lockstep, then starts its
+   * Preloads every animation, gives the troll a random walking speed between 0.15 and 0.40 so the group does not move in lockstep, then starts its
    * animation loops and registers its sounds for muting and volume control.
    */
   constructor() {

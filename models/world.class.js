@@ -1,22 +1,6 @@
 /**
  * The game world: owns the level, the camera and every rule about how things
  * interact.
- *
- * Three loops run at different rates, and the rate is part of the design.
- * draw() runs on requestAnimationFrame because it only paints. Collisions that
- * a player would notice being missed run every 25ms, because at 100ms a falling
- * character can pass straight through an enemy between two checks. Everything
- * else — damage, pickups, shooting, clearing corpses — runs every 100ms, which
- * is frequent enough and keeps the cheap work off the fast loop.
- *
- * Damage is not applied the moment a collision is found. Collisions only queue
- * damage on the character, and the main loop applies the whole queue as one hit,
- * so two enemies touching Vorga in the same tick deal their damage together
- * instead of one cancelling the other through the hurt state.
- *
- * The camera follows the character directly for most of the level and switches
- * to a smoothed follow once the endboss is active, so the fight stays framed
- * rather than snapping around.
  */
 class World {
   level = level1;
@@ -27,31 +11,26 @@ class World {
 
   /**
    * Horizontal camera shift, applied by translating the canvas before drawing.
-   *
-   * Negative as the character advances, since the world moves left past a fixed
-   * viewport rather than the viewport moving right.
    */
   camera_x = 0;
 
   /**
    * Where the character sits on screen, in pixels from the left edge.
-   *
-   * Constant for most of the level and re-aimed during the boss fight, which is
-   * what keeps both fighters in view.
    */
   cameraOffset = 100;
 
-  /** Where the camera is heading during the boss fight; camera_x eases towards this. */
+  /** 
+   * Where the camera is heading during the boss fight; camera_x eases towards this. 
+   */
   targetCameraX = 0;
 
-  /** Fraction of the remaining distance the camera closes each frame. */
+  /** 
+   * Fraction of the remaining distance the camera closes each frame.
+   */
   cameraLerpFactor = 0.1;
 
   /**
    * Distance at which the camera snaps to its target instead of easing further.
-   *
-   * Without it the camera would creep by ever smaller amounts forever and the
-   * background would shimmer.
    */
   lerpThreshold = 0.4;
   healthBar = new HealthBar();
@@ -59,20 +38,20 @@ class World {
   coinBar = new CoinBar();
   endbossHealthBar = new EndbossHealthBar();
 
-  /** Arrows available to shoot, capped at five. The quiver bar shows the same supply. */
+  /** 
+   * Arrows available to shoot, capped at five. The quiver bar shows the same supply. 
+   */
   arrowInventory = 0;
 
   /**
    * Running cursor for troll spawn positions.
-   *
-   * Each troll places itself a random distance past this point and then writes
-   * its own position back, so the trolls come out spread along the level
-   * instead of stacked on one spot.
    */
   initialObstacleSpawn = 600;
   paused = false;
 
-  /** Handle for the current draw frame, kept so pausing can cancel it. */
+  /** 
+   * Handle for the current draw frame, kept so pausing can cancel it. 
+   */
   animationFrameId = null;
 
   /**
@@ -91,14 +70,7 @@ class World {
   }
 
   /**
-   * Gives the character and every enemy a reference back to this world, and
-   * places the trolls.
-   *
-   * They need it to reach each other and the level; the endboss is skipped when
-   * placing because its position is fixed by design.
-   *
-   * The boss's health bar is measured up here too, since this is the first
-   * point at which the canvas it has to fit inside is known.
+   * Gives the character and every enemy a reference back to this world, and places the trolls.
    */
   setWorld() {
     this.character.world = this;
@@ -111,7 +83,9 @@ class World {
     });
   }
 
-  /** Freezes the world: stops drawing and pauses every object's own loops. */
+  /** 
+   * Freezes the world: stops drawing and pauses every object's own loops. 
+   */
   pause() {
     this.paused = true;
     cancelAnimationFrame(this.animationFrameId);
@@ -123,9 +97,6 @@ class World {
 
   /**
    * Unfreezes the world and restarts drawing.
-   *
-   * Returns early if it was not paused, so a stray resume cannot start a second
-   * draw loop alongside the first.
    */
   resume() {
     if (!this.paused) return;
@@ -137,13 +108,17 @@ class World {
     this.draw();
   }
 
-  /** Starts both game loops. */
+  /** 
+   * Starts both game loops. 
+   */
   run() {
     this.runMainLoop();
     this.runFastCollisionLoop();
   }
 
-  /** Ten times a second: damage, shooting, pickups and clearing dead enemies. */
+  /** 
+   * Ten times a second: damage, shooting, pickups and clearing dead enemies. 
+   */
   runMainLoop() {
     registerInterval(
       setInterval(() => {
@@ -159,11 +134,6 @@ class World {
 
   /**
    * Forty times a second: arrow hits and stomps.
-   *
-   * These two are here rather than in the main loop because both involve fast
-   * movement. An arrow or a falling character covers enough ground in 100ms to
-   * pass clean through a target between checks, which showed up as hits that
-   * simply did not register.
    */
   runFastCollisionLoop() {
     registerInterval(
@@ -175,7 +145,9 @@ class World {
     );
   }
 
-  /** Applies whatever damage was queued this tick and updates the health bar. */
+  /** 
+   * Applies whatever damage was queued this tick and updates the health bar. 
+   */
   applyDamageFromEnemies() {
     if (this.character.pendingDamage > 0) {
       this.character.applyAccumulatedDamage();
@@ -183,7 +155,9 @@ class World {
     }
   }
 
-  /** Runs the slower collision checks: enemy attacks, contact damage and pickups. */
+  /** 
+   * Runs the slower collision checks: enemy attacks, contact damage and pickups. 
+   */
   checkCollisions() {
     this.checkEnemyWalkingCollisions(this.level.enemies);
     this.checkCharacterWalkingCollisions();
@@ -208,10 +182,6 @@ class World {
   /**
    * Starts a troll's attack if it is close, idle and off cooldown.
    *
-   * The character has to be standing still: a troll does not get a free hit on
-   * someone running past. The one-second cooldown stops the attack animation
-   * restarting every tick while the two stand face to face.
-   *
    * @param {MovableObject} enemy - Candidate enemy; ignored unless it is a troll.
    * @param {number} timeSinceLastAttack - Milliseconds since this enemy last attacked.
    */
@@ -226,8 +196,7 @@ class World {
   }
 
   /**
-   * Starts the endboss's attack under the same conditions as a troll's, but on
-   * a shorter cooldown so the fight stays pressured.
+   * Starts the endboss's attack under the same conditions as a troll's, but on a shorter cooldown so the fight stays pressured.
    *
    * @param {MovableObject} enemy - Candidate enemy; ignored unless it is the endboss.
    * @param {number} timeSinceLastAttack - Milliseconds since the boss last attacked.
@@ -244,11 +213,6 @@ class World {
 
   /**
    * Kills a troll the character lands on top of, and bounces the character off.
-   *
-   * Four conditions have to hold at once, and together they are what makes this
-   * a stomp: falling, overlapping, above the ground, and centred over the
-   * enemy's body. Walking into a troll from the side never qualifies. The
-   * endboss is excluded — it cannot be stomped at all.
    */
   checkCharacterJumpingCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -264,14 +228,10 @@ class World {
   }
 
   /**
-   * Reports whether the character is over the enemy's body rather than its
-   * sprite's empty edges.
-   *
-   * Measured from the character's centre against a per-enemy inset, so clipping
-   * a troll's outstretched arm on the way down does not count as landing on it.
+   * Reports whether the character is over the enemy's body rather than its sprite's empty edges.
    *
    * @param {MovableObject} enemy - The enemy being landed on.
-   * @returns {boolean} True when the character is centred over the body.
+   * @returns {boolean} - True when the character is centred over the body.
    */
   isStompingBody(enemy) {
     let characterCenterX = this.character.x + this.character.width / 2;
@@ -280,12 +240,7 @@ class World {
   }
 
   /**
-   * Deals contact damage when the character walks into an enemy, once per
-   * contact.
-   *
-   * The hasDealtDamage flag is what limits it: it is set on the hit and only
-   * cleared once the two separate, so standing inside an enemy does not drain
-   * health tick after tick.
+   * Deals contact damage when the character walks into an enemy, once per contact.
    */
   checkCharacterWalkingCollisions() {
     this.level.enemies.forEach((enemy) => {
@@ -302,10 +257,6 @@ class World {
 
   /**
    * Deals endboss contact damage while the character is airborne.
-   *
-   * A separate check because jumping into the boss should still hurt, whereas
-   * jumping onto a troll is a stomp. Same once-per-contact rule as on the
-   * ground.
    */
   checkEndbossCollisionWhileCharacterIsJumping() {
     this.level.enemies.forEach((enemy) => {
@@ -325,7 +276,7 @@ class World {
    * Decides whether walking into this enemy should deal damage.
    *
    * @param {MovableObject} enemy - The enemy in contact.
-   * @returns {boolean} True when all conditions for a contact hit are met.
+   * @returns {boolean} - True when all conditions for a contact hit are met.
    */
   checkWalkingCollisionStatus(enemy) {
     return (
@@ -341,9 +292,6 @@ class World {
 
   /**
    * Collects an item and fills its bar, unless that bar is already full.
-   *
-   * Shared by arrows and coins; the bar passed in is what makes the difference.
-   * A full bar leaves the item lying there to be picked up later.
    *
    * @param {MovableObject[]} array - The collectibles still in the level.
    * @param {StatusBar} bar - The bar this kind of item fills.
@@ -364,9 +312,6 @@ class World {
 
   /**
    * Resolves arrow hits.
-   *
-   * Iterates a copy, because a hit removes the arrow from the live array and
-   * mutating it mid-iteration would skip the next entry.
    */
   checkCollisionOfArrows() {
     this.level.throwableObjects.slice().forEach((arrow) => {
@@ -380,11 +325,8 @@ class World {
   /**
    * Picks which enemy an arrow hits when it overlaps more than one.
    *
-   * Sorted by direction of flight so the nearest target takes the hit; an arrow
-   * cannot pass through a troll to reach the boss behind it.
-   *
    * @param {ThrowableObject} arrow - The arrow in flight.
-   * @returns {MovableObject|undefined} The enemy hit, or undefined if none.
+   * @returns {MovableObject|undefined} - The enemy hit, or undefined if none.
    */
   findHitEnemy(arrow) {
     let hits = this.level.enemies.filter((enemy) => this.canArrowHit(enemy, arrow));
@@ -399,12 +341,9 @@ class World {
   /**
    * Reports whether this enemy is a legal target.
    *
-   * Off-screen and not-yet-activated enemies are excluded, so arrows cannot
-   * whittle down the boss before the fight begins.
-   *
    * @param {MovableObject} enemy - Candidate target.
    * @param {ThrowableObject} arrow - The arrow in flight.
-   * @returns {boolean} True when the arrow may hit this enemy.
+   * @returns {boolean} - True when the arrow may hit this enemy.
    */
   canArrowHit(enemy, arrow) {
     if (enemy.dead) return false;
@@ -429,11 +368,6 @@ class World {
   /**
    * Syncs the boss's bar after a hit, ignoring hits on trolls.
    *
-   * The percentage is read back off the boss's own energy rather than counted
-   * down separately, so the bar cannot drift out of step with the health it is
-   * reporting. Its 20 energy scales to 100, which makes an arrow's 5 damage a
-   * quarter of the bar.
-   *
    * @param {MovableObject} enemy - The enemy that was just hit.
    */
   updateEndbossHealthBar(enemy) {
@@ -445,11 +379,8 @@ class World {
   /**
    * Reports whether an enemy may be targeted yet.
    *
-   * Only the endboss can answer no, and only before it is activated; every
-   * other enemy passes straight through.
-   *
    * @param {MovableObject} enemy - The enemy to test.
-   * @returns {boolean} True unless this is the dormant endboss.
+   * @returns {boolean} - True unless this is the dormant endboss.
    */
   checkEndbossActive(enemy) {
     if (enemy instanceof Endboss) {
@@ -458,13 +389,17 @@ class World {
     return true;
   }
 
-  /** Drops corpses from the level once their death animation has finished. */
+  /** 
+   * Drops corpses from the level once their death animation has finished. 
+   */
   removeDeadEnemies() {
     let deadEnemies = this.level.enemies.filter((enemy) => enemy.delete);
     deadEnemies.forEach((enemy) => this.level.enemies.splice(this.level.enemies.indexOf(enemy), 1));
   }
 
-  /** Adds one arrow, up to five. */
+  /** 
+   * Adds one arrow, up to five. 
+   */
   addAmmunition() {
     if (this.arrowInventory < 5) {
       this.arrowInventory++;
@@ -473,11 +408,6 @@ class World {
 
   /**
    * Spawns an arrow once the character's draw animation has finished.
-   *
-   * It waits on releaseArrow rather than the key press, which is why the arrow
-   * leaves the bow at the end of the animation. The arrow is given the facing
-   * captured when the draw began, so turning mid-draw does not redirect a shot
-   * already aimed.
    */
   checkShootArrow() {
     if (this.character.releaseArrow && this.arrowInventory > 0 && this.character.shotAllowed() && !this.character.isAttacking) {
@@ -493,7 +423,9 @@ class World {
     }
   }
 
-  /** Removes arrows that have hit the ground, checking six times a second. */
+  /** 
+   * Removes arrows that have hit the ground, checking six times a second.
+   */
   checkArrowTrajectory() {
     let checkIfArrowIsFlying = registerInterval(
       setInterval(() => {
@@ -509,8 +441,7 @@ class World {
   }
 
   /**
-   * Stops the trajectory check after 1.1 seconds, which outlasts any arrow's
-   * flight.
+   * Stops the trajectory check after 1.1 seconds, which outlasts any arrow's flight.
    *
    * @param {number} checkIfArrowIsFlying - Interval id to clear.
    */
@@ -522,7 +453,9 @@ class World {
     );
   }
 
-  /** Spends one arrow and takes a segment off the quiver bar. */
+  /** 
+   * Spends one arrow and takes a segment off the quiver bar. 
+   */
   reduceQuiver() {
     this.arrowInventory--;
     this.quiver.depleteBar();
@@ -531,7 +464,7 @@ class World {
   /**
    * Places the arrow at the bow rather than at the sprite's edge.
    *
-   * @returns {number} Spawn x, offset to whichever side the character faces.
+   * @returns {number} - Spawn x, offset to whichever side the character faces.
    */
   getArrowX() {
     if (this.character.otherDirection) {
@@ -543,11 +476,6 @@ class World {
 
   /**
    * Positions the camera for this frame.
-   *
-   * Before the boss is active the camera is simply pinned to the character,
-   * which is exact and cheap. Once the fight starts it eases towards a target
-   * instead, because the offset itself now moves and snapping to it each frame
-   * would look jerky.
    */
   updateCamera() {
     let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
@@ -568,7 +496,7 @@ class World {
    *
    * @param {number} diff - Distance still to cover.
    * @param {number} targetCameraX - Where the camera is heading.
-   * @returns {number} The new camera position.
+   * @returns {number} - The new camera position.
    */
   floatCamera(diff, targetCameraX) {
     if (Math.abs(diff) < this.lerpThreshold) {
@@ -579,13 +507,7 @@ class World {
   }
 
   /**
-   * Re-aims the camera depending on where the character stands relative to the
-   * boss's walking range.
-   *
-   * Past the boss it offsets by the full range, before it by the usual amount,
-   * and between the two it centres on half the range so both fighters stay in
-   * frame.
-   *
+   * Re-aims the camera depending on where the character stands relative to the boss's walking range.
    * @param {Endboss} endboss - The boss being framed.
    * @param {number} endbossRightEdge - Right end of the boss's walking range.
    */
@@ -603,10 +525,6 @@ class World {
 
   /**
    * Paints one frame and schedules the next.
-   *
-   * The canvas is translated by the camera for the world, then translated back
-   * before the bars, which is what keeps them fixed on screen while everything
-   * else scrolls.
    */
   draw() {
     if (this.paused) return;
@@ -625,11 +543,8 @@ class World {
 
   /**
    * Locks the character's facing to the direction the shot was aimed.
-   *
-   * Applied each frame during a draw, so pressing the opposite arrow mid-draw
-   * does not spin the sprite around while the bow is still bent.
-   *
-   * @returns {boolean|undefined} The facing applied, or undefined outside a draw.
+   * 
+   * @returns {boolean|undefined} - The facing applied, or undefined outside a draw.
    */
   requestCurrentCharacterDirection() {
     if (this.character.isAttacking && !this.character.releaseArrow) {
@@ -637,7 +552,9 @@ class World {
     }
   }
 
-  /** Draws the three bars, after the camera translation has been undone. */
+  /** 
+   * Draws the three bars, after the camera translation has been undone. 
+   */
   addCharacterBarsToGame() {
     this.addToMap(this.healthBar);
     this.addToMap(this.quiver);
@@ -647,9 +564,6 @@ class World {
 
   /**
    * Advances the slide and draws the boss's bar, once the fight has started.
-   *
-   * The early return also covers the world's very first frame, which is drawn
-   * before setWorld() has given the bar its bounds.
    */
   addEndbossHealthBarToGame() {
     if (!this.endbossHealthBar.visible) return;
@@ -657,7 +571,9 @@ class World {
     this.addToMap(this.endbossHealthBar);
   }
 
-  /** Draws the scenery and collectibles, behind everything that moves. */
+  /** 
+   * Draws the scenery and collectibles, behind everything that moves. 
+   */
   addStaticObjectsToGame() {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.throwableObjects);
@@ -665,7 +581,9 @@ class World {
     this.addObjectsToMap(this.level.arrows);
   }
 
-  /** Draws the enemies and the character on top of the scenery. */
+  /** 
+   * Draws the enemies and the character on top of the scenery. 
+   */
   addMovingObjectsToGame() {
     this.requestCurrentCharacterDirection();
     this.addObjectsToMap(this.level.enemies);
@@ -674,9 +592,6 @@ class World {
 
   /**
    * Draws a list of objects.
-   *
-   * Arrows take their own path because they are rotated to their flight angle
-   * rather than simply mirrored.
    *
    * @param {MovableObject[]} objects - What to draw.
    */
@@ -706,11 +621,7 @@ class World {
   }
 
   /**
-   * Mirrors the canvas so a left-facing sprite can be drawn from its
-   * right-facing frames.
-   *
-   * Negating x is part of the trick: in a mirrored canvas the object's real
-   * position is its coordinate reflected, and flipImageBack() undoes it.
+   * Mirrors the canvas so a left-facing sprite can be drawn from its right-facing frames.
    *
    * @param {MovableObject} mo - The object being mirrored.
    */
