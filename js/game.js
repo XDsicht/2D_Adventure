@@ -321,6 +321,7 @@ function checkIfGameOver() {
   if (world.character.dead && world.character.deathAnimationDone) {
     endGame();
     showGameOverScreen();
+    return;
   }
   if (checkEndbossDefeated()) {
     scheduleVictory();
