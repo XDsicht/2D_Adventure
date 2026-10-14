@@ -90,7 +90,7 @@ class World {
   }
 
   /** 
-   * Freezes the world: stops drawing and pauses every object's own loops. 
+   * The methods pause() and resume() freeze and unfreeze the world, including the character, enemies and the draw loop. 
    */
   pause() {
     this.paused = true;
@@ -101,9 +101,6 @@ class World {
     this.level.throwableObjects.forEach((arrow) => arrow.pause());
   }
 
-  /**
-   * Unfreezes the world and restarts drawing.
-   */
   resume() {
     if (!this.paused) return;
     this.paused = false;
