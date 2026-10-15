@@ -197,7 +197,7 @@ class Enemy extends MovableObject {
    * Lands 20 points of damage partway through the attack animation.
    */
   enemyDealsDamage() {
-    if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringObstacle(this)) {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isEncounteringObstacle(this)) {
       this.world.character.addPendingDamage(this, 20);
       this.world.character.lastAttacker = this;
       this.hasDealtDamage = true;

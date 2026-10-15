@@ -424,7 +424,7 @@ class Endboss extends Enemy {
    * Lands 40 points of damage partway through the swing, double a troll's.
    */
   endbossDealsDamage() {
-    if (this.currentImage >= 7 && !this.hasDealtDamage && this.world.character.isEncounteringEndboss(this)) {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isEncounteringEndboss(this)) {
       this.world.character.addPendingDamage(this, 40);
       this.world.character.lastAttacker = this;
       this.hasDealtDamage = true;

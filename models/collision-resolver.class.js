@@ -25,7 +25,7 @@ class CollisionResolver {
   checkCollisions() {
     this.checkEnemyWalkingCollisions(this.world.level.enemies);
     this.checkCharacterWalkingCollisions();
-    this.checkEndbossCollisionWhileCharacterIsJumping();
+    this.checkAirborneContact();
     this.checkCollisionsWithCollectibles(this.world.level.arrows, this.world.quiver);
     this.checkCollisionsWithCollectibles(this.world.level.coins, this.world.coinBar);
   }
@@ -102,6 +102,17 @@ class CollisionResolver {
     let stompOffset = enemy.getStompOffset();
     return characterCenterX > enemy.x + stompOffset.left && characterCenterX < enemy.x + enemy.width - stompOffset.right;
   }
+  /**
+   * Reports whether this overlap is a stomp about to land. The boss answers false because it cannot be stomped, so dropping onto it must still hurt.
+   *
+   * @param {MovableObject} enemy - The enemy being overlapped.
+   * @returns {boolean} - True while the character is dropping squarely onto it.
+   */
+  isStompInProgress(enemy) {
+    if (enemy instanceof Endboss) return false;
+    return this.world.character.isCollidingVertically(enemy) && this.isStompingBody(enemy);
+  }
+
 
   /**
    * Deals contact damage when the character walks into an enemy, once per contact.
@@ -120,11 +131,11 @@ class CollisionResolver {
   }
 
   /**
-   * Deals endboss contact damage while the character is airborne.
+   * Deals contact damage while the character is airborne.
    */
-  checkEndbossCollisionWhileCharacterIsJumping() {
+  checkAirborneContact() {
     this.world.level.enemies.forEach((enemy) => {
-      if (!(enemy instanceof Endboss) || enemy.dead) return;
+      if (enemy.dead || this.isStompInProgress(enemy)) return;
       if (this.world.character.isAboveGround() && this.world.character.isColliding(enemy) && !this.world.character.isHurt() && !enemy.hasDealtDamage) {
         this.world.character.addPendingDamage(enemy, 20);
         this.world.character.lastAttacker = enemy;
