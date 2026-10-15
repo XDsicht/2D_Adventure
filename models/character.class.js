@@ -42,6 +42,11 @@ class Character extends MovableObject {
   jumpFootInset = 34;
 
   /**
+   * Seconds between shots. The endboss raises it when it wakes, so arrows stay quick against trolls but have to be timed during the fight.
+   */
+  shotCooldown = 0.2;
+
+  /**
    * Vorga's own set, declared with the others in sounds.js.
    */
   characterSounds = playerSounds;
@@ -359,7 +364,7 @@ class Character extends MovableObject {
   shotAllowed() {
     let timePassed = new Date().getTime() - this.shootingTime;
     timePassed = timePassed / 1000;
-    return timePassed > 0.2;
+    return timePassed > this.shotCooldown;
   }
 
   /**

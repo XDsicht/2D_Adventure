@@ -10,12 +10,12 @@ class Endboss extends Enemy {
   height = 360;
   width = 340;
 
-  /** 
-   * Walking pace; sprint() raises it to 3.0 once it closes in. 
+  /**
+   * Walking pace; sprint() raises it to 3.0 once it closes in.
    */
   speed = 0.9;
 
-  /** 
+  /**
    * Health, four arrows' worth, double a troll's.
    */
   energy = 20;
@@ -44,18 +44,23 @@ class Endboss extends Enemy {
 
   otherDirection = true;
 
-  /** 
-   * False until the character gets close enough; gates movement and the music swap. 
+  /**
+   * The shot cooldown it imposes on the character once the fight begins, in seconds.
+   */
+  imposedShotCooldown = 0.8;
+
+  /**
+   * False until the character gets close enough; gates movement and the music swap.
    */
   activated = false;
 
-  /** 
-   * Where the boss actually stands, independent of the current frame's width. 
+  /**
+   * Where the boss actually stands, independent of the current frame's width.
    */
   baseX = 0;
 
-  /** 
-   * How far x has been shifted to compensate for the current frame's width. 
+  /**
+   * How far x has been shifted to compensate for the current frame's width.
    */
   xOffset = 0;
 
@@ -80,8 +85,8 @@ class Endboss extends Enemy {
     bottom: 10,
   };
 
-  /** 
-   * Its own cries, used in place of the inherited troll ones. 
+  /**
+   * Its own cries, used in place of the inherited troll ones.
    */
   endbossSounds = bossSounds;
 
@@ -99,8 +104,8 @@ class Endboss extends Enemy {
     this.registerEndbossSounds();
   }
 
-  /** 
-   * Preloads the six animations the boss actually plays. 
+  /**
+   * Preloads the six animations the boss actually plays.
    */
   loadEndbossImages() {
     Object.values(endbossImages).forEach((set) => this.loadImages(set));
@@ -140,8 +145,16 @@ class Endboss extends Enemy {
     return characterViewEnd >= this.x;
   }
 
-  /** 
-   * Switches from walking to the sprint, more than tripling its speed. 
+  /**
+   * Takes the hit and cries out.
+   */
+  hit() {
+    super.hit();
+    this.playOwnSound(this.endbossSounds.isHurtSound);
+  }
+
+  /**
+   * Switches from walking to the sprint, more than tripling its speed.
    */
   sprint() {
     this.isRunning = true;
@@ -193,8 +206,8 @@ class Endboss extends Enemy {
     }
   }
 
-  /** 
-   * Drops any compensation, used by states drawn at the base walk size. 
+  /**
+   * Drops any compensation, used by states drawn at the base walk size.
    */
   resetXOffset() {
     this.xOffset = 0;
@@ -213,8 +226,8 @@ class Endboss extends Enemy {
     this.startSprinting();
   }
 
-  /** 
-   * Schedules the switch to a sprint 1.6 seconds from now. 
+  /**
+   * Schedules the switch to a sprint 1.6 seconds from now.
    */
   startSprinting() {
     registerInterval(
@@ -226,16 +239,16 @@ class Endboss extends Enemy {
     );
   }
 
-  /** 
-   * Starts both boss loops: movement at 60fps and animation at 10fps. 
+  /**
+   * Starts both boss loops: movement at 60fps and animation at 10fps.
    */
   animateEndboss() {
     this.getEndbossMovementStatus();
     this.playEndbossAnimations();
   }
 
-  /** 
-   * Animation loop, picking a state ten times a second. 
+  /**
+   * Animation loop, picking a state ten times a second.
    */
   playEndbossAnimations() {
     registerInterval(
@@ -253,10 +266,10 @@ class Endboss extends Enemy {
   getStatusBasedAnimation() {
     if (this.dead) {
       this.playEndbossDeadAnimation();
-    } else if (this.isHurt()) {
-      this.playEndbossHurtAnimation();
     } else if (this.isAttacking) {
       this.getEndbossAttackState();
+    } else if (this.isHurt()) {
+      this.playEndbossHurtAnimation();
     } else {
       this.playEndbossMovementAnimation();
     }
@@ -275,8 +288,8 @@ class Endboss extends Enemy {
     }
   }
 
-  /** 
-   * Swings, unless the character is already reeling, in which case it holds. 
+  /**
+   * Swings, unless the character is already reeling, in which case it holds.
    */
   getEndbossAttackState() {
     if (this.world.character.isHurt()) {
@@ -286,8 +299,8 @@ class Endboss extends Enemy {
     }
   }
 
-  /** 
-   * Plays one swing through to the end, then returns the boss to sprinting. 
+  /**
+   * Plays one swing through to the end, then returns the boss to sprinting.
    */
   executeAttack() {
     this.hasDealtDamage = false;
@@ -298,8 +311,8 @@ class Endboss extends Enemy {
     }
   }
 
-  /** 
-   * The following methods resize the sprite box to the size of the current state, play the appropriate sound and advance the animation. 
+  /**
+   * The following methods resize the sprite box to the size of the current state, play the appropriate sound and advance the animation.
    * The dead one also drops the boss to the ground line.
    */
   playEndbossDeadAnimation() {
@@ -349,8 +362,8 @@ class Endboss extends Enemy {
     this.isAttacking = false;
   }
 
-  /** 
-   * Ends the swing and drops the boss back into its sprint. 
+  /**
+   * Ends the swing and drops the boss back into its sprint.
    */
   resetEndbossStatus() {
     this.isRunning = true;
@@ -377,8 +390,8 @@ class Endboss extends Enemy {
     );
   }
 
-  /** 
-   * Moves the boss unless it is dead, reeling or already within reach. 
+  /**
+   * Moves the boss unless it is dead, reeling or already within reach.
    */
   startEndbossMovement() {
     if (!this.dead && !this.shouldStopMoving() && !this.world.character.isEncounteringEndboss(this)) {
@@ -394,6 +407,7 @@ class Endboss extends Enemy {
       this.activated = true;
       startEndbossMusic();
       this.world.endbossHealthBar.show();
+      this.world.character.shotCooldown = this.imposedShotCooldown;
     }
   }
 

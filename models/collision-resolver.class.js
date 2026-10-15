@@ -238,7 +238,8 @@ class CollisionResolver {
     playSound(enemy.enemySounds.isHitSound, gameSoundsVolume);
     enemy.hit();
     this.updateEndbossHealthBar(enemy);
-    this.world.level.throwableObjects.splice(this.world.level.throwableObjects.indexOf(arrow), 1);
+    let index = this.world.level.throwableObjects.indexOf(arrow);
+    if (index > -1) this.world.level.throwableObjects.splice(index, 1);
   }
 
   /**

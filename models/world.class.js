@@ -131,6 +131,7 @@ class World {
         this.character.resetDamageAccumulation();
         this.checkShootArrow();
         this.removeDeadEnemies();
+        this.removeGroundedArrows();
       }, 100),
     );
   }
@@ -146,6 +147,13 @@ class World {
         this.collisions.checkCharacterJumpingCollisions();
       }, 25),
     );
+  }
+
+  /**
+   * Drops arrows that have hit the ground.
+   */
+  removeGroundedArrows() {
+    this.level.throwableObjects = this.level.throwableObjects.filter((arrow) => arrow.isAboveGround());
   }
 
   /** 
@@ -178,38 +186,7 @@ class World {
       this.reduceQuiver();
       this.character.releaseArrow = false;
       this.character.shootingTime = new Date().getTime();
-      this.checkArrowTrajectory();
     }
-  }
-
-  /** 
-   * Removes arrows that have hit the ground, checking six times a second.
-   */
-  checkArrowTrajectory() {
-    let checkIfArrowIsFlying = registerInterval(
-      setInterval(() => {
-        if (this.paused) return;
-        this.level.throwableObjects.forEach((arrow) => {
-          if (!arrow.isAboveGround()) {
-            this.level.throwableObjects.splice(0, 1);
-          }
-        });
-      }, 150),
-    );
-    this.clearFlyingArrow(checkIfArrowIsFlying);
-  }
-
-  /**
-   * Stops the trajectory check after 1.1 seconds, which outlasts any arrow's flight.
-   *
-   * @param {number} checkIfArrowIsFlying - Interval id to clear.
-   */
-  clearFlyingArrow(checkIfArrowIsFlying) {
-    registerInterval(
-      setTimeout(() => {
-        clearInterval(checkIfArrowIsFlying);
-      }, 1100),
-    );
   }
 
   /** 
@@ -267,6 +244,7 @@ class World {
 
   /**
    * Re-aims the camera depending on where the character stands relative to the boss's walking range.
+   * 
    * @param {Endboss} endboss - The boss being framed.
    * @param {number} endbossRightEdge - Right end of the boss's walking range.
    */
