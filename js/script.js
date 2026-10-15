@@ -65,18 +65,6 @@ function renderSoundControls(id) {
 }
 
 /**
- * Renders the imprint shell and fills its three empty content containers.
- *
- * @param {string} id - Screen id, always "imprint".
- */
-function renderImprint(id) {
-  renderHTML(id);
-  getElement("gameDescription").innerHTML = getGameDescriptionTemplate();
-  getElement("imprintInfo").innerHTML = getImprintInfoTemplate();
-  getElement("privacyInfo").innerHTML = getPrivacyInfoTemplate();
-}
-
-/**
  * Builds the control overlay that sits on top of the canvas during play.
  */
 function renderInGameControlsBar() {
@@ -145,8 +133,6 @@ function renderHTML(id) {
 function restoreCurrentScreen() {
   if (currentScreen == "soundControls") {
     renderSoundControls(currentScreen);
-  } else if (currentScreen == "imprint") {
-    renderImprint(currentScreen);
   } else {
     renderHTML(currentScreen);
   }
@@ -159,17 +145,52 @@ function restoreCurrentScreen() {
  * @returns {string|undefined} - The screen's HTML, or undefined for an unknown id.
  */
 function getTemplate(id) {
+  return getMenuTemplate(id) || getTextScreenTemplate(id) || getGameStateTemplate(id);
+}
+
+/**
+ * Screens the player reaches by navigating the menus.
+ *
+ * @param {string} id - Screen id.
+ * @returns {string|undefined} - The screen's HTML, or undefined if it is not a menu screen.
+ */
+function getMenuTemplate(id) {
   switch (id) {
-    case "loading": return getLoadingTemplate();
     case "lobby": return getLobbyTemplate();
     case "controls": return getControlsTemplate();
     case "soundControls": return getSoundControlsTemplate();
+    case "about": return getAboutTemplate();
+  }
+}
+
+/**
+ * The three long-text screens behind the About menu.
+ *
+ * @param {string} id - Screen id.
+ * @returns {string|undefined} - The screen's HTML, or undefined if it is not a text screen.
+ */
+function getTextScreenTemplate(id) {
+  switch (id) {
+    case "gameDescription": return getGameDescriptionTemplate();
+    case "privacy": return getPrivacyTemplate();
+    case "imprint": return getImprintTemplate();
+  }
+}
+
+/**
+ * Screens the game's own state puts up, rather than the player asking for them.
+ *
+ * @param {string} id - Screen id.
+ * @returns {string|undefined} - The screen's HTML, or undefined if it is not a game state screen.
+ */
+function getGameStateTemplate(id) {
+  switch (id) {
+    case "loading": return getLoadingTemplate();
+    case "pause": return getPauseTemplate();
     case "victory": return getVictoryTemplate();
     case "gameOver": return getGameOverTemplate();
     case "rotatePhone": return getRotatePhoneTemplate();
     case "enlargeWindow": return getEnlargeWindowTemplate();
-    case "imprint": return getImprintTemplate();
-    case "pause": return getPauseTemplate();
   }
 }
 

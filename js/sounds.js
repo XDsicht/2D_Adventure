@@ -30,6 +30,11 @@ let endbossMusic = new Audio("audio/game_audio/endboss_music.mp3");
 let lobbyMusic = new Audio("audio/game_audio/lobby_music.mp3");
 
 /**
+ * Played when a coin is collected. Coin holds a reference to it, so the pickup plays through the coin itself.
+ */
+const coinCollectSound = new Audio("audio/game_audio/coin_collect.mp3");
+
+/**
  * Vorga's own set.
  */
 const playerSounds = {

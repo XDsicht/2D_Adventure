@@ -85,6 +85,7 @@ function initGame(canvas) {
   world = new World(canvas, keyboard);
   registerGameSound(backgroundMusic);
   registerGameSound(endbossMusic);
+  registerGameSound(coinCollectSound);
   createAllSoundsArray();
   applyAudioStates(allSounds);
   currentMusic = backgroundMusic;

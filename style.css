@@ -3,8 +3,23 @@
   src: url("fonts/Uncial_Antiqua/UncialAntiqua-Regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Metamorphous";
+  src: url("fonts/Metamorphous/Metamorphous-Regular.ttf") format("truetype");
+}
+
+:root {
+  --font-fantasy: "Uncial Antiqua", system-ui;
+  --font-readable: "Metamorphous", system-ui;
+}
+
+.readable-font {
+  font-family: var(--font-readable);
+  letter-spacing: normal;
+}
+
 body {
-  font-family: "Uncial Antiqua", system-ui;
+  font-family: var(--font-fantasy);
   flex-direction: column;
   background-image: url("img/5.elements/background/website-background.jpg");
   background-position: center;
@@ -115,6 +130,7 @@ canvas {
 
 .character-head {
   width: 250px;
+  aspect-ratio: 521 / 497;
   height: auto;
   image-rendering: pixelated;
   animation: wobble 1.8s ease-in-out infinite;
@@ -146,7 +162,7 @@ canvas {
   background: linear-gradient(180deg, #8b5e3c 0%, #5a3820 50%, #3d2410 100%);
   color: #f5e6c8;
   transition: all 0.2s ease;
-  font-family: "Uncial Antiqua", system-ui;
+  font-family: var(--font-fantasy);
 }
 
 .fantasy-btn:hover {
@@ -266,7 +282,7 @@ canvas {
   color: #f5e6c8;
   border: 2px solid #c49a5a;
   border-radius: 6px;
-  font-family: "Uncial Antiqua", system-ui;
+  font-family: var(--font-fantasy);
   font-size: 22px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
   box-shadow:
@@ -316,6 +332,7 @@ canvas {
   display: flex;
   align-items: center;
   height: 22px;
+  transform: translateY(1px);
 }
 
 .badge-touch {
@@ -424,7 +441,7 @@ canvas {
   100%     { transform: rotate(0deg); }
 }
 
-.imprint-screen {
+.text-screen {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -442,7 +459,7 @@ canvas {
   border-radius: 8px;
 }
 
-.imprint-screen h2 {
+.text-screen h2 {
   flex-shrink: 0;
   margin: 0 0 12px;
   padding-bottom: 12px;
@@ -451,23 +468,25 @@ canvas {
   text-align: center;
 }
 
-.imprint-body {
+.text-body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-}
-
-.imprint-screen h3 {
-  margin: 16px 0 4px;
   font-size: 15px;
+  line-height: 1.7;
+}
+
+.text-screen h3 {
+  margin: 16px 0 4px;
+  font-size: 17px;
   color: #e0b870;
 }
 
-.imprint-screen a {
+.text-screen a {
   color: #e0b870;
 }
 
-.imprint-screen .overlay-btn-row {
+.text-screen .overlay-btn-row {
   flex-shrink: 0;
   justify-content: center;
   margin-top: 16px;
@@ -504,7 +523,7 @@ canvas {
 @supports not selector(::-webkit-scrollbar) {
   html,
   .lobby,
-  .imprint-screen {
+  .text-screen {
     scrollbar-width: thin;
     scrollbar-color: #5a3820 rgba(32, 20, 10, 0.5);
   }

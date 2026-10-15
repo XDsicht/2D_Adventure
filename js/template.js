@@ -97,7 +97,7 @@ function getLobbyTemplate() {
       <div class="overlay-btn-row">
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2 hide-on-touch" onclick="renderHTML('controls')">Show Controls</button>
         <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderSoundControls('soundControls')">Sounds</button>
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderImprint('imprint')">Imprint</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('about')">About</button>
       </div>
     </div>
   `;
@@ -126,7 +126,7 @@ function getControlsTemplate() {
           <span class="text-shadow-standard controls-label">Jump</span>
         </div>
         <div class="controls-row">
-          <kbd class="key-badge d-flex-center">D</kbd>
+          <kbd class="key-badge d-flex-center"><span class="badge-key readable-font">D</span></kbd>
           <span class="text-shadow-standard controls-label">Shoot Arrow</span>
         </div>
       </div>
@@ -179,7 +179,7 @@ function getGameControlsBarTemplate() {
         <span class="badge-touch">${SVG_JUMP}</span>
       </kbd>
       <kbd class="key-badge d-flex-center" id='shoot'>
-        <span class="badge-desktop"><span class="badge-key">D</span>${SVG_TARGET}</span>
+        <span class="badge-desktop"><span class="badge-key readable-font">D</span>${SVG_TARGET}</span>
         <span class="badge-touch">${SVG_SHOOT}</span>
       </kbd>
     </div>
@@ -274,100 +274,124 @@ function getEnlargeWindowTemplate() {
 }
 
 /**
- * Shell for the legal page: a fixed heading, a scrollable body and a pinned Back button.
+ * The About menu, which keeps the game description, the privacy policy and the
+ * imprint as three separate screens rather than one stacked page.
  *
- * @returns {string} - The imprint frame's markup, including the three containers renderImprint() fills.
+ * @returns {string} - The About menu's markup.
  */
-function getImprintTemplate() {
+function getAboutTemplate() {
   return `
-    <div class="imprint-screen">
-      <h2 class="letter-spacing-2">About the Game, Imprint &amp; Privacy</h2>
-      <div class="imprint-body">
-        <div id="gameDescription"></div>
-        <div id="imprintInfo"></div>
-        <div id="privacyInfo"></div>
+    <div class="overlay-btn-group flex-center-column">
+      <h2 class="sound-settings-title text-shadow-standard letter-spacing-2">About</h2>
+      <div class="overlay-btn-group flex-center-column">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('gameDescription')">Game Description</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('privacy')">Privacy Policy</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('imprint')">Imprint</button>
+      </div>
+      <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
+    </div>
+  `;
+}
+
+/**
+ * What the game is, how it plays and the controls.
+ *
+ * @returns {string} - The screen's markup.
+ */
+function getGameDescriptionTemplate() {
+  return `
+    <div class="text-screen">
+      <h2 class="letter-spacing-2">Game Description</h2>
+      <div class="text-body readable-font">
+      <h3>About the Game</h3>
+      <p>Adventures of Vorga Flammenherz is a 2D side-scrolling action game built with plain JavaScript and the HTML5 Canvas, without a game engine or framework.</p>
+      <p>You play Vorga, an archer fighting along a desert trail overrun by trolls. Collect arrows to refill your quiver, gather coins as you cross the dunes, and defeat the troll chieftain guarding the end of the path.</p>
+      <h3>Gameplay</h3>
+      <p>Six trolls patrol the trail and a chieftain waits at the end. Two arrows bring down a troll, the chieftain takes four. You can also defeat a troll by landing on it, but only from directly above and only while falling. Contact with a troll costs 20 of your 100 health points, the chieftain costs 40. Nineteen arrows and five coins are scattered across the level.</p>
+      <h3>Controls</h3>
+      <p>
+      Move: &#8592; &#8594;<br />
+      Jump: Space<br />
+      Shoot an arrow: D<br />
+      Pause: Esc
+      </p>
+      <p>On phones and tablets the game switches to on-screen buttons and is played in landscape orientation.</p>
       </div>
       <div class="overlay-btn-row">
-        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('lobby')">Back</button>
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('about')">Back</button>
       </div>
     </div>
   `;
 }
 
-/** 
- * Fills #gameDescription: what the game is, how it plays and the controls. 
+/**
+ * The privacy policy: data handling, hosting, GDPR rights and local storage.
  *
- * @returns {string} - The game description section's markup.
+ * @returns {string} - The screen's markup.
  */
-function getGameDescriptionTemplate() {
+function getPrivacyTemplate() {
   return `
-    <h3>About the Game</h3>
-    <p>Adventures of Vorga Flammenherz is a 2D side-scrolling action game built with plain JavaScript and the HTML5 Canvas, without a game engine or framework.</p>
-    <p>You play Vorga, an archer fighting along a desert trail overrun by trolls. Collect arrows to refill your quiver, gather coins as you cross the dunes, and defeat the troll chieftain guarding the end of the path.</p>
-    <h3>Gameplay</h3>
-    <p>Six trolls patrol the trail and a chieftain waits at the end. Two arrows bring down a troll, the chieftain takes four. You can also defeat a troll by landing on it, but only from directly above and only while falling. Contact with a troll costs 20 of your 100 health points, the chieftain costs 40. Nineteen arrows and five coins are scattered across the level.</p>
-    <h3>Controls</h3>
-    <p>
-      Move: &#8592; &#8594;<br />
-      Jump: Space<br />
-      Shoot an arrow: D<br />
-      Pause: Esc
-    </p>
-    <p>On phones and tablets the game switches to on-screen buttons and is played in landscape orientation.</p>
+    <div class="text-screen">
+      <h2 class="letter-spacing-2">Privacy Policy</h2>
+      <div class="text-body readable-font">
+      <h3>Data Protection at a Glance</h3>
+      <p>Personal data is any data by which you can be personally identified. This website contains no contact forms, no registration, no newsletter, no analytics tools, no advertising networks and no social media plug-ins. No personal data is collected, processed or passed on to third parties by the operator of this website.</p>
+      <p>Technical data such as your IP address, browser type and the time of access may be recorded automatically in the server log files of the hosting provider. This happens for the technical operation and security of the service.</p>
+      <h3>Hosting</h3>
+      <p>This website is hosted by an external provider:<br />netcup GmbH<br />Emmy-Noether-Straße 10<br />D-76131 Karlsruhe<br />Germany</p>
+      <p>The data recorded in the provider's server log files is processed on the basis of our legitimate interest in the secure and efficient provision of this service (Art. 6(1)(f) GDPR).</p>
+      <h3>Controller</h3>
+      <p>The controller responsible for data processing on this website is the person named in the Imprint. This website is operated in accordance with the applicable data protection regulations, in particular the GDPR and the German Federal Data Protection Act (BDSG).</p>
+      <h3>Storage Period</h3>
+      <p>No data is stored by the operator. Data held in the hosting provider's server log files is deleted in accordance with that provider's retention periods.</p>
+      <h3>Your Rights</h3>
+      <p>You have the right at any time to obtain information about your stored personal data, its origin and recipients, and the purpose of processing (Art. 15 GDPR), as well as the right to rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and to object to processing (Art. 21). You may withdraw any consent given at any time with effect for the future. You also have the right to lodge a complaint with the competent supervisory authority.</p>
+      <h3>SSL/TLS Encryption</h3>
+      <p>This site uses SSL/TLS encryption for security reasons. You can recognise an encrypted connection by the https:// prefix in your browser's address bar.</p>
+      <h3>Local Storage in Your Browser</h3>
+      <p>This game stores your sound settings (volume and mute state) in your browser's sessionStorage under the key "vorgaSoundSettings". This data never leaves your device, is not transmitted to any server and is deleted automatically when you close the browser window. No cookies are set.</p>
+      <h3>Fonts</h3>
+      <p>The font used is stored locally on this server. No connection to Google servers or any other external provider is established when you visit this site, and no data is transmitted to third parties.</p>
+      </div>
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('about')">Back</button>
+      </div>
+    </div>
   `;
 }
 
-/** 
- * Fills #imprintInfo: provider details, liability, copyright and credits. 
+/**
+ * The imprint: provider details, liability, copyright and credits.
  *
- * @returns {string} - The provider, liability and copyright section's markup.
+ * @returns {string} - The screen's markup.
  */
-function getImprintInfoTemplate() {
+function getImprintTemplate() {
   return `
-    <h3>Information pursuant to Section 5 DDG</h3>
-    <p>Tobias Fröhler<br />Johann-von-Weerth-Str. 22<br />79100 Freiburg im Breisgau<br />Germany</p>
-    <h3>Contact</h3>
-    <p>E-mail: tobias.froehler24@gmail.com</p>
-    <h3>Liability for Content</h3>
-    <p>As a service provider, we are responsible for our own content on these pages in accordance with general legislation. However, we are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general law remain unaffected. Liability in this respect is only possible from the point in time at which knowledge of a specific infringement is obtained. Upon becoming aware of such violations, we will remove the content immediately.</p>
-    <h3>Liability for Links</h3>
-    <p>This website contains links to external third-party websites. We have no influence over their content and therefore accept no responsibility for it. The respective provider or operator of the linked pages is always responsible for their content.</p>
-    <h3>Copyright</h3>
-    <p>The content created by the site operator on these pages is subject to German copyright law. This project was created as part of a training programme at the Developer Akademie and serves exclusively non-commercial educational and demonstration purposes. Any commercial reuse of the content is not permitted.</p>
-    <h3>Credits</h3>
-    <p>
+    <div class="text-screen">
+      <h2 class="letter-spacing-2">Imprint</h2>
+      <div class="text-body readable-font">
+      <h3>Information pursuant to Section 5 DDG</h3>
+      <p>Tobias Fröhler<br />Johann-von-Weerth-Str. 22<br />79100 Freiburg im Breisgau<br />Germany</p>
+      <h3>Contact</h3>
+      <p>E-mail: tobias.froehler24@gmail.com</p>
+      <h3>Liability for Content</h3>
+      <p>As a service provider, we are responsible for our own content on these pages in accordance with general legislation. However, we are not obliged to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general law remain unaffected. Liability in this respect is only possible from the point in time at which knowledge of a specific infringement is obtained. Upon becoming aware of such violations, we will remove the content immediately.</p>
+      <h3>Liability for Links</h3>
+      <p>This website contains links to external third-party websites. We have no influence over their content and therefore accept no responsibility for it. The respective provider or operator of the linked pages is always responsible for their content.</p>
+      <h3>Copyright</h3>
+      <p>The content created by the site operator on these pages is subject to German copyright law. This project was created as part of a training programme at the Developer Akademie and serves exclusively non-commercial educational and demonstration purposes. Any commercial reuse of the content is not permitted.</p>
+      <h3>Credits</h3>
+      <p>
       Graphics and sprites: <a href="https://craftpix.net/" target="_blank" rel="noopener">craftpix.net</a><br />
       Music and sound effects: <a href="https://freesound.org/" target="_blank" rel="noopener">freesound.org</a><br />
-      Font "Uncial Antiqua": © 2011 Brian J. Bonislawsky DBA Astigmatic (AOETI), licensed under the SIL Open Font License 1.1
-    </p>
-  `;
-}
-
-/** 
- * Fills #privacyInfo: data handling, hosting, GDPR rights and local storage. 
- *
- * @returns {string} - The data protection section's markup.
- */
-function getPrivacyInfoTemplate() {
-  return `
-    <h3>Data Protection at a Glance</h3>
-    <p>Personal data is any data by which you can be personally identified. This website contains no contact forms, no registration, no newsletter, no analytics tools, no advertising networks and no social media plug-ins. No personal data is collected, processed or passed on to third parties by the operator of this website.</p>
-    <p>Technical data such as your IP address, browser type and the time of access may be recorded automatically in the server log files of the hosting provider. This happens for the technical operation and security of the service.</p>
-    <h3>Hosting</h3>
-    <p>This website is hosted by an external provider:<br />netcup GmbH<br />Emmy-Noether-Straße 10<br />D-76131 Karlsruhe<br />Germany</p>
-    <p>The data recorded in the provider's server log files is processed on the basis of our legitimate interest in the secure and efficient provision of this service (Art. 6(1)(f) GDPR).</p>
-    <h3>Controller</h3>
-    <p>The controller responsible for data processing on this website is the person named in the imprint above. This website is operated in accordance with the applicable data protection regulations, in particular the GDPR and the German Federal Data Protection Act (BDSG).</p>
-    <h3>Storage Period</h3>
-    <p>No data is stored by the operator. Data held in the hosting provider's server log files is deleted in accordance with that provider's retention periods.</p>
-    <h3>Your Rights</h3>
-    <p>You have the right at any time to obtain information about your stored personal data, its origin and recipients, and the purpose of processing (Art. 15 GDPR), as well as the right to rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and to object to processing (Art. 21). You may withdraw any consent given at any time with effect for the future. You also have the right to lodge a complaint with the competent supervisory authority.</p>
-    <h3>SSL/TLS Encryption</h3>
-    <p>This site uses SSL/TLS encryption for security reasons. You can recognise an encrypted connection by the https:// prefix in your browser's address bar.</p>
-    <h3>Local Storage in Your Browser</h3>
-    <p>This game stores your sound settings (volume and mute state) in your browser's sessionStorage under the key "vorgaSoundSettings". This data never leaves your device, is not transmitted to any server and is deleted automatically when you close the browser window. No cookies are set.</p>
-    <h3>Fonts</h3>
-    <p>The font used is stored locally on this server. No connection to Google servers or any other external provider is established when you visit this site, and no data is transmitted to third parties.</p>
+      Font "Uncial Antiqua": © 2011 Brian J. Bonislawsky DBA Astigmatic (AOETI), licensed under the SIL Open Font License 1.1<br />
+      Font "Metamorphous": &copy; 2011-2012 Sorkin Type Co, licensed under the SIL Open Font License 1.1
+      </p>
+      </div>
+      <div class="overlay-btn-row">
+        <button class="fantasy-btn cursor-pointer start-btn secondary-btn letter-spacing-2" onclick="renderHTML('about')">Back</button>
+      </div>
+    </div>
   `;
 }
 

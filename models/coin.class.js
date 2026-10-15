@@ -7,6 +7,11 @@ class Coin extends MovableObject {
 
   IMAGES = coinImages;
 
+  /**
+   * Played when this coin is collected; the collision resolver triggers it.
+   */
+  collectSound = coinCollectSound;
+
   /** 
    * Creates a coin at a random position between x 300-2300 and y 155-355. 
    */

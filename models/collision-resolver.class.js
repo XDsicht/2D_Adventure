@@ -166,6 +166,7 @@ class CollisionResolver {
         if (!bar.checkBarPercentage()) {
           array.splice(array.indexOf(item), 1);
           bar.fillBar();
+          if (item.collectSound) item.playOwnSound(item.collectSound);
         }
         if (item instanceof Arrow && this.world.quiver.percentage <= 100 && this.world.arrowInventory <= 5) {
           this.world.addAmmunition();
