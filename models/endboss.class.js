@@ -90,9 +90,6 @@ class Endboss extends Enemy {
    */
   endbossSounds = bossSounds;
 
-  /**
-   * Preloads its six animations, parks the boss at x 2500 and starts its loops. The loops run from the start, but movement stays gated behind activated until the character approaches.
-   */
   constructor() {
     super().loadImage(endbossImages.walking[0]);
     this.loadEndbossImages();
@@ -239,17 +236,11 @@ class Endboss extends Enemy {
     );
   }
 
-  /**
-   * Starts both boss loops: movement at 60fps and animation at 10fps.
-   */
   animateEndboss() {
     this.getEndbossMovementStatus();
     this.playEndbossAnimations();
   }
 
-  /**
-   * Animation loop, picking a state ten times a second.
-   */
   playEndbossAnimations() {
     registerInterval(
       setInterval(() => {
@@ -313,7 +304,6 @@ class Endboss extends Enemy {
 
   /**
    * The following methods resize the sprite box to the size of the current state, play the appropriate sound and advance the animation.
-   * The dead one also drops the boss to the ground line.
    */
   playEndbossDeadAnimation() {
     this.applyStateGeometry("dead");

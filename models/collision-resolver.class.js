@@ -80,15 +80,32 @@ class CollisionResolver {
    */
   checkCharacterJumpingCollisions() {
     this.world.level.enemies.forEach((enemy) => {
-      if (!(enemy instanceof Endboss)) {
-        if (this.world.character.isCollidingVertically(enemy) && this.isStompingBody(enemy) && this.world.character.isAboveGround() && !this.world.character.dead && !enemy.dead) {
-          this.world.character.bounce();
-          enemy.energy = 0;
-          enemy.checkIfEnemyIsDead();
-          enemy.isAttacking = false;
-        }
+      if (this.canStomp(enemy)) {
+        this.world.character.bounce();
+        enemy.energy = 0;
+        enemy.checkIfEnemyIsDead();
+        enemy.isAttacking = false;
       }
     });
+  }
+
+  /**
+   * Decides whether a stomp should land. A hit cancels the kill: an enemy that has already landed a hit on her stays latched until she is back on the ground, so a jump that cost her health cannot also earn the kill.
+   *
+   * @param {MovableObject} enemy - The enemy being landed on.
+   * @returns {boolean} - True when this stomp kills.
+   */
+  canStomp(enemy) {
+    if (enemy instanceof Endboss) return false;
+    return (
+      this.world.character.isCollidingVertically(enemy) &&
+      this.isStompingBody(enemy) &&
+      this.world.character.isAboveGround() &&
+      !this.world.character.isHurt() &&
+      !this.world.character.dead &&
+      !enemy.dead &&
+      !enemy.hasDealtDamage
+    );
   }
 
   /**
@@ -103,14 +120,14 @@ class CollisionResolver {
     return characterCenterX > enemy.x + stompOffset.left && characterCenterX < enemy.x + enemy.width - stompOffset.right;
   }
   /**
-   * Reports whether this overlap is a stomp about to land. The boss answers false because it cannot be stomped, so dropping onto it must still hurt.
+   * Reports whether a stomp is under way: she is in the air and lined up over this enemy's body, so she is on her way down onto it rather than passing through it. The band is narrow enough that being inside it while airborne means being above the enemy. The boss answers false because it cannot be stomped, so touching it in the air must still hurt.
    *
    * @param {MovableObject} enemy - The enemy being overlapped.
-   * @returns {boolean} - True while the character is dropping squarely onto it.
+   * @returns {boolean} - True while the character is lined up to stomp it.
    */
   isStompInProgress(enemy) {
     if (enemy instanceof Endboss) return false;
-    return this.world.character.isCollidingVertically(enemy) && this.isStompingBody(enemy);
+    return this.world.character.isAboveGround() && this.isStompingBody(enemy);
   }
 
 
@@ -124,14 +141,23 @@ class CollisionResolver {
         this.world.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
       }
-      if (!this.world.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
-        enemy.hasDealtDamage = false;
-      }
+      this.releaseDamageLatch(enemy);
     });
   }
 
   /**
-   * Deals contact damage while the character is airborne.
+   * Lets an enemy deal contact damage again, but only once she is back on the ground and clear of it. Holding the latch through the air matters: her jump arc carries her out of the enemy's box near the apex, and releasing it there would make re-entry on the way down count as a second contact.
+   *
+   * @param {MovableObject} enemy - The enemy whose latch is being released.
+   */
+  releaseDamageLatch(enemy) {
+    if (!this.world.character.isAboveGround() && !this.world.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
+      enemy.hasDealtDamage = false;
+    }
+  }
+
+  /**
+   * Deals contact damage while the character is airborne, so passing through an enemy costs health. A stomp already under way is spared, since she is lined up to land on the enemy rather than running into it.
    */
   checkAirborneContact() {
     this.world.level.enemies.forEach((enemy) => {
@@ -140,9 +166,6 @@ class CollisionResolver {
         this.world.character.addPendingDamage(enemy, 20);
         this.world.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
-      }
-      if (!this.world.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
-        enemy.hasDealtDamage = false;
       }
     });
   }
