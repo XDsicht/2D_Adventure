@@ -9,11 +9,14 @@ class CollisionResolver {
     this.world = world;
   }
 
-  /** 
-   * Applies whatever damage was queued this tick and updates the health bar. 
+  /**
+   * Applies whatever damage was queued this tick and updates the health bar. Every source of damage is applied here, so this is also where a jump is marked as having cost her health, whether that came from touching an enemy or from one landing a swing on her in mid-air.
    */
   applyDamageFromEnemies() {
     if (this.world.character.pendingDamage > 0) {
+      if (this.world.character.isAboveGround()) {
+        this.world.character.hasBeenHurtThisJump = true;
+      }
       this.world.character.applyAccumulatedDamage();
       this.world.healthBar.setPercentage(this.world.character.energy);
     }
@@ -90,7 +93,7 @@ class CollisionResolver {
   }
 
   /**
-   * Decides whether a stomp should land. A hit cancels the kill: an enemy that has already landed a hit on her stays latched until she is back on the ground, so a jump that cost her health cannot also earn the kill.
+   * Decides whether a stomp should land. A hit cancels the kill, and hasBeenHurtThisJump carries that for the rest of the jump, which lasts longer than the 0.8s the hurt reaction does.
    *
    * @param {MovableObject} enemy - The enemy being landed on.
    * @returns {boolean} - True when this stomp kills.
@@ -102,9 +105,9 @@ class CollisionResolver {
       this.isStompingBody(enemy) &&
       this.world.character.isAboveGround() &&
       !this.world.character.isHurt() &&
+      !this.world.character.hasBeenHurtThisJump &&
       !this.world.character.dead &&
-      !enemy.dead &&
-      !enemy.hasDealtDamage
+      !enemy.dead
     );
   }
 
@@ -146,12 +149,12 @@ class CollisionResolver {
   }
 
   /**
-   * Lets an enemy deal contact damage again, but only once she is back on the ground and clear of it. Holding the latch through the air matters: her jump arc carries her out of the enemy's box near the apex, and releasing it there would make re-entry on the way down count as a second contact.
+   * Lets an enemy deal contact damage again once she is clear of it. The latch is about one contact, not one jump: hasBeenHurtThisJump is what limits a jump to a single hit, so this must not outlive the contact or an enemy she landed against would stay harmless for good.
    *
    * @param {MovableObject} enemy - The enemy whose latch is being released.
    */
   releaseDamageLatch(enemy) {
-    if (!this.world.character.isAboveGround() && !this.world.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
+    if (!this.world.character.isColliding(enemy) && enemy.hasDealtDamage && !enemy.isAttacking) {
       enemy.hasDealtDamage = false;
     }
   }
@@ -162,7 +165,7 @@ class CollisionResolver {
   checkAirborneContact() {
     this.world.level.enemies.forEach((enemy) => {
       if (enemy.dead || this.isStompInProgress(enemy)) return;
-      if (this.world.character.isAboveGround() && this.world.character.isColliding(enemy) && !this.world.character.isHurt() && !enemy.hasDealtDamage) {
+      if (this.world.character.isAboveGround() && this.world.character.isColliding(enemy) && !this.world.character.isHurt() && !this.world.character.hasBeenHurtThisJump) {
         this.world.character.addPendingDamage(enemy, 20);
         this.world.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;

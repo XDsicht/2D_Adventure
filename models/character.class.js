@@ -19,6 +19,11 @@ class Character extends MovableObject {
   shootingTime = 0;
   characterJumping = false;
 
+  /**
+   * Records that the current jump has already cost her health, and is cleared by the next jump.
+   */
+  hasBeenHurtThisJump = false;
+
   /** 
    * Facing snapshotted when the draw begins, so the arrow flies the way the shot was aimed. 
    */
@@ -210,6 +215,7 @@ class Character extends MovableObject {
    */
   executeJump() {
     this.characterJumping = true;
+    this.hasBeenHurtThisJump = false;
     this.isWalking = false;
     this.resetCurrentImage();
     this.jump();
