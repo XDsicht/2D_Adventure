@@ -54,7 +54,7 @@ class CollisionResolver {
    */
   handleTrollWalkingCollision(enemy, timeSinceLastAttack) {
     if ((enemy instanceof Troll_1 || enemy instanceof Troll_2) && !this.world.character.isHurt()) {
-      if (this.world.character.isEncounteringObstacle(enemy) && !this.world.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
+      if (this.world.character.isWithinStrikeZone(enemy) && !this.world.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
         enemy.isAttacking = true;
         enemy.lastAttackTime = new Date().getTime();
         enemy.resetCurrentImage();
@@ -70,7 +70,7 @@ class CollisionResolver {
    */
   handleEndbossWalkingCollision(enemy, timeSinceLastAttack) {
     if (enemy instanceof Endboss && !this.world.character.isHurt()) {
-      if (this.world.character.isEncounteringEndboss(enemy) && !this.world.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
+      if (this.world.character.isWithinStrikeZone(enemy) && !this.world.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 800) {
         enemy.isAttacking = true;
         enemy.lastAttackTime = new Date().getTime();
         enemy.resetCurrentImage();

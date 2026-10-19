@@ -374,15 +374,15 @@ class Character extends MovableObject {
   }
 
   /**
-   * Reports whether a troll is within striking distance horizontally.
+   * Reports whether an enemy's attack can reach her. The enemy supplies its own edges, since a troll's club is inset into its sprite while the boss's reaches beyond it.
    *
-   * @param {Enemy} enemy - The troll to measure against.
-   * @returns {boolean} - True when the troll is close enough to attack.
+   * @param {Enemy} enemy - The enemy measuring its attack.
+   * @returns {boolean} - True when the attack would connect.
    */
-  isEncounteringObstacle(enemy) {
-    const offset = this.getDirectionalOffset(enemy);
-    const reach = enemy.getReachOffset();
-    return this.x + this.width - offset.thisRight > enemy.x + reach.left - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - reach.right;
+  isWithinStrikeZone(enemy) {
+    let offset = this.getDirectionalOffset(enemy);
+    let reach = enemy.getReachEdges();
+    return this.x + this.width - offset.thisRight > reach.left && this.x + offset.thisLeft < reach.right;
   }
 
   /**

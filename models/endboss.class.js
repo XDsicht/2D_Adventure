@@ -135,6 +135,29 @@ class Endboss extends Enemy {
   }
 
   /**
+   * How far inside baseX the swing connects.
+   */
+  swingInset = 26;
+
+  /**
+   * The edges within which the swing connects.
+   *
+   * @returns {{left: number, right: number}} - The outer edges of the swing.
+   */
+  getReachEdges() {
+    return { left: this.baseX + this.swingInset, right: this.baseX + this.walkWidth - this.swingInset };
+  }
+
+  /**
+   * Turns the boss around, measuring from baseX rather than from x.
+   */
+  getEnemyDirection() {
+    if (this.isCharacterBehind(this.baseX)) {
+      this.otherDirection = !this.otherDirection;
+    }
+  }
+
+  /**
    * Reports whether the boss has come far enough into view to wake up.
    *
    * @returns {boolean} - True once the boss is within the visible frame.
@@ -215,11 +238,23 @@ class Endboss extends Enemy {
   }
 
   /**
+   * The shift updateXOffset actually applied to x. 
+   *
+   * @returns {number} - The shift currently applied to x.
+   */
+  getAppliedXShift() {
+    if (this.width == this.attackWidth) {
+      return this.xOffset / 2;
+    }
+    return this.xOffset;
+  }
+
+  /**
    * Advances the boss one step and re-anchors baseX to where it now stands.
    */
   startMoving() {
     this.move();
-    this.baseX = this.x + this.xOffset;
+    this.baseX = this.x + this.getAppliedXShift();
     if (!this.isRunning) {
       this.isWalking = true;
     }
@@ -270,9 +305,10 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Picks between sprinting, walking and standing still.
+   * Picks between sprinting, walking and standing still. A boss that is not moving keeps the frame it has, which is what holds its mid-swing pose while she is still reeling from the hit: without that, the run animation would overwrite the pose on the very next tick.
    */
   playEndbossMovementAnimation() {
+    if (this.shouldStopMoving()) return;
     if (this.isRunning && !this.world.character.isEncounteringEndboss(this)) {
       this.playEndbossRunAnimation();
     } else if (this.isWalking && !this.isRunning) {
@@ -431,7 +467,7 @@ class Endboss extends Enemy {
    * Lands 40 points of damage partway through the swing, double a troll's.
    */
   endbossDealsDamage() {
-    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isEncounteringEndboss(this)) {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isWithinStrikeZone(this)) {
       this.world.character.addPendingDamage(this, 40);
       this.world.character.lastAttacker = this;
       this.hasDealtDamage = true;

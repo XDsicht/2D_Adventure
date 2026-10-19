@@ -24,7 +24,7 @@ class Enemy extends MovableObject {
   enemySoundLibrary;
 
   /**
-   * Collision box inset, measured against the visible pixels of both troll types: their bodies occupy x+49 to x+167 of the 240px sprite, and these insets put the box there in both facings, since getDirectionalOffset swaps left and right for a mirrored sprite.
+   * Collision box inset, measured against the visible pixels of both troll types.
    */
   offset = {
     top: 85,
@@ -82,6 +82,16 @@ class Enemy extends MovableObject {
     };
   }
 
+  /**
+   * The edges within which this enemy's attack can connect.
+   *
+   * @returns {{left: number, right: number}} - The outer edges of the strike zone.
+   */
+  getReachEdges() {
+    let reach = this.getReachOffset();
+    return { left: this.x + reach.left - 15, right: this.x + this.width - reach.right };
+  }
+
   /** 
    * Troll sound set, shared between all enemies; the endboss cries with its own. 
    */
@@ -100,14 +110,15 @@ class Enemy extends MovableObject {
   /**
    * Reports whether the character has got past this enemy.
    *
+   * @param {number} [position] - Where the enemy stands.
    * @returns {boolean} - True when the character is behind the way the enemy faces.
    */
-  isCharacterBehind() {
+  isCharacterBehind(position) {
     if (!this.world || !this.world.character) return false;
     if (this.otherDirection) {
-      return this.world.character.x > this.x;
+      return this.world.character.x > position;
     } else {
-      return this.world.character.x < this.x;
+      return this.world.character.x < position;
     }
   }
 
@@ -216,7 +227,7 @@ class Enemy extends MovableObject {
    * Lands 20 points of damage partway through the attack animation.
    */
   enemyDealsDamage() {
-    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isEncounteringObstacle(this)) {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isWithinStrikeZone(this)) {
       this.world.character.addPendingDamage(this, 20);
       this.world.character.lastAttacker = this;
       this.hasDealtDamage = true;
@@ -284,7 +295,7 @@ class Enemy extends MovableObject {
    * Turns the enemy around when the character slips past it. 
    */
   getEnemyDirection() {
-    if (this.isCharacterBehind()) {
+    if (this.isCharacterBehind(this.x)) {
       this.otherDirection = !this.otherDirection;
     }
   }
