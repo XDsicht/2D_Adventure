@@ -79,14 +79,15 @@ class Enemy extends MovableObject {
   }
 
   /**
-   * Mirrors the projectile hit box for the current facing. The pair comes back the way getDirectionalOffset resolves it for a collision, so left is the inset at the box's left edge, which is the opposite swap from getStompOffset.
+   * Mirrors the projectile hit box for the current facing, falling back to the collision box for an enemy that has none. The pair comes back the way getDirectionalOffset resolves it for a collision, so left is the inset at the box's left edge, which is the opposite swap from getStompOffset.
    *
    * @returns {{left: number, right: number}} - The hit box, resolved for the current facing.
    */
   getHitOffset() {
+    let box = this.offsetHit || this.getCurrentOffset();
     return {
-      left: this.otherDirection ? this.offsetHit.left : this.offsetHit.right,
-      right: this.otherDirection ? this.offsetHit.right : this.offsetHit.left,
+      left: this.otherDirection ? box.left : box.right,
+      right: this.otherDirection ? box.right : box.left,
     };
   }
 

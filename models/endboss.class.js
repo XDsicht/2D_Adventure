@@ -64,29 +64,12 @@ class Endboss extends Enemy {
    */
   xOffset = 0;
 
-  offset = {
-    top: 160,
-    left: 80,
-    right: 60,
-    bottom: 10,
-  };
-
   /**
-   * Collision box for the sprint. 
+   * Collision box per state. The sprint box is inset much further because the boss leans into its run, putting its legs well behind its head; the attack box sits lower and reaches wider.
    */
-  offsetRun = {
-    top: 160,
-    left: 150,
-    right: 70,
-    bottom: 10,
-  };
-
-  offsetAttack = {
-    top: 180,
-    left: 80,
-    right: 50,
-    bottom: 10,
-  };
+  offset = { top: 160, left: 80, right: 60, bottom: 10 };
+  offsetRun = { top: 160, left: 150, right: 70, bottom: 10 };
+  offsetAttack = { top: 180, left: 80, right: 50, bottom: 10 };
 
   /**
    * Its own cries, used in place of the inherited troll ones.
@@ -135,17 +118,9 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Defines arrow hit detection for the boss.
-   *
-   * @returns {{left: number, right: number}} - The current box, resolved for the facing.
+   * No separate projectile hit box: the boss resizes between states and already carries an offset for each.
    */
-  getHitOffset() {
-    let box = this.getCurrentOffset();
-    return {
-      left: this.otherDirection ? box.left : box.right,
-      right: this.otherDirection ? box.right : box.left,
-    };
-  }
+  offsetHit = null;
 
   /**
    * How far inside baseX the swing connects.
@@ -204,43 +179,13 @@ class Endboss extends Enemy {
    * @param {number} newWidth - Width of the frame about to be drawn.
    */
   updateXOffset(newWidth) {
-    const widthDifference = newWidth - this.walkWidth;
-    this.xOffset = widthDifference;
-    if (this.otherDirection) {
-      this.updateXInOtherDirection(newWidth);
-    } else {
-      this.updateXInDirection(newWidth);
+    this.xOffset = newWidth - this.walkWidth;
+    if (this.otherDirection || newWidth == this.attackWidth) {
+      this.x = this.baseX - this.getAppliedXShift();
     }
   }
 
-  /**
-   * Compensates for a width change while facing left.
-   *
-   * @param {number} newWidth - Width of the frame about to be drawn.
-   */
-  updateXInOtherDirection(newWidth) {
-    if (newWidth == this.attackWidth) {
-      this.x = this.baseX - this.xOffset / 2;
-    } else {
-      this.x = this.baseX - this.xOffset;
-    }
-  }
 
-  /**
-   * Compensates for a width change while facing right.
-   *
-   * @param {number} newWidth - Width of the frame about to be drawn.
-   */
-  updateXInDirection(newWidth) {
-    switch (newWidth) {
-      case this.attackWidth:
-        this.x = this.baseX - this.xOffset / 2;
-        break;
-      case !this.attackWidth:
-        this.xOffset = 0;
-        this.x = this.baseX;
-    }
-  }
 
   /**
    * Drops any compensation, used by states drawn at the base walk size.
