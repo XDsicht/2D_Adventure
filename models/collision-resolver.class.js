@@ -160,17 +160,33 @@ class CollisionResolver {
   }
 
   /**
-   * Deals contact damage while the character is airborne, so passing through an enemy costs health. A stomp already under way is spared, since she is lined up to land on the enemy rather than running into it.
+   * Deals contact damage while the character is airborne, so dropping onto an enemy off to one side costs health
    */
   checkAirborneContact() {
     this.world.level.enemies.forEach((enemy) => {
       if (enemy.dead || this.isStompInProgress(enemy)) return;
-      if (this.world.character.isAboveGround() && this.world.character.isColliding(enemy) && !this.world.character.isHurt() && !this.world.character.hasBeenHurtThisJump) {
+      if (this.isFallingInto(enemy)) {
         this.world.character.addPendingDamage(enemy, 20);
         this.world.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
       }
     });
+  }
+
+  /**
+   * Decides whether an overlap in mid-air should cost her health. Only once she is on the way down, which makes the two airborne rules symmetric: falling and lined up is a stomp, falling and off to one side is a hit, and climbing is neither. Hurting her on the way up spent the jump before the stomp could ever land, since hasBeenHurtThisJump then cancelled the kill.
+   *
+   * @param {MovableObject} enemy - The enemy she is overlapping.
+   * @returns {boolean} - True when the overlap should deal contact damage.
+   */
+  isFallingInto(enemy) {
+    return (
+      this.world.character.speedY < 0 &&
+      this.world.character.isAboveGround() &&
+      this.world.character.isColliding(enemy) &&
+      !this.world.character.isHurt() &&
+      !this.world.character.hasBeenHurtThisJump
+    );
   }
 
   /**

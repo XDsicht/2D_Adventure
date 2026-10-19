@@ -34,12 +34,11 @@ class Enemy extends MovableObject {
   };
 
   /**
-   * Horizontal band the character's centre must land within to stomp this enemy. 
-   * Narrower than the collision box on purpose, so a glancing hit from the side does not count as landing on top.
+   * Horizontal band the character's centre must land within to stomp this enemy.
    */
   stompOffset = {
-    left: 100,
-    right: 75,
+    left: 50,
+    right: 90,
   };
 
   /**

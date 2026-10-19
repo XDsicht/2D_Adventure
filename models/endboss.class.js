@@ -71,9 +71,12 @@ class Endboss extends Enemy {
     bottom: 10,
   };
 
+  /**
+   * Collision box for the sprint. 
+   */
   offsetRun = {
     top: 160,
-    left: 100,
+    left: 150,
     right: 70,
     bottom: 10,
   };
