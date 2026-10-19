@@ -23,13 +23,13 @@ class Enemy extends MovableObject {
    */
   enemySoundLibrary;
 
-  /** 
-   * Collision box inset, leaving roughly 100px of the 240px sprite. 
+  /**
+   * Collision box inset, measured against the visible pixels of both troll types: their bodies occupy x+49 to x+167 of the 240px sprite, and these insets put the box there in both facings, since getDirectionalOffset swaps left and right for a mirrored sprite.
    */
   offset = {
     top: 85,
-    left: 90,
-    right: 50,
+    left: 50,
+    right: 73,
     bottom: 35,
   };
 
@@ -37,6 +37,14 @@ class Enemy extends MovableObject {
    * Horizontal band the character's centre must land within to stomp this enemy.
    */
   stompOffset = {
+    left: 73,
+    right: 50,
+  };
+
+  /**
+   * How far the club reaches when the troll swings.
+   */
+  offsetReach = {
     left: 50,
     right: 90,
   };
@@ -59,6 +67,18 @@ class Enemy extends MovableObject {
     return {
       left: this.otherDirection ? this.stompOffset.right : this.stompOffset.left,
       right: this.otherDirection ? this.stompOffset.left : this.stompOffset.right,
+    };
+  }
+
+  /**
+   * Mirrors the club's reach for the current facing, as getStompOffset does for the stomp band.
+   *
+   * @returns {{left: number, right: number}} - The reach, resolved for the current facing.
+   */
+  getReachOffset() {
+    return {
+      left: this.otherDirection ? this.offsetReach.right : this.offsetReach.left,
+      right: this.otherDirection ? this.offsetReach.left : this.offsetReach.right,
     };
   }
 

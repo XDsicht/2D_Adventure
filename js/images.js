@@ -311,12 +311,12 @@ const coinImages = [
  * Six health bar frames, from empty at index 0 to full at index 5. 
  */
 const healthBarImages = [
-  "img/6.bars/1.health/0_ copia_3.png",
-  "img/6.bars/1.health/20_ copia_4.png",
-  "img/6.bars/1.health/40_ copia_3.png",
-  "img/6.bars/1.health/60_ copia_3.png",
-  "img/6.bars/1.health/80_ copia_3.png",
-  "img/6.bars/1.health/100_ copia_2.png",
+  "img/6.bars/1.health/0_copia_3.png",
+  "img/6.bars/1.health/20_copia_4.png",
+  "img/6.bars/1.health/40_copia_3.png",
+  "img/6.bars/1.health/60_copia_3.png",
+  "img/6.bars/1.health/80_copia_3.png",
+  "img/6.bars/1.health/100_copia_2.png",
 ];
 
 /** 

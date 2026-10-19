@@ -381,8 +381,8 @@ class Character extends MovableObject {
    */
   isEncounteringObstacle(enemy) {
     const offset = this.getDirectionalOffset(enemy);
-
-    return this.x + this.width - offset.thisRight > enemy.x + offset.moRight - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - offset.moLeft;
+    const reach = enemy.getReachOffset();
+    return this.x + this.width - offset.thisRight > enemy.x + reach.left - 15 && this.x + offset.thisLeft < enemy.x + enemy.width - reach.right;
   }
 
   /**
