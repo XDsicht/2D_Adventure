@@ -267,7 +267,25 @@ class CollisionResolver {
     if (enemy.dead) return false;
     if (!enemy.inFrame()) return false;
     if (!this.checkEndbossActive(enemy)) return false;
-    return arrow.isColliding(enemy);
+    return this.isArrowOnTarget(enemy, arrow);
+  }
+
+  /**
+   * Reports whether an arrow has reached the enemy's body, measured against the projectile hit box rather than the collision box. The collision box is fitted to the body's widest extent so a stomp lands anywhere on it, but an arrow flies at one height, where the body is narrower for most of the walk cycle.
+   *
+   * @param {MovableObject} enemy - The target.
+   * @param {ThrowableObject} arrow - The arrow in flight.
+   * @returns {boolean} - True when the arrow overlaps the hit box.
+   */
+  isArrowOnTarget(enemy, arrow) {
+    let hit = enemy.getHitOffset();
+    let box = enemy.getCurrentOffset();
+    return (
+      arrow.x + arrow.width > enemy.x + hit.left &&
+      arrow.x < enemy.x + enemy.width - hit.right &&
+      arrow.y + arrow.height > enemy.y + box.top &&
+      arrow.y < enemy.y + enemy.height - box.bottom
+    );
   }
 
   /**

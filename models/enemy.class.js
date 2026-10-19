@@ -50,6 +50,14 @@ class Enemy extends MovableObject {
   };
 
   /**
+   * Where a projectile connects. Narrower than the collision box, which is fitted to the body's widest extent so a stomp lands anywhere on the troll. An arrow flies at one height, and across the walk cycle the body is up to 40px narrower there.
+   */
+  offsetHit = {
+    left: 90,
+    right: 50,
+  };
+
+  /**
    * Adds this enemy's three sounds to the shared list for muting and volume.
    */
   registerEnemySounds() {
@@ -67,6 +75,18 @@ class Enemy extends MovableObject {
     return {
       left: this.otherDirection ? this.stompOffset.right : this.stompOffset.left,
       right: this.otherDirection ? this.stompOffset.left : this.stompOffset.right,
+    };
+  }
+
+  /**
+   * Mirrors the projectile hit box for the current facing. The pair comes back the way getDirectionalOffset resolves it for a collision, so left is the inset at the box's left edge, which is the opposite swap from getStompOffset.
+   *
+   * @returns {{left: number, right: number}} - The hit box, resolved for the current facing.
+   */
+  getHitOffset() {
+    return {
+      left: this.otherDirection ? this.offsetHit.left : this.offsetHit.right,
+      right: this.otherDirection ? this.offsetHit.right : this.offsetHit.left,
     };
   }
 

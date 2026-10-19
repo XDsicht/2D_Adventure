@@ -135,6 +135,19 @@ class Endboss extends Enemy {
   }
 
   /**
+   * Defines arrow hit detection for the boss.
+   *
+   * @returns {{left: number, right: number}} - The current box, resolved for the facing.
+   */
+  getHitOffset() {
+    let box = this.getCurrentOffset();
+    return {
+      left: this.otherDirection ? box.left : box.right,
+      right: this.otherDirection ? box.right : box.left,
+    };
+  }
+
+  /**
    * How far inside baseX the swing connects.
    */
   swingInset = 26;
@@ -305,7 +318,7 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Picks between sprinting, walking and standing still. A boss that is not moving keeps the frame it has, which is what holds its mid-swing pose while she is still reeling from the hit: without that, the run animation would overwrite the pose on the very next tick.
+   * Picks between sprinting, walking and standing still.
    */
   playEndbossMovementAnimation() {
     if (this.shouldStopMoving()) return;
