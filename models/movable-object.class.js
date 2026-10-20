@@ -325,33 +325,6 @@ class MovableObject extends DrawableObject {
   }
 
   /**
-   * Reports whether the character is landing on top of an enemy.
-   *
-   * @param {MovableObject} mo - The enemy being landed on.
-   * @returns {boolean} - True when falling onto the enemy's box.
-   */
-  isCollidingVertically(mo) {
-    const offset = this.getDirectionalOffset(mo);
-    const footInset = this.getFootInset();
-    return (
-      this.x + offset.thisLeft < mo.x + mo.width - offset.moRight &&
-      this.y + this.height - footInset < mo.y + mo.height - mo.offset.bottom &&
-      this.y + this.height - footInset > mo.y + mo.offset.top &&
-      this.x + this.width - offset.thisRight > mo.x + offset.moLeft &&
-      this.speedY < 0
-    );
-  }
-
-  /**
-   * Distance from the sprite's bottom edge up to the soles.
-   *
-   * @returns {number} - The inset to measure the feet from.
-   */
-  getFootInset() {
-    return this.offset.bottom;
-  }
-
-  /**
    * Plays one of this object's own sounds from the start.
    *
    * @param {HTMLAudioElement} sound - The sound to play.

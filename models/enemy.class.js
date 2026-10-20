@@ -37,16 +37,21 @@ class Enemy extends MovableObject {
    * Horizontal band the character's centre must land within to stomp this enemy.
    */
   stompOffset = {
-    left: 73,
-    right: 50,
+    left: 50,
+    right: 73,
   };
 
   /**
-   * How far the club reaches when the troll swings.
+   * How far below the top of the head character's feet may be and still count as landing on it.
+   */
+  stompDepth = 30;
+
+  /**
+   * How far the club reaches when the troll swings, as an inset from each sprite edge.
    */
   offsetReach = {
-    left: 50,
-    right: 90,
+    left: 75,
+    right: 50,
   };
 
   /**
@@ -73,13 +78,22 @@ class Enemy extends MovableObject {
    */
   getStompOffset() {
     return {
-      left: this.otherDirection ? this.stompOffset.right : this.stompOffset.left,
-      right: this.otherDirection ? this.stompOffset.left : this.stompOffset.right,
+      left: this.otherDirection ? this.stompOffset.left : this.stompOffset.right,
+      right: this.otherDirection ? this.stompOffset.right : this.stompOffset.left,
     };
   }
 
   /**
-   * Mirrors the projectile hit box for the current facing, falling back to the collision box for an enemy that has none. The pair comes back the way getDirectionalOffset resolves it for a collision, so left is the inset at the box's left edge, which is the opposite swap from getStompOffset.
+   * The height of the top of the head, where a stomp lands.
+   *
+   * @returns {number} - The y of the collision box's top edge.
+   */
+  getStompY() {
+    return this.y + this.getCurrentOffset().top;
+  }
+
+  /**
+   * Mirrors the projectile hit box for the current facing, falling back to the collision box for an enemy that has none. 
    *
    * @returns {{left: number, right: number}} - The hit box, resolved for the current facing.
    */
@@ -98,8 +112,8 @@ class Enemy extends MovableObject {
    */
   getReachOffset() {
     return {
-      left: this.otherDirection ? this.offsetReach.right : this.offsetReach.left,
-      right: this.otherDirection ? this.offsetReach.left : this.offsetReach.right,
+      left: this.otherDirection ? this.offsetReach.left : this.offsetReach.right,
+      right: this.otherDirection ? this.offsetReach.right : this.offsetReach.left,
     };
   }
 
@@ -110,7 +124,7 @@ class Enemy extends MovableObject {
    */
   getReachEdges() {
     let reach = this.getReachOffset();
-    return { left: this.x + reach.left - 15, right: this.x + this.width - reach.right };
+    return { left: this.x + reach.left, right: this.x + this.width - reach.right };
   }
 
   /** 
@@ -248,11 +262,21 @@ class Enemy extends MovableObject {
    * Lands 20 points of damage partway through the attack animation.
    */
   enemyDealsDamage() {
-    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isWithinStrikeZone(this)) {
+    if (this.currentImage >= 7 && !this.hasDealtDamage && !this.world.character.isHurt() && this.world.character.isWithinStrikeZone(this) && this.canClubReach()) {
       this.world.character.addPendingDamage(this, 20);
       this.world.character.lastAttacker = this;
       this.hasDealtDamage = true;
     }
+  }
+
+  /**
+   * Reports whether the club can reach character's height.
+   *
+   * @returns {boolean} - True when character is on the ground or low enough to be hit.
+   */
+  canClubReach() {
+    let character = this.world.character;
+    return !character.isAboveGround() || character.getFeetY() > this.getStompY() + this.stompDepth;
   }
 
   /**

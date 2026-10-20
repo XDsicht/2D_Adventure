@@ -22,13 +22,12 @@ class CollisionResolver {
     }
   }
 
-  /** 
-   * Runs the slower collision checks: enemy attacks, contact damage and pickups. 
+  /**
+   * Runs the slower collision checks: enemy attacks, contact damage on the ground and pickups. Mid-air contact runs in the fast loop instead.
    */
   checkCollisions() {
     this.checkEnemyWalkingCollisions(this.world.level.enemies);
     this.checkCharacterWalkingCollisions();
-    this.checkAirborneContact();
     this.checkCollisionsWithCollectibles(this.world.level.arrows, this.world.quiver);
     this.checkCollisionsWithCollectibles(this.world.level.coins, this.world.coinBar);
   }
@@ -93,20 +92,22 @@ class CollisionResolver {
   }
 
   /**
-   * Decides whether a stomp should land. A hit cancels the kill, and hasBeenHurtThisJump carries that for the rest of the jump, which lasts longer than the 0.8s the hurt reaction does.
+   * Decides whether a stomp should land.
    *
    * @param {MovableObject} enemy - The enemy being landed on.
    * @returns {boolean} - True when this stomp kills.
    */
   canStomp(enemy) {
     if (enemy instanceof Endboss) return false;
+    let character = this.world.character;
     return (
-      this.world.character.isCollidingVertically(enemy) &&
+      character.speedY < 0 &&
+      character.isAboveGround() &&
+      this.isInStompZone(enemy) &&
       this.isStompingBody(enemy) &&
-      this.world.character.isAboveGround() &&
-      !this.world.character.isHurt() &&
-      !this.world.character.hasBeenHurtThisJump &&
-      !this.world.character.dead &&
+      !character.isHurt() &&
+      !character.hasBeenHurtThisJump &&
+      !character.dead &&
       !enemy.dead
     );
   }
@@ -122,17 +123,28 @@ class CollisionResolver {
     let stompOffset = enemy.getStompOffset();
     return characterCenterX > enemy.x + stompOffset.left && characterCenterX < enemy.x + enemy.width - stompOffset.right;
   }
+
   /**
-   * Reports whether a stomp is under way: she is in the air and lined up over this enemy's body, so she is on her way down onto it rather than passing through it. The band is narrow enough that being inside it while airborne means being above the enemy. The boss answers false because it cannot be stomped, so touching it in the air must still hurt.
+   * Reports whether character's feet are in the band just below the top of the head, the only height at which a landing kills.
    *
-   * @param {MovableObject} enemy - The enemy being overlapped.
-   * @returns {boolean} - True while the character is lined up to stomp it.
+   * @param {MovableObject} enemy - The enemy being landed on.
+   * @returns {boolean} - True while character's feet are inside the stomp zone.
    */
-  isStompInProgress(enemy) {
-    if (enemy instanceof Endboss) return false;
-    return this.world.character.isAboveGround() && this.isStompingBody(enemy);
+  isInStompZone(enemy) {
+    let feetY = this.world.character.getFeetY();
+    let stompY = enemy.getStompY();
+    return feetY > stompY && feetY <= stompY + enemy.stompDepth;
   }
 
+  /**
+   * Reports whether character's feet are below the stomp zone, where touching the enemy hurts instead of killing it.
+   *
+   * @param {MovableObject} enemy - The enemy being touched.
+   * @returns {boolean} - True once character's feet are deeper than the stomp zone.
+   */
+  isBelowStompZone(enemy) {
+    return this.world.character.getFeetY() > enemy.getStompY() + enemy.stompDepth;
+  }
 
   /**
    * Deals contact damage when the character walks into an enemy, once per contact.
@@ -149,7 +161,7 @@ class CollisionResolver {
   }
 
   /**
-   * Lets an enemy deal contact damage again once she is clear of it. The latch is about one contact, not one jump: hasBeenHurtThisJump is what limits a jump to a single hit, so this must not outlive the contact or an enemy she landed against would stay harmless for good.
+   * Lets an enemy deal contact damage again once character is clear of it.
    *
    * @param {MovableObject} enemy - The enemy whose latch is being released.
    */
@@ -160,12 +172,12 @@ class CollisionResolver {
   }
 
   /**
-   * Deals contact damage while the character is airborne, so dropping onto an enemy off to one side costs health
+   * Deals contact damage while the character is airborne, so jumping through an enemy or dropping in beside it costs health.
    */
   checkAirborneContact() {
     this.world.level.enemies.forEach((enemy) => {
-      if (enemy.dead || this.isStompInProgress(enemy)) return;
-      if (this.isFallingInto(enemy)) {
+      if (enemy.dead) return;
+      if (this.isTouchingInMidAir(enemy)) {
         this.world.character.addPendingDamage(enemy, 20);
         this.world.character.lastAttacker = enemy;
         enemy.hasDealtDamage = true;
@@ -174,19 +186,31 @@ class CollisionResolver {
   }
 
   /**
-   * Decides whether an overlap in mid-air should cost her health. Only once she is on the way down, which makes the two airborne rules symmetric: falling and lined up is a stomp, falling and off to one side is a hit, and climbing is neither. Hurting her on the way up spent the jump before the stomp could ever land, since hasBeenHurtThisJump then cancelled the kill.
+   * Decides whether an overlap in mid-air should cost character health, on the way up as well as down.
    *
-   * @param {MovableObject} enemy - The enemy she is overlapping.
+   * @param {MovableObject} enemy - The enemy character is overlapping.
    * @returns {boolean} - True when the overlap should deal contact damage.
    */
-  isFallingInto(enemy) {
+  isTouchingInMidAir(enemy) {
+    let character = this.world.character;
     return (
-      this.world.character.speedY < 0 &&
-      this.world.character.isAboveGround() &&
-      this.world.character.isColliding(enemy) &&
-      !this.world.character.isHurt() &&
-      !this.world.character.hasBeenHurtThisJump
+      character.isAboveGround() &&
+      character.isColliding(enemy) &&
+      this.isInHurtRange(enemy) &&
+      !character.isHurt() &&
+      !character.hasBeenHurtThisJump
     );
+  }
+
+  /**
+   * Reports whether a touch at character's current height hurts.
+   *
+   * @param {MovableObject} enemy - The enemy character is overlapping.
+   * @returns {boolean} - True when a touch at this height hurts.
+   */
+  isInHurtRange(enemy) {
+    if (enemy instanceof Endboss) return true;
+    return this.isBelowStompZone(enemy);
   }
 
   /**

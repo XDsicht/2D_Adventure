@@ -137,7 +137,7 @@ class World {
   }
 
   /**
-   * Forty times a second: arrow hits and stomps.
+   * Forty times a second: arrow hits, stomps and mid-air contact.
    */
   runFastCollisionLoop() {
     registerInterval(
@@ -145,6 +145,7 @@ class World {
         if (this.paused) return;
         this.collisions.checkCollisionOfArrows();
         this.collisions.checkCharacterJumpingCollisions();
+        this.collisions.checkAirborneContact();
       }, 25),
     );
   }

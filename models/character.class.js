@@ -409,6 +409,15 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   * Where character's soles are, measured the same way for stomping and for mid-air contact.
+   *
+   * @returns {number} - The y of the soles for the pose being drawn.
+   */
+  getFeetY() {
+    return this.y + this.height - this.getFootInset();
+  }
+
   /** 
    * Plays footsteps on the ground and silences them in mid-air. 
    */
