@@ -224,7 +224,7 @@ class World {
       const diff = this.targetCameraX - this.camera_x;
       this.floatCamera(diff, this.targetCameraX);
     } else {
-      return (this.camera_x = -this.character.x + 100);
+      return (this.camera_x = -this.character.x + this.cameraOffset);
     }
   }
 
