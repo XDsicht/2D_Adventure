@@ -35,5 +35,9 @@ class Level {
     this.arrows = arrows;
   }
 
-  createLevel() {}
+  createLevel(levelObject, propertyIndex) {
+    for (let i = 0; i < propertyIndex; i++) {
+      levelObject;
+    }
+  }
 }

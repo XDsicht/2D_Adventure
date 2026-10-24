@@ -356,13 +356,17 @@ const endbossHealthBarImages = [
 ];
 
 /**
- * Single images the game draws that belong to no animation and serve as background.
+ * The five background layers, back to front. The level repeats them along the trail.
  */
-const sceneImages = [
+const backgroundImages = [
   "img/5.elements/background/1.png",
   "img/5.elements/background/2.png",
   "img/5.elements/background/3.png",
   "img/5.elements/background/4.png",
   "img/5.elements/background/5.png",
-  "img/5.elements/throwables/arrows/arrow.png",
 ];
+
+/**
+ * Single images the game draws that belong to no animation.
+ */
+const sceneImages = ["img/5.elements/throwables/arrows/arrow.png"];
