@@ -181,7 +181,7 @@ class Enemy extends MovableObject {
    * Selects the right sound set for this enemy type and plays its death cry. 
    */
   playEnemyBasedDeadSound() {
-    if (this instanceof Troll_1 || this instanceof Troll_2) {
+    if (this instanceof Troll) {
       this.enemySoundLibrary = this.enemySounds;
     } else {
       this.enemySoundLibrary = this.endbossSounds;
@@ -194,7 +194,7 @@ class Enemy extends MovableObject {
    */
   playEnemyBasedHurtSound() {
     if (this.currentImage === 0) {
-      if (this instanceof Troll_1 || this instanceof Troll_2) {
+      if (this instanceof Troll) {
         this.enemySoundLibrary = this.enemySounds;
       } else {
         this.enemySoundLibrary = this.endbossSounds;

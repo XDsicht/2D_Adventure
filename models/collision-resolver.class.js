@@ -52,7 +52,7 @@ class CollisionResolver {
    * @param {number} timeSinceLastAttack - Milliseconds since this enemy last attacked.
    */
   handleTrollWalkingCollision(enemy, timeSinceLastAttack) {
-    if ((enemy instanceof Troll_1 || enemy instanceof Troll_2) && !this.world.character.isHurt()) {
+    if (enemy instanceof Troll && !this.world.character.isHurt()) {
       if (this.world.character.isWithinStrikeZone(enemy) && !this.world.character.isWalking && !enemy.isAttacking && !enemy.dead && timeSinceLastAttack > 1000) {
         enemy.isAttacking = true;
         enemy.lastAttackTime = new Date().getTime();

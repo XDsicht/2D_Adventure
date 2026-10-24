@@ -29,7 +29,7 @@ let preloadedImages = {};
  */
 function collectAllImagePaths() {
   let paths = [];
-  let animationSets = [characterImages, endbossImages, troll1Images, troll2Images];
+  let animationSets = [characterImages, endbossImages, greyTrollImages, greenTrollImages];
   let flatSets = [coinImages, healthBarImages, quiverImages, coinBarImages, endbossHealthBarImages, sceneImages];
   animationSets.forEach((set) => addAnimationSetPaths(set, paths));
   flatSets.forEach((set) => set.forEach((path) => paths.push(path)));

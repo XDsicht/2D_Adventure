@@ -79,7 +79,7 @@ class World {
     this.endbossHealthBar.setBounds(this.canvas.width);
     this.level.enemies.forEach((enemy) => {
       enemy.world = this;
-      if (enemy instanceof Troll_1 || enemy instanceof Troll_2) {
+      if (enemy instanceof Troll) {
         enemy.x = enemy.calculateSpawningLocation();
       }
     });

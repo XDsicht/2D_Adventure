@@ -159,10 +159,10 @@ const endbossImages = {
   ],
 };
 
-/** 
- * First troll type: five animation states. 
+/**
+ * Grey troll: five animation states.
  */
-const troll1Images = {
+const greyTrollImages = {
   idle: [
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_000.png",
     "img/3.enemies/1.enemy/1.idle/Troll_03_1_IDLE_001.png",
@@ -225,10 +225,10 @@ const troll1Images = {
   ],
 };
 
-/** 
- * Second troll type: five animation states, same set as troll1Images. 
+/**
+ * Green troll: five animation states, same set as greyTrollImages.
  */
-const troll2Images = {
+const greenTrollImages = {
   idle: [
     "img/3.enemies/2.enemy/1.idle/Troll_01_1_IDLE_000.png",
     "img/3.enemies/2.enemy/1.idle/Troll_01_1_IDLE_001.png",
