@@ -34,4 +34,6 @@ class Level {
     this.coins = coins;
     this.arrows = arrows;
   }
+
+  createLevel() {}
 }

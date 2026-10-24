@@ -2,9 +2,7 @@
  * Base class for everything that moves, collides or takes damage.
  */
 class MovableObject extends DrawableObject {
-  /** 
-   * Horizontal step per move; subclasses override it with their own pace. 
-   */
+
   speed = 0.15;
 
   /** 
@@ -24,9 +22,6 @@ class MovableObject extends DrawableObject {
    */
   speedY = 0;
 
-  /** 
-   * Amount subtracted from speedY each gravity tick. 
-   */
   acceleration = 2.5;
 
   /** 

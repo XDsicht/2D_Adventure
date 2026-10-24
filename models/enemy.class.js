@@ -18,9 +18,6 @@ class Enemy extends MovableObject {
    */
   deadY = 228;
 
-  /** 
-   * Points at either enemySounds or endbossSounds, chosen per instance at runtime. 
-   */
   enemySoundLibrary;
 
   /**

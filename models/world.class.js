@@ -37,10 +37,6 @@ class World {
   quiver = new Quiver();
   coinBar = new CoinBar();
   endbossHealthBar = new EndbossHealthBar();
-
-  /** 
-   * Arrows available to shoot, capped at five. The quiver bar shows the same supply. 
-   */
   arrowInventory = 0;
 
   /**

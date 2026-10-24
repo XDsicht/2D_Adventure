@@ -7,12 +7,10 @@ const ENDBOSS_GROUND_Y = 432;
  * The troll chieftain guarding the end of the level.
  */
 class Endboss extends Enemy {
+  
   height = 360;
   width = 340;
 
-  /**
-   * Walking pace; sprint() raises it to 3.0 once it closes in.
-   */
   speed = 0.9;
 
   /**

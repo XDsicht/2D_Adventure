@@ -24,9 +24,6 @@ class Character extends MovableObject {
    */
   hasBeenHurtThisJump = false;
 
-  /** 
-   * Facing snapshotted when the draw begins, so the arrow flies the way the shot was aimed. 
-   */
   currentDirection;
 
   /** 
@@ -51,9 +48,6 @@ class Character extends MovableObject {
    */
   shotCooldown = 0.2;
 
-  /**
-   * Vorga's own set, declared with the others in sounds.js.
-   */
   characterSounds = playerSounds;
 
   IMAGES_IDLE = characterImages.idle;
